@@ -28,7 +28,7 @@ export default function FormGuiaContribucion() {
     ]
   return (
     <div>
-        <img src={pruebas[1].URL} alt="" />
+        {/* <img src={pruebas[1].URL} alt="" /> */}
         <CardPrueba 
             imagen={pruebas[imagenActual]}
             setImagen={setImagen}

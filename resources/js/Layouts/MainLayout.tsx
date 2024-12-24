@@ -15,7 +15,7 @@ export default function MainLayout({
         </div> */}
             <SidebarProvider>
                 <AppSidebar />
-                <main>
+                <main className='w-full'>
                     <SidebarTrigger />
                     <div className="p-5">
                         {children}

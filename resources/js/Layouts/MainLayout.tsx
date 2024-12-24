@@ -17,7 +17,9 @@ export default function MainLayout({
                 <AppSidebar />
                 <main>
                     <SidebarTrigger />
-                    {children}
+                    <div className="p-5">
+                        {children}
+                    </div>
                 </main>
             </SidebarProvider>
         </div>

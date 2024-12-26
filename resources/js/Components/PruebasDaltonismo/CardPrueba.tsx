@@ -26,32 +26,32 @@ export default function CardPrueba({
         </CardHeader>
         <CardContent>
           <div className="flex justify-center">
-            <div className="h-72 w-72 object-contain">
+            <div className="h-44 w-44 md:h-72 md:w-72 object-contain">
               <img src={imagen.URL} alt="" />
             </div>
           </div>
 
           <div className="flex justify-center">
             <div className="w-1/2 flex justify-center">
-              <div className="grid grid-cols-2 gap-x-12 gap-y-4">
+              <div className="grid md:grid-cols-2 gap-x-12 gap-y-4">
                 <div>
-                  <Button className='w-24 px-7 py-6' onClick={() => setImagen(imagen.Respuesta_1, imagen.id - 1)}>
+                  <Button className='w-32 px-7 py-4' onClick={() => setImagen(imagen.Respuesta_1, imagen.id - 1)}>
                     {imagen.Respuesta_1}
                   </Button>
                 </div>
                 <div>
-                  <Button className='w-24 px-7 py-6' onClick={() => setImagen(imagen.Respuesta_2, imagen.id - 1)}>
+                  <Button className='w-32 px-7 py-4' onClick={() => setImagen(imagen.Respuesta_2, imagen.id - 1)}>
                     {imagen.Respuesta_2}
                   </Button>
                 </div>
                 <div>
-                  <Button className='w-24 px-7 py-6' onClick={() => setImagen(imagen.Respuesta_3, imagen.id - 1)}>
+                  <Button className='w-32 px-7 py-4' onClick={() => setImagen(imagen.Respuesta_3, imagen.id - 1)}>
                     {imagen.Respuesta_3}
                   </Button>
                 </div>
                 <div>
-                  <Button className='w-24 px-7 py-6' onClick={() => setImagen(0, imagen.id - 1)}>
-                    No veo nada
+                  <Button className='w-32 px-7 py-4' onClick={() => setImagen(0, imagen.id - 1)}>
+                    No veo
                   </Button>
                 </div>
               </div>

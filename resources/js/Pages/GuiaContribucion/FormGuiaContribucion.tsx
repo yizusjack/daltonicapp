@@ -1,4 +1,5 @@
 import CardPrueba from '@/Components/PruebasDaltonismo/CardPrueba';
+import MainLayout from '@/Layouts/MainLayout';
 import React, { useState } from 'react'
 
 export default function FormGuiaContribucion() {
@@ -27,12 +28,11 @@ export default function FormGuiaContribucion() {
         }
     ]
   return (
-    <div>
-        {/* <img src={pruebas[1].URL} alt="" /> */}
+    <MainLayout name='Guia de contribución'>
         <CardPrueba 
             imagen={pruebas[imagenActual]}
             setImagen={setImagen}
         />
-    </div>
+    </MainLayout>
   )
 }

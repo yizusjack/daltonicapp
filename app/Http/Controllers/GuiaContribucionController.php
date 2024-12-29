@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\GuiaContribucion;
 use App\Http\Requests\StoreGuiaContribucionRequest;
-use App\Http\Requests\UpdateGuiaContribucionRequest;
 
 class GuiaContribucionController extends Controller
 {
@@ -21,45 +21,13 @@ class GuiaContribucionController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('GuiaContribucion/FormGuiaContribucion');
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreGuiaContribucionRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(GuiaContribucion $guiaContribucion)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(GuiaContribucion $guiaContribucion)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateGuiaContribucionRequest $request, GuiaContribucion $guiaContribucion)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(GuiaContribucion $guiaContribucion)
     {
         //
     }

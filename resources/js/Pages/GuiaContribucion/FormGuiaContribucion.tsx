@@ -1,7 +1,8 @@
 import CardPrueba from '@/Components/PruebasDaltonismo/CardPrueba';
 import MainLayout from '@/Layouts/MainLayout';
 import { PageProps } from '@/types';
-import React, { useState } from 'react'
+import { useForm } from '@inertiajs/react';
+import React, { useEffect, useState } from 'react'
 
 export default function FormGuiaContribucion(
     {
@@ -11,15 +12,28 @@ export default function FormGuiaContribucion(
     const [imagenActual, setImagenActual] = useState(0);
     const totalPruebas = pruebas.length;
 
+    const { data, setData, post, processing, errors } = useForm<{
+        resultados: {id: number, valor: number}[];
+    }>({
+        resultados: [], // Inicializa como un array vacío
+    });
+
+    function submit() {
+        console.log(data);
+    }
+
+    useEffect(() => {
+        if (data.resultados.length === totalPruebas) {
+            submit();
+        }
+    }, [data.resultados]);
+
     const setImagen = (valor: number, id: number) => {
-        console.log(valor);
+        setData('resultados', [...data.resultados, {id: pruebas[id].id, valor}])
 
         if(id + 1 < totalPruebas) {
             setImagenActual(id + 1);
-        } else {
-            alert("Ya fue todo");
         }
-        
     }
 
   return (

@@ -8,20 +8,27 @@ export default function FormGuiaContribucion(
         pruebas
     }: PageProps<{pruebas: {id: number, URL: string, Respuesta_1: number, Respuesta_2: number, Respuesta_3: number}[]}>
 ) {
-    console.log(pruebas);
     const [imagenActual, setImagenActual] = useState(0);
+    const totalPruebas = pruebas.length;
 
     const setImagen = (valor: number, id: number) => {
         console.log(valor);
 
-        setImagenActual(id + 1);
+        if(id + 1 < totalPruebas) {
+            setImagenActual(id + 1);
+        } else {
+            alert("Ya fue todo");
+        }
+        
     }
 
   return (
     <MainLayout name='Guia de contribución'>
-        <CardPrueba 
+        <CardPrueba
+            index={imagenActual}
             imagen={pruebas[imagenActual]}
             setImagen={setImagen}
+            totalPruebas={totalPruebas}
         />
     </MainLayout>
   )

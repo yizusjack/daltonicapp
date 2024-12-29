@@ -1,18 +1,22 @@
 import { usePage } from '@inertiajs/react';
-import React, { ReactNode, PropsWithChildren } from 'react'
-import NavBar from '@/Components/NavBar';
+import React, { ReactNode, PropsWithChildren, useEffect } from 'react'
 import { SidebarProvider, SidebarTrigger } from '@/Components/ui/sidebar';
 import AppSidebar from '@/Components/AppSidebar';
 
 export default function MainLayout({
+    name,
     children,
-}: PropsWithChildren<{}>) {
+}: PropsWithChildren<{
+    name?: string
+}>) {
     const user = usePage().props.auth.user;
+
+    useEffect(()=> {
+        document.title = name ?? 'Daltonicapp';
+    }, [name]);
+
     return (
         <div>
-            {/* <div>
-            <NavBar />
-        </div> */}
             <SidebarProvider>
                 <AppSidebar />
                 <main className='w-full'>

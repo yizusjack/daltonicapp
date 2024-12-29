@@ -22,7 +22,7 @@ export default function CardPrueba({
       <Card className='w-full bg-slate-50'>
         <CardHeader>
           <CardTitle>Guía de contribución</CardTitle>
-          <CardDescription>Imágen {imagen.id}</CardDescription>
+          <CardDescription>Imagen {imagen.id}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex justify-center">
@@ -50,7 +50,7 @@ export default function CardPrueba({
                   </Button>
                 </div>
                 <div>
-                  <Button className='w-32 px-7 py-4' onClick={() => setImagen(0, imagen.id - 1)}>
+                  <Button className='w-32 px-7 py-4' onClick={() => setImagen(-1, imagen.id - 1)}>
                     No veo
                   </Button>
                 </div>

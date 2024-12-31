@@ -6,8 +6,12 @@ import React, { useEffect, useState } from 'react'
 
 export default function FormGuiaContribucion(
     {
-        pruebas
-    }: PageProps<{pruebas: {id: number, URL: string, Respuesta_1: number, Respuesta_2: number, Respuesta_3: number}[]}>
+        pruebas,
+        store_url
+    }: PageProps<{
+        pruebas: {id: number, URL: string, Respuesta_1: number, Respuesta_2: number, Respuesta_3: number}[],
+        store_url: string,
+    }>
 ) {
     const [imagenActual, setImagenActual] = useState(0);
     const totalPruebas = pruebas.length;
@@ -19,7 +23,7 @@ export default function FormGuiaContribucion(
     });
 
     function submit() {
-        console.log(data);
+        post(store_url);
     }
 
     useEffect(() => {

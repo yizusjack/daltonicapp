@@ -24,6 +24,7 @@ class GuiaContribucionController extends Controller
     {
         return Inertia::render('GuiaContribucion/FormGuiaContribucion', [
             'pruebas' => Imagen::get(),
+            'store_url' => route('guiaContribucion.store'),
         ]);
     }
 
@@ -32,6 +33,6 @@ class GuiaContribucionController extends Controller
      */
     public function store(StoreGuiaContribucionRequest $request)
     {
-        //
+        dd($request->all());
     }
 }

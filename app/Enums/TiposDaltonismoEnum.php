@@ -10,9 +10,11 @@ use App\Traits\EnumToArray;
  *
  * @enum
  */
-enum TipoArchivoEnum: string
+enum TiposDaltonismoEnum: string
 {
     use EnumToArray;
     
-    case Ishihara = 'Imagen Ishihara';
+    case Protanopia = 'Protanopía';
+    case Deuteranopia = 'Deuteranopía';
+    case Tritanopia = 'Tritanopía';
 }

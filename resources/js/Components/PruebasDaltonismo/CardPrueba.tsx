@@ -39,22 +39,22 @@ export default function CardPrueba({
 						<div className="w-1/2 flex justify-center">
 							<div className="grid md:grid-cols-2 gap-x-12 gap-y-4">
 								<div>
-									<Button className='w-32 px-7 py-4' onClick={() => setImagen(imagen.Respuesta_1, index)}>
+									<Button className='w-64 md:w-32 px-7 py-4' onClick={() => setImagen(imagen.Respuesta_1, index)}>
 										{imagen.Respuesta_1}
 									</Button>
 								</div>
 								<div>
-									<Button className='w-32 px-7 py-4' onClick={() => setImagen(imagen.Respuesta_2, index)}>
+									<Button className='w-64 md:w-32 px-7 py-4' onClick={() => setImagen(imagen.Respuesta_2, index)}>
 										{imagen.Respuesta_2}
 									</Button>
 								</div>
 								<div>
-									<Button className='w-32 px-7 py-4' onClick={() => setImagen(imagen.Respuesta_3, index)}>
+									<Button className='w-64 md:w-32 px-7 py-4' onClick={() => setImagen(imagen.Respuesta_3, index)}>
 										{imagen.Respuesta_3}
 									</Button>
 								</div>
 								<div>
-									<Button className='w-32 px-7 py-4' onClick={() => setImagen(-1, index)}>
+									<Button className='w-64 md:w-32 px-7 py-4' onClick={() => setImagen(-1, index)}>
 										No veo
 									</Button>
 								</div>

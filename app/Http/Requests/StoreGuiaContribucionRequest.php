@@ -22,7 +22,10 @@ class StoreGuiaContribucionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'resultados' => 'required|array',
+            'resultados.*' => 'array:id,valor',
+            'resultados.*.id' => 'required|exists:imagenes,id',
+            'resultados.*.valor' => 'required|numeric'
         ];
     }
 }

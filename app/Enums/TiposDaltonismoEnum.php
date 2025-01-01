@@ -6,7 +6,7 @@ use App\Traits\EnumToArray;
 
 
 /**
- * Enumerado para mostrar los tipos de archivos validos.
+ * Enumerado para mostrar los tipos de daltonismo existentes
  *
  * @enum
  */

@@ -23,6 +23,19 @@ trait EnumToArray
     {
         return array_column(self::cases(), 'value');
     }
+
+    /**
+     * Retorna un arreglo con los nombres y casos del enum
+     * 
+     * @return array
+     */
+    public static function keysValues(): array
+    {
+        return array_combine(
+            array_column(self::cases(), 'name'),
+            array_column(self::cases(), 'value')
+        );
+    }
 }
 
 

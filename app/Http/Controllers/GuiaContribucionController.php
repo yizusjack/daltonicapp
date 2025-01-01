@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Imagen;
 use App\Models\GuiaContribucion;
+use App\Enums\TiposDaltonismoEnum;
 use App\Http\Requests\StoreGuiaContribucionRequest;
 
 class GuiaContribucionController extends Controller
@@ -24,6 +25,7 @@ class GuiaContribucionController extends Controller
     {
         return Inertia::render('GuiaContribucion/FormGuiaContribucion', [
             'pruebas' => Imagen::get(),
+            'tipos_daltonismo' => TiposDaltonismoEnum::keysValues(),
             'store_url' => route('guiaContribucion.store'),
         ]);
     }

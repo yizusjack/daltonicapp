@@ -35,6 +35,6 @@ class GuiaContribucionController extends Controller
      */
     public function store(StoreGuiaContribucionRequest $request)
     {
-        dd($request->all());
+        dd($request->all()['resultados']);
     }
 }

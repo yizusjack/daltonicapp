@@ -3,7 +3,7 @@ import CardTipoDaltonismo from '@/Components/PruebasDaltonismo/CardTipoDaltonism
 import MainLayout from '@/Layouts/MainLayout';
 import { PageProps } from '@/types';
 import { useForm } from '@inertiajs/react';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 export default function FormGuiaContribucion(
     {
@@ -33,12 +33,6 @@ export default function FormGuiaContribucion(
         post(store_url);
     }
 
-    // useEffect(() => {
-    //     if (data.resultados.length === totalPruebas) {
-    //         submit();
-    //     }
-    // }, [data.resultados]);
-
     const setImagen = (valor: number, id: number) => {
         setData('resultados', [...data.resultados, {id: pruebas[id].id, valor}])
 
@@ -61,6 +55,7 @@ export default function FormGuiaContribucion(
             : 
             <CardTipoDaltonismo 
                 tipos_daltonismo = {tipos_daltonismo} 
+                errors = {errors}
                 setData={setData}
                 onSubmit={submit}
             />

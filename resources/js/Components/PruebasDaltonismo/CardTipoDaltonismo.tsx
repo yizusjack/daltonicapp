@@ -1,7 +1,6 @@
 import React, { PropsWithChildren } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '@/components/ui/button'
-import { Input } from "@/components/ui/input"
 import {
     Select,
     SelectContent,
@@ -12,10 +11,12 @@ import {
 
 export default function CardTipoDaltonismo({
     tipos_daltonismo,
+    errors,
     setData,
     onSubmit,
 }: PropsWithChildren<{
     tipos_daltonismo: { [index: string]: string }
+    errors: Partial<Record<string, string>>
     setData: (field: string, value: any) => void;
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }>) {
@@ -46,8 +47,9 @@ export default function CardTipoDaltonismo({
                                             }
                                         </SelectContent>
                                     </Select>
+                                    {errors.tipo_daltonismo && <div className='p-1 text-xs text-red-700'>{errors.tipo_daltonismo}</div>}
                                 </div>
-                                <Button className='w-full' type="submit">Submit</Button>
+                                <Button className='w-full' type="submit">Enviar</Button>
                             </form>
                         </div>
                     </div>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
+use App\Enums\TiposDaltonismoEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreGuiaContribucionRequest extends FormRequest
@@ -25,7 +27,8 @@ class StoreGuiaContribucionRequest extends FormRequest
             'resultados' => 'required|array',
             'resultados.*' => 'array:id,valor',
             'resultados.*.id' => 'required|exists:imagenes,id',
-            'resultados.*.valor' => 'required|numeric'
+            'resultados.*.valor' => 'required|numeric',
+            'tipo_daltonismo' => ['required', Rule::in(TiposDaltonismoEnum::names())],
         ];
     }
 }

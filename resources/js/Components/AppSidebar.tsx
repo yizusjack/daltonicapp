@@ -19,6 +19,8 @@ import LoginButtons from './partials/LoginButtons';
 
 export default function AppSidebar() {
     const user = usePage().props.auth.user;
+    const {url} = usePage();
+
     return (
         <Sidebar>
             <SidebarHeader>
@@ -57,9 +59,11 @@ export default function AppSidebar() {
                 <SidebarGroup>
                     <SidebarGroupLabel>Guía de contribución</SidebarGroupLabel>
                     <SidebarGroupContent>
-                        <SidebarMenuButton>
-                            <View /> Ayuda a mejorar test de visión
-                        </SidebarMenuButton>
+                        <Link href='/guiaContribucion/create'>
+                            <SidebarMenuButton isActive={url === '/guiaContribucion/create'}>
+                                <View /> Ayuda a mejorar test de visión
+                            </SidebarMenuButton>
+                        </Link>
                     </SidebarGroupContent>
                 </SidebarGroup>
 

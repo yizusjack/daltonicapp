@@ -18,6 +18,7 @@ class GuiaContribucion extends Model
     protected $table = 'guia_contribuciones';
 
     protected $fillable = [
+        'tipo_daltonismo',
         'user_id'
     ];
 

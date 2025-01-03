@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('guia_contribuciones', function (Blueprint $table) {
             $table->id();
+            $table->string('tipo_daltonismo');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

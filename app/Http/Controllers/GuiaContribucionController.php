@@ -7,11 +7,25 @@ use App\Models\Imagen;
 use App\Models\Respuesta;
 use App\Models\GuiaContribucion;
 use App\Enums\TiposDaltonismoEnum;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreGuiaContribucionRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class GuiaContribucionController extends Controller
 {
+    use AuthorizesRequests;
+    
+    /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(GuiaContribucion::class, 'guiaContribucion');
+    }
+    
     /**
      * Display a listing of the resource.
      */

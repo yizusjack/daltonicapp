@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Imagen;
+use App\Models\Respuesta;
 use App\Models\GuiaContribucion;
 use App\Enums\TiposDaltonismoEnum;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreGuiaContribucionRequest;
 
 class GuiaContribucionController extends Controller
@@ -35,6 +37,21 @@ class GuiaContribucionController extends Controller
      */
     public function store(StoreGuiaContribucionRequest $request)
     {
-        dd($request->all()['resultados']);
+        $response = $request->all();
+        
+        $guiaContribucion = GuiaContribucion::create([
+            'tipo_daltonismo' => $response['tipo_daltonismo'],
+            'user_id' => Auth::user()->id,
+        ]);
+
+        foreach($response['resultados'] as $resultado){
+            Respuesta::create([
+                'resultado' => $resultado['valor'],
+                'imagen_id' => $resultado['id'],
+                'guia_contribucion_id' => $guiaContribucion->id,
+            ]);
+        }
+
+        return redirect()->route('dashboard');
     }
 }

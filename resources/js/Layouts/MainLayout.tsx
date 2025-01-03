@@ -10,6 +10,7 @@ export default function MainLayout({
     name?: string
 }>) {
     const user = usePage().props.auth.user;
+    const permissions = usePage().props.auth?.permissions;
 
     useEffect(()=> {
         document.title = name ?? 'Daltonicapp';

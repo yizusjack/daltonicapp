@@ -16,9 +16,11 @@ import { Camera, CircleHelp, ClipboardX, Diff, GalleryHorizontal, Images, Speech
 import { Link, usePage } from '@inertiajs/react';
 import DropdownLogin from './partials/DropdownLogin';
 import LoginButtons from './partials/LoginButtons';
+import Can from './Auth/Can';
 
 export default function AppSidebar() {
     const user = usePage().props.auth.user;
+    const permissions = usePage().props.auth?.permissions;
     const {url} = usePage();
 
     return (
@@ -56,16 +58,18 @@ export default function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
 
-                <SidebarGroup>
-                    <SidebarGroupLabel>Guía de contribución</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <Link href='/guiaContribucion/create'>
-                            <SidebarMenuButton isActive={url === '/guiaContribucion/create'}>
-                                <View /> Ayuda a mejorar test de visión
-                            </SidebarMenuButton>
-                        </Link>
-                    </SidebarGroupContent>
-                </SidebarGroup>
+                <Can permission = {permissions.guiaContribucion.create}>
+                    <SidebarGroup>
+                        <SidebarGroupLabel>Guía de contribución</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <Link href='/guiaContribucion/create'>
+                                <SidebarMenuButton isActive={url === '/guiaContribucion/create'}>
+                                    <View /> Ayuda a mejorar test de visión
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                </Can>
 
                 <SidebarGroup>
                     <SidebarGroupLabel>Administración</SidebarGroupLabel>

@@ -12,7 +12,6 @@ export default function MainLayout({
     name?: string
 }>) {
     const user = usePage().props.auth.user;
-    const permissions = usePage().props.auth?.permissions;
     const {flash} = usePage().props;
 
     const { toast } = useToast()

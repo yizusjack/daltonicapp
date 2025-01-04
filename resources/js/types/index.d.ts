@@ -11,6 +11,11 @@ export interface Permissions {
     };
 }
 
+export interface Flash {
+    message?: string,
+    description?: string,
+}
+
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
@@ -18,4 +23,5 @@ export type PageProps<
         user: User;
         permissions: Permissions;
     };
+    flash?: Flash;
 };

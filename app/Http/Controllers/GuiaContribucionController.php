@@ -66,6 +66,9 @@ class GuiaContribucionController extends Controller
             ]);
         }
 
-        return redirect()->route('dashboard');
+        return redirect()->route('prueba')->with([
+            'message' => 'Gracias por tu contribución',
+            'description' => 'Tu información se almacenó correctamente y se usará para mejorar nuestro sistema',
+        ]);
     }
 }

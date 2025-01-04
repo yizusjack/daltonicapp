@@ -2,6 +2,9 @@
 
 namespace App\Enums;
 
+use App\Traits\EnumToArray;
+
+
 /**
  * Enumerado para mostrar los tipos de archivos validos.
  *
@@ -9,5 +12,7 @@ namespace App\Enums;
  */
 enum TipoArchivoEnum: string
 {
+    use EnumToArray;
+    
     case Ishihara = 'Imagen Ishihara';
 }

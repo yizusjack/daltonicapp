@@ -1,38 +1,65 @@
 import CardPrueba from '@/Components/PruebasDaltonismo/CardPrueba';
+import CardTipoDaltonismo from '@/Components/PruebasDaltonismo/CardTipoDaltonismo';
+import MainLayout from '@/Layouts/MainLayout';
+import { PageProps } from '@/types';
+import { useForm } from '@inertiajs/react';
 import React, { useState } from 'react'
 
-export default function FormGuiaContribucion() {
+export default function FormGuiaContribucion(
+    {
+        pruebas,
+        tipos_daltonismo,
+        store_url
+    }: PageProps<{
+        pruebas: {id: number, URL: string, Respuesta_1: number, Respuesta_2: number, Respuesta_3: number}[],
+        tipos_daltonismo: { [index: string]: string },
+        store_url: string,
+    }>
+) {
     const [imagenActual, setImagenActual] = useState(0);
+    const [completadas, setCompletadas] = useState(false);
+    const totalPruebas = pruebas.length;
 
-    const setImagen = (valor: number, id: number) => {
-        console.log(valor);
+    const { data, setData, post, processing, errors } = useForm<{
+        tipo_daltonismo: string;
+        resultados: {id: number, valor: number}[];
+    }>({
+        tipo_daltonismo: '',
+        resultados: [], // Inicializa como un array vacío
+    });
 
-        setImagenActual(id + 1);
+    function submit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        post(store_url);
     }
 
-    const pruebas: {id: number, URL: string, Respuesta_1: number, Respuesta_2: number, Respuesta_3: number}[] = [
-        {
-            id: 1,
-            URL: 'http://daltonicapp.test/storage/ish1.png',
-            Respuesta_1: 23,
-            Respuesta_2: 34,
-            Respuesta_3: 2
-        },
-        {
-            id: 2,
-            URL: 'http://daltonicapp.test/storage/ish2.png',
-            Respuesta_1: 3,
-            Respuesta_2: 4,
-            Respuesta_3: 23
+    const setImagen = (valor: number, id: number) => {
+        setData('resultados', [...data.resultados, {id: pruebas[id].id, valor}])
+
+        if(id + 1 < totalPruebas) {
+            setImagenActual(id + 1);
+        } else {
+            setCompletadas(true);
         }
-    ]
+    }
+
   return (
-    <div>
-        {/* <img src={pruebas[1].URL} alt="" /> */}
-        <CardPrueba 
-            imagen={pruebas[imagenActual]}
-            setImagen={setImagen}
-        />
-    </div>
+    <MainLayout name='Guia de contribución'>
+        { completadas == false ?
+            <CardPrueba
+                index={imagenActual}
+                imagen={pruebas[imagenActual]}
+                setImagen={setImagen}
+                totalPruebas={totalPruebas}
+            /> 
+            : 
+            <CardTipoDaltonismo 
+                tipos_daltonismo = {tipos_daltonismo} 
+                errors = {errors}
+                setData={setData}
+                onSubmit={submit}
+            />
+        }
+    </MainLayout>
   )
 }

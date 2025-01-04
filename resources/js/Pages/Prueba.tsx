@@ -18,7 +18,7 @@ import FormGuiaContribucion from './GuiaContribucion/FormGuiaContribucion'
 export default function Prueba() {
   return (
     <MainLayout>
-      <FormGuiaContribucion />
+      {/* <FormGuiaContribucion /> */}
     </MainLayout>
   )
 }

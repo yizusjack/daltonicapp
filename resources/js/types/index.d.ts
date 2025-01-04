@@ -5,10 +5,23 @@ export interface User {
     email_verified_at?: string;
 }
 
+export interface Permissions {
+    guiaContribucion: {
+        create: boolean;
+    };
+}
+
+export interface Flash {
+    message?: string,
+    description?: string,
+}
+
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
     auth: {
         user: User;
+        permissions: Permissions;
     };
+    flash?: Flash;
 };

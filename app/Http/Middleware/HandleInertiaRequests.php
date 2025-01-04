@@ -2,8 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Illuminate\Http\Request;
+use App\Models\GuiaContribucion;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -33,6 +34,15 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                'permissions' => [
+                    'guiaContribucion' => [
+                        'create' => $request->user()?->can('create', GuiaContribucion::class),
+                    ],
+                ],
+            ],
+            'flash' => [
+                'message' => fn () => $request->session()->get('message'),
+                'description' => fn () => $request->session()->get('description'),
             ],
         ];
     }

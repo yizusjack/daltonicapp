@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GuiaContribucionController;
+use App\Http\Controllers\ImagenController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -32,6 +33,10 @@ Route::middleware('auth')->group(function () {
     //Rutas para la guia de contribucion
     Route::resource('guiaContribucion', GuiaContribucionController::class)
         ->only(['create', 'store']);
+
+    //Rutas para imagenes
+    Route::resource('imagenes', ImagenController::class)
+        ->only(['create','store']);
 });
 
 require __DIR__.'/auth.php';

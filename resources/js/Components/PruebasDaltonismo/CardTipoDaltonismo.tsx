@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/Components/ui/button'
 import {
     Select,
     SelectContent,

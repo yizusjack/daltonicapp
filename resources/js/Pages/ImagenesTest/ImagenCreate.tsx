@@ -10,9 +10,9 @@ import {
   FormDescription,
   FormMessage,
 } from "@/Components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/Components/ui/input";
 import { useForm, FormProvider } from "react-hook-form";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/Components/ui/button";
 
 export default function FormImagenes({
   store_url,

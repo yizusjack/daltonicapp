@@ -7,7 +7,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/Components/ui/card"
-import { Button } from '@/components/ui/button';
+import { Button } from '@/Components/ui/button';
 
 export default function CardPrueba({
 	index,

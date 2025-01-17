@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\GetApiToken;
 use Inertia\Inertia;
 use App\Models\Imagen;
 use Illuminate\Http\Request;
+use App\Http\Requests\SendTipoDaltonismoRequest;
 
 class IshiharaController extends Controller
 {
@@ -22,8 +24,12 @@ class IshiharaController extends Controller
     /**
      * Obtiene el tipo de daltonismo y lo guarda en el usuario
      */
-    public function getTipoDaltonismo(Request $request)
+    public function getTipoDaltonismo(SendTipoDaltonismoRequest $request)
     {
-        dd($request);
+        $response = $request->all();
+        $tokenClass = new GetApiToken();
+        $token = $tokenClass->getToken();
+
+        dd(json_encode($response));
     }
 }

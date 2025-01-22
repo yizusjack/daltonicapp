@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
 
     //Rutas para imagenes
     Route::resource('imagenes', ImagenController::class)
-        ->only(['create','store']);
+        ->only(['index', 'create','store']);
 });
 
 require __DIR__.'/auth.php';

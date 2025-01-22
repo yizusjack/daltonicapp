@@ -15,7 +15,10 @@ class ImagenController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('ImagenesTest/ImagenIndex', [
+            'pruebas' => Imagen::get(),
+            'create_url' => route('imagenes.create'),
+        ]);
     }
 
     /**

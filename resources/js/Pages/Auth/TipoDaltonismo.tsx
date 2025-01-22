@@ -1,14 +1,14 @@
+import AppCard from '@/Components/AppCard';
 import CardPrueba from '@/Components/PruebasDaltonismo/CardPrueba';
+import { Button } from '@/Components/ui/button';
 import MainLayout from '@/Layouts/MainLayout';
 import { PageProps } from '@/types'
-import { Button } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
 import React, { useState } from 'react'
 
 export default function TipoDaltonismo(
     {
         pruebas,
-        tipos_daltonismo,
         store_url
     }: PageProps<{
         pruebas: { id: number, URL: string, Respuesta_1: number, Respuesta_2: number, Respuesta_3: number }[],
@@ -52,9 +52,17 @@ export default function TipoDaltonismo(
                     titleCard='Test de tipo de daltonismo'
                 />
                 :
-                <form onSubmit={submit}>
-                    <Button className='w-full' type="submit">Enviar</Button>
-                </form>
+                <AppCard 
+                    title='Test de tipo de daltonismo'
+                    description='Al enviar el formulario obtendrás tu tipo de daltonismo'
+                    footer='Enviar resultados'
+                >
+                    <div className="h-96 flex justify-center items-center">
+                        <form onSubmit={submit}>
+                            <Button type="submit">Enviar mis resultados</Button>
+                        </form>
+                    </div>
+                </AppCard>
             }
         </MainLayout>
     )

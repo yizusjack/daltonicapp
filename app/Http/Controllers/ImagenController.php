@@ -35,7 +35,7 @@ class ImagenController extends Controller
     {
         $request->validate([
             'Imagen' => 'required|file|mimes:jpg,jpeg,png|max:2048',
-            'Respuesta_1' => 'required|numeric',
+            'Respuesta_1' => 'required|numeric|min:0',
             'Respuesta_2' => 'required|numeric',
             'Respuesta_3' => 'required|numeric',
         ]);
@@ -49,8 +49,8 @@ class ImagenController extends Controller
         $imagen->addMediaFromRequest('Imagen')->toMediaCollection(TipoArchivoEnum::Ishihara->value);
 
         return redirect()->route('prueba')->with([
-            'message' => 'Gracias por tu contribución',
-            'description' => 'Tu información se almacenó correctamente y se usará para mejorar nuestro sistema',
+            'message' => 'Éxito',
+            'description' => 'La imagen ha sido guardada correctamente',
         ]);
     }
 

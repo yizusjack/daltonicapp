@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\GetApiToken;
+use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Imagen;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
 use App\Http\Requests\SendTipoDaltonismoRequest;
 
@@ -16,6 +18,8 @@ class IshiharaController extends Controller
      */
     public function test()
     {
+        Gate::authorize('hacerTest', User::class);
+
         return Inertia::render('Auth/TipoDaltonismo', [
             'pruebas' => Imagen::get(),
             'store_url' => route('ishihara.store'),
@@ -27,6 +31,8 @@ class IshiharaController extends Controller
      */
     public function getTipoDaltonismo(SendTipoDaltonismoRequest $request)
     {
+        Gate::authorize('hacerTest', User::class);
+        
         //Obtiene la informacion validada
         $data = $request->all();
 

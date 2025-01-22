@@ -21,7 +21,7 @@ import Can from './Auth/Can';
 export default function AppSidebar() {
     const user = usePage().props.auth.user;
     const permissions = usePage().props.auth?.permissions;
-    const {url} = usePage();
+    const { url } = usePage();
 
     return (
         <Sidebar>
@@ -31,17 +31,34 @@ export default function AppSidebar() {
                 </div>
             </SidebarHeader>
             <SidebarContent>
-                <SidebarGroup>
-                    <SidebarGroupLabel>Cámara</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenuButton>
-                            <Camera />Nueva imagen
-                        </SidebarMenuButton>
-                        <SidebarMenuButton>
-                            <Images />Mi galería
-                        </SidebarMenuButton>
-                    </SidebarGroupContent>
-                </SidebarGroup>
+                <Can permission={! permissions.imagenes.useCamera}>
+                    <SidebarGroup>
+                        <SidebarGroupLabel>Test de daltonismo</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <Link href='/test'>
+                                <SidebarMenuButton isActive={url === '/test'}>
+                                    <View /> Realizar test de daltonismo
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                </Can>
+
+                <Can
+                    permission={permissions.imagenes.useCamera}
+                >
+                    <SidebarGroup>
+                        <SidebarGroupLabel>Cámara</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <SidebarMenuButton>
+                                <Camera />Nueva imagen
+                            </SidebarMenuButton>
+                            <SidebarMenuButton>
+                                <Images />Mi galería
+                            </SidebarMenuButton>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                </Can>
 
                 <SidebarGroup>
                     <SidebarGroupLabel>Foro</SidebarGroupLabel>
@@ -52,13 +69,17 @@ export default function AppSidebar() {
                         <SidebarMenuButton>
                             <Speech />Comunidad
                         </SidebarMenuButton>
-                        <SidebarMenuButton>
-                            <GalleryHorizontal />Imágenes para mi
-                        </SidebarMenuButton>
+                        <Can
+                            permission={permissions.imagenes.useCamera}
+                        >
+                            <SidebarMenuButton>
+                                <GalleryHorizontal />Imágenes para mi
+                            </SidebarMenuButton>
+                        </Can>
                     </SidebarGroupContent>
                 </SidebarGroup>
 
-                <Can permission = {permissions.guiaContribucion.create}>
+                <Can permission={permissions.guiaContribucion.create && permissions.imagenes.useCamera}>
                     <SidebarGroup>
                         <SidebarGroupLabel>Guía de contribución</SidebarGroupLabel>
                         <SidebarGroupContent>

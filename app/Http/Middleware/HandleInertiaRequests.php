@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Inertia\Middleware;
 use Illuminate\Http\Request;
 use App\Models\GuiaContribucion;
@@ -35,6 +36,9 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
                 'permissions' => [
+                    'imagenes' => [
+                        'useCamera' => $request->user()?->can('useCamera', User::class),
+                    ],
                     'guiaContribucion' => [
                         'create' => $request->user()?->can('create', GuiaContribucion::class),
                     ],

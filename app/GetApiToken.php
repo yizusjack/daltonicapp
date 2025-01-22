@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 
 class GetApiToken
 {
@@ -16,6 +17,8 @@ class GetApiToken
 
     /**
      * Gets the token for the API
+     * 
+     * @return string
      */
     public static function getToken()
     {
@@ -26,6 +29,26 @@ class GetApiToken
             ],
         ]);
 
-        dd(json_decode($response->body(), true));
+        $status = $response->status();
+
+        if ($status == 200) {
+            $token = json_decode($response->body(), true)['token'];
+            Session::put('api-token', $token);
+            return $token;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Retrieves the api token
+     * 
+     * @return string
+     */
+    public function retrieveToken()
+    {
+        return Session::has('api-token')
+            ? Session::get('api-token')
+            : $this->getToken();
     }
 }

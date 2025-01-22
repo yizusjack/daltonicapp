@@ -1,0 +1,105 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - WWW_USER_ID=${DOCKER_UID:-1000}
+        - WWW_GROUP_ID=${DOCKER_GID:-1002}
+    image: "daltonicapp"
+    restart: unless-stopped
+    tty: true
+    depends_on:
+      - db
+      - webserver
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+      
+    working_dir: /var/www
+    volumes:
+      - '/mnt/storage/web-files/calidad-archivos/:/var/archivo_calidad'
+      - '/mnt/storage/backups/:/var/respaldo'
+      - './:/var/www'
+      - './php/local.ini:/usr/local/etc/php/conf.d/local.ini'
+      - '/home/${DOCKER_HOME_USER}/.ssh/:/home/www/.ssh/'
+      - './nginx/conf.d/:/etc/nginx/conf.d/'
+    networks:
+      - app-network
+  webserver:
+    image: 'nginx:alpine3.18-slim'
+    restart: unless-stopped
+    tty: true
+    expose:
+      - "80"
+    ports:
+      - '${DOCKER_WEB_PORT:-8090}:80'
+    environment:
+      - VIRTUAL_HOST=${DOCKER_PROXY_DOMAIN}
+      #- LETSENCRYPT_HOST=${DOCKER_PROXY_DOMAIN}
+      #- LETSENCRYPT_EMAIL=soporte.sigi@cucei.udg.mx
+    volumes:
+      - '/mnt/storage/web-files/sigi-archivos/:/var/archivo_calidad'
+      - '/mnt/storage/backups/:/var/respaldo'
+      - './:/var/www'
+      - './nginx/conf.d/:/etc/nginx/conf.d/'
+      - './php/local.ini:/usr/local/etc/php/conf.d/local.ini'
+
+    networks:
+      - default
+      - app-network
+  db:
+    image: 'mariadb:10.9.4'
+    restart: unless-stopped
+    tty: true
+    ports:
+      - '${DOCKER_DB_PORT:-3318}:3306'
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+      LANG: C.UTF-8
+    volumes:
+      - 'dbdata:/var/lib/mysql/'
+      - './mysql/my.cnf:/etc/mysql/my.cnf'
+      - '/mnt/storage/backups/:/var/respaldo'
+    networks:
+      - app-network
+  npm:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+      - WWW_USER_ID=${DOCKER_UID:-1000}
+      - WWW_GROUP_ID=${DOCKER_GID:-1002}
+    image: "daltonicapp"
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    ports:
+      - '5174:5174'
+    working_dir: /var/www
+    depends_on:
+      - app
+    volumes:
+      - './:/var/www'
+    entrypoint: ['npm', 'run', 'dev', '--host']
+    networks:
+      - app-network
+  
+networks:
+  default:
+    name: nginx-proxy
+  app-network:
+    driver: bridge
+volumes:
+  dbdata:
+    driver: local
+  #ssl:
+  #certs:
+  #html:
+  #vhostd:

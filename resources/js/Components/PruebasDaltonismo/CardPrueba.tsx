@@ -7,25 +7,27 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/Components/ui/card"
-import { Button } from '@/components/ui/button';
+import { Button } from '@/Components/ui/button';
 
 export default function CardPrueba({
 	index,
 	imagen,
 	setImagen,
-	totalPruebas
+	totalPruebas,
+	titleCard,
 }: PropsWithChildren<{
 	index: number;
 	setImagen: (valor: number, id: number) => void;
 	imagen: { id: number, URL: string, Respuesta_1: number, Respuesta_2: number, Respuesta_3: number };
-	totalPruebas: number
+	totalPruebas: number;
+	titleCard: string;
 }>) {
 
 	return (
 		<div className='p-6'>
 			<Card className='w-full bg-slate-50'>
 				<CardHeader>
-					<CardTitle>Guía de contribución</CardTitle>
+					<CardTitle>{titleCard}</CardTitle>
 					<CardDescription>Selecciona el número que ves en la imagen</CardDescription>
 				</CardHeader>
 				<CardContent>

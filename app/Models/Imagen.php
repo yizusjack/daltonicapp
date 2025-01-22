@@ -40,6 +40,6 @@ class Imagen extends Model implements HasMedia
      */
     public function getURLAttribute()
     {
-        return $this->getMedia(TipoArchivoEnum::Ishihara->value)->first()->getUrl();
+        return $this->getMedia(TipoArchivoEnum::Ishihara->value)->first()?->getUrl();
     }
 }

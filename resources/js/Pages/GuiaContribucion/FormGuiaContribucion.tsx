@@ -51,6 +51,7 @@ export default function FormGuiaContribucion(
                 imagen={pruebas[imagenActual]}
                 setImagen={setImagen}
                 totalPruebas={totalPruebas}
+                titleCard='Guía de contribución'
             /> 
             : 
             <CardTipoDaltonismo 

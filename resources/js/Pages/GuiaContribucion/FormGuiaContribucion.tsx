@@ -20,6 +20,13 @@ export default function FormGuiaContribucion(
     const [completadas, setCompletadas] = useState(false);
     const totalPruebas = pruebas.length;
 
+    const breadcrumb = [
+        {
+            url: 'active',
+            name: 'Guía de contribución'
+        }
+    ];
+
     const { data, setData, post, processing, errors } = useForm<{
         tipo_daltonismo: string;
         resultados: {id: number, valor: number}[];
@@ -44,7 +51,10 @@ export default function FormGuiaContribucion(
     }
 
   return (
-    <MainLayout name='Guia de contribución'>
+    <MainLayout 
+        name='Guia de contribución'
+        breadcrumb={breadcrumb}
+    >
         { completadas == false ?
             <CardPrueba
                 index={imagenActual}

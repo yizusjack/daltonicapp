@@ -29,7 +29,7 @@ class GuiaContribucionPolicy
      */
     public function create(User $user): bool
     {
-        return $user->guiaContribucion == null;
+        return $user->guiaContribucion == null && $user->tipo_daltonismo != null;
     }
 
     /**

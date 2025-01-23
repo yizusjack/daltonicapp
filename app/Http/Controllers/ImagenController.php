@@ -51,7 +51,7 @@ class ImagenController extends Controller
 
         $imagen->addMediaFromRequest('Imagen')->toMediaCollection(TipoArchivoEnum::Ishihara->value);
 
-        return redirect()->route('prueba')->with([
+        return redirect()->route('imagenes.index')->with([
             'message' => 'Éxito',
             'description' => 'La imagen ha sido guardada correctamente',
         ]);

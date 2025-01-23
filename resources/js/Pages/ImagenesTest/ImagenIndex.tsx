@@ -46,8 +46,12 @@ export default function ImagenIndex({
             <AppCard
                 title='Imagenes de test'
             >
-                <div className="flex justify-end">
-                    <Button asChild className='bg-neutral-700 hover:bg-neutral-600'>
+                <div className="flex pb-3 md:justify-end">
+                    <Button 
+                        asChild 
+                        className='bg-neutral-700 hover:bg-neutral-600'
+                        size={"sm"}
+                    >
                         <Link href={create_url}>
                             <Plus />
                             Nueva imagen de prueba
@@ -55,7 +59,7 @@ export default function ImagenIndex({
                     </Button>
                 </div>
 
-                <div className="flex justify-center">
+                <div className="flex justify-center px-10">
                     <Carousel setApi={setApi} className="w-full max-w-xs">
                         <CarouselContent>
                             {pruebas.map((prueba) => (
@@ -86,7 +90,7 @@ export default function ImagenIndex({
                     </Carousel>
                 </div>
 
-                <div className="text-sm text-right text-muted-foreground">
+                <div className="text-xs md:text-sm mt-3 text-right text-muted-foreground">
                     Imagen {current} de {count}
                 </div>
             </AppCard>

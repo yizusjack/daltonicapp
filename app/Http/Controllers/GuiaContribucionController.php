@@ -9,6 +9,7 @@ use App\Models\GuiaContribucion;
 use App\Enums\TiposDaltonismoEnum;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreGuiaContribucionRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -39,6 +40,8 @@ class GuiaContribucionController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', GuiaContribucion::class);
+        
         return Inertia::render('GuiaContribucion/FormGuiaContribucion', [
             'pruebas' => Imagen::get(),
             'tipos_daltonismo' => TiposDaltonismoEnum::keysValues(),
@@ -51,6 +54,8 @@ class GuiaContribucionController extends Controller
      */
     public function store(StoreGuiaContribucionRequest $request)
     {
+        Gate::authorize('create', GuiaContribucion::class);
+        
         $response = $request->all();
         
         $guiaContribucion = GuiaContribucion::create([

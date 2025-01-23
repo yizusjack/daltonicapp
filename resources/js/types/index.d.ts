@@ -22,7 +22,7 @@ export interface Flash {
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
-    auth: {
+    auth?: {
         user: User;
         permissions: Permissions;
     };

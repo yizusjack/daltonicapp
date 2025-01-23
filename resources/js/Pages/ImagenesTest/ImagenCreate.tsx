@@ -41,6 +41,17 @@ export default function FormImagenes({
         },
     });
 
+    const breadcrumb = [
+        {
+            url: '/imagenes',
+            name: 'Imagenes de test'
+        },
+        {
+            url: 'active',
+            name: 'Crear imagen'
+        }
+    ];
+
     function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
@@ -56,7 +67,10 @@ export default function FormImagenes({
     }
 
     return (
-        <MainLayout name="Nueva imagen de test">
+        <MainLayout 
+            name="Nueva imagen de test"
+            breadcrumb={breadcrumb}
+        >
             <AppCard
                 title="Nueva imagen para test de Ishihara"
             >

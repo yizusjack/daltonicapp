@@ -20,6 +20,13 @@ export default function TipoDaltonismo(
     const [completadas, setCompletadas] = useState(false);
     const totalPruebas = pruebas.length;
 
+    const breadcrumb = [
+        {
+            url: 'active',
+            name: 'Test de daltonismo'
+        }
+    ];
+
     const { data, setData, post, processing, errors } = useForm<{
         resultados: { id: number, valor: number }[];
     }>({
@@ -42,7 +49,10 @@ export default function TipoDaltonismo(
     }
 
     return (
-        <MainLayout name='Test de tipo de daltonismo'>
+        <MainLayout 
+            name='Test de tipo de daltonismo'
+            breadcrumb={breadcrumb}
+        >
             {completadas == false ?
                 <CardPrueba
                     index={imagenActual}

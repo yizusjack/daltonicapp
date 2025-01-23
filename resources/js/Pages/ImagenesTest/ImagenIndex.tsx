@@ -13,6 +13,7 @@ import {
 import { Button } from '@/Components/ui/button'
 import { Link } from '@inertiajs/react'
 import { Plus } from 'lucide-react'
+import { isNumberObject } from 'util/types'
 
 export default function ImagenIndex({
     pruebas,
@@ -39,9 +40,17 @@ export default function ImagenIndex({
         })
     }, [api])
 
+    const breadcrumb = [
+        {
+            url: 'active',
+            name: 'Imagenes'
+        }
+    ];
+
     return (
         <MainLayout
             name="Imagenes de test"
+            breadcrumb={breadcrumb}
         >
             <AppCard
                 title='Imagenes de test'

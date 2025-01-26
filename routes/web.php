@@ -21,6 +21,10 @@ Route::get('/prueba', function () {
     return Inertia::render('Prueba');
 })->name('prueba');
 
+Route::get('/log', function () {
+    return Inertia::render('Auth/LoginPage');
+})->name('log');
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

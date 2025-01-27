@@ -8,6 +8,7 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/Components/ui/breadcrumb"
+import { Link } from '@inertiajs/react'
 
 export default function AppBreadcrumb({
     elementos
@@ -18,7 +19,7 @@ export default function AppBreadcrumb({
         <Breadcrumb>
             <BreadcrumbList>
                 <BreadcrumbItem>
-                    <BreadcrumbLink href="/dashboard">Inicio</BreadcrumbLink>
+                    <Link href="/dashboard">Inicio</Link>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
 
@@ -29,7 +30,7 @@ export default function AppBreadcrumb({
                                 elemento.url != 'active' ? (
                                     <>
                                         <BreadcrumbItem>
-                                            <BreadcrumbLink href={elemento.url}>{elemento.name}</BreadcrumbLink>
+                                            <Link href={elemento.url}>{elemento.name}</Link>
                                             <BreadcrumbSeparator />
                                         </BreadcrumbItem>
                                     </>

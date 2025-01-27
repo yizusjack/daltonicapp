@@ -29,6 +29,8 @@ export default function MainLayout({
     useEffect(() => {
         if(flash?.description && flash?.message) {
             displayToast();
+            flash.message = undefined;
+            flash.description = undefined;
         }
     }, [flash]);
 

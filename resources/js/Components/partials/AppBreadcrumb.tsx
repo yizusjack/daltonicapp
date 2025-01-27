@@ -19,7 +19,7 @@ export default function AppBreadcrumb({
         <Breadcrumb>
             <BreadcrumbList>
                 <BreadcrumbItem>
-                    <BreadcrumbLink href="/dashboard">Inicio</BreadcrumbLink>
+                    <Link href="/dashboard">Inicio</Link>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
 

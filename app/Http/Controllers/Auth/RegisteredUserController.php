@@ -46,6 +46,9 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('ishihara.create', absolute: false))->with([
+            'message' => 'Gracias por registrarte a Daltonicapp',
+            'description' => 'Para comenzar haremos una prueba para conocer tu tipo de daltonismo',
+        ]);;
     }
 }

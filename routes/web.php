@@ -3,10 +3,11 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\IshiharaController;
+use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\GuiaContribucionController;
-use App\Http\Controllers\ImagenController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -16,6 +17,12 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+// Route to redirect to Google's OAuth page
+Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
+
+// Route to handle the callback from Google
+Route::get('/api/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

@@ -17,8 +17,9 @@ export default function DropdownLogin({
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className='text-md hover:bg-[#b5b7bd]'>
-                    <User2 /> {user.name}
+                <SidebarMenuButton className="text-md hover:bg-[#b5b7bd] flex items-center">
+                    <User2 />
+                    <span className="ml-2 truncate flex-1 overflow-hidden">{user.name}</span>
                     <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
             </DropdownMenuTrigger>

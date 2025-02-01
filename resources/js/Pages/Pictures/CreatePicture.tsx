@@ -1,31 +1,30 @@
-import AppCard from '@/Components/AppCard'
-import MainLayout from '@/Layouts/MainLayout'
-import { PageProps } from '@/types'
-import React, { useRef, useState } from 'react'
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-    type CarouselApi,
-} from "@/Components/ui/carousel"
-import { Button } from '@/Components/ui/button'
-import { Link } from '@inertiajs/react'
-import { Plus } from 'lucide-react'
-import { isNumberObject } from 'util/types'
-import Webcam from 'react-webcam'
+import MainLayout from "@/Layouts/MainLayout";
+import { PageProps } from "@/types";
+import { useForm } from "@inertiajs/react";
+import React, { useEffect, useRef, useState } from "react";
+import { Button } from "@/Components/ui/button";
+import Webcam from "react-webcam";
 
-export default function PictureCreate() {
+export default function PictureCreate({
+    store_url,
+}: PageProps<{
+    store_url: string;
+}>) {
+    const { data, setData, post, processing, errors } = useForm<{
+        Imagen: string | null;
+    }>({
+        Imagen: null,
+    });
+
+    const [showWebcam, setShowWebcam] = useState(false);
     const webcamRef = useRef<Webcam>(null);
     const [image, setImage] = useState<string | null>(null);
-    const [showWebcam, setShowWebcam] = useState(false);
 
     const capture = () => {
         if (webcamRef.current) {
             const screenshot = webcamRef.current.getScreenshot();
             setImage(screenshot);
-            setShowWebcam(false); // Hide webcam after capture
+            setShowWebcam(false);
         }
     };
 
@@ -40,20 +39,34 @@ export default function PictureCreate() {
         }
     };
 
+    
+    useEffect(() =>{
+        setData("Imagen",image);
+    }, [image])
+    
+
+    function submit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        if (image) {
+            post(store_url, {data}); 
+        }
+    }
+
     return (
         <MainLayout name="Create Picture">
             <div className="flex flex-col items-center gap-4">
                 {!showWebcam ? (
                     <>
-                        <button 
-                            onClick={() => setShowWebcam(true)} 
+                        <Button
+                            onClick={() => setShowWebcam(true)}
                             className="px-4 py-2 bg-blue-500 text-white rounded-md"
                         >
-                            Take Photo
-                        </button>
+                            Camara
+                        </Button>
 
                         <label className="px-4 py-2 bg-green-500 text-white rounded-md cursor-pointer">
-                            Upload Photo
+                            Subir Foto
                             <input
                                 type="file"
                                 accept="image/*"
@@ -74,24 +87,24 @@ export default function PictureCreate() {
                             }}
                             className="border rounded-lg"
                         />
-                        
-                        <button 
-                            onClick={capture} 
+
+                        <Button
+                            onClick={capture}
                             className="px-4 py-2 bg-blue-500 text-white rounded-md"
                         >
-                            Capture Photo
-                        </button>
+                            Tomar Foto
+                        </Button>
                     </>
                 )}
 
-                {image && (
-                    <div>
-                        <h3 className="text-lg font-semibold">Selected Image:</h3>
-                        <img src={image} alt="Captured or Uploaded" className="mt-2 border rounded-lg" />
+                <form onSubmit={submit}>
+                    <div className="pt-3 w-full flex justify-center">
+                        <Button className="px-6" variant="default" type="submit" disabled={processing}>
+                            Enviar
+                        </Button>
                     </div>
-                )}
+                </form>
             </div>
         </MainLayout>
     );
 }
-

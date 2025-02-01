@@ -6,6 +6,8 @@ use Inertia\Inertia;
 use App\Models\Picture;
 use App\Http\Requests\StorePictureRequest;
 use App\Http\Requests\UpdatePictureRequest;
+use Illuminate\Routing\Controller;
+use Illuminate\Http\Request;
 
 class PictureController extends Controller
 {
@@ -22,16 +24,26 @@ class PictureController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Pictures/CreatePicture');
+        return Inertia::render('Pictures/CreatePicture', [
+            'store_url' => route('picture.store'),
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePictureRequest $request)
+    public function store(Request $request)
     {
-        $request->validate([
-            'Imagen' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+        $imageData = $request->input('Imagen');  
+
+        if ($imageData) {
+            $image = base64_decode($imageData);
+        }
+
+        dd($imageData);
+
+        return redirect()->route('picture.create')->with([
+            'message' => 'Éxito',
         ]);
     }
 

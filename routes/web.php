@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     //Rutas para imagenes
     Route::resource('imagenes', ImagenController::class)
         ->only(['index', 'create','store']);
+        
     Route::resource('picture', PictureController::class);
 });
 

@@ -4,12 +4,22 @@ import { useForm } from "@inertiajs/react";
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/Components/ui/button";
 import Webcam from "react-webcam";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs"
+import AppCard from "@/Components/AppCard";
 
 export default function PictureCreate({
     store_url,
 }: PageProps<{
     store_url: string;
 }>) {
+
+    const breadcrumb = [
+        {
+            url: 'active',
+            name: 'Nueva imagen'
+        }
+    ];
+
     const { data, setData, post, processing, errors } = useForm<{
         Imagen: string | null;
     }>({
@@ -39,72 +49,79 @@ export default function PictureCreate({
         }
     };
 
-    
-    useEffect(() =>{
-        setData("Imagen",image);
+
+    useEffect(() => {
+        setData("Imagen", image);
     }, [image])
-    
+
 
     function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
         if (image) {
-            post(store_url, {data}); 
+            post(store_url, { data });
         }
     }
 
     return (
-        <MainLayout name="Create Picture">
-            <div className="flex flex-col items-center gap-4">
-                {!showWebcam ? (
-                    <>
-                        <Button
-                            onClick={() => setShowWebcam(true)}
-                            className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                        >
-                            Camara
-                        </Button>
+        <MainLayout
+            name="Nueva Imagen"
+            breadcrumb={breadcrumb}
+        >
+            <AppCard
+                title="Nueva imagen"
+            >
+                <div className="flex flex-col items-center gap-4">
+                    {!showWebcam ? (
+                        <>
+                            <Button
+                                onClick={() => setShowWebcam(true)}
+                                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                            >
+                                Camara
+                            </Button>
 
-                        <label className="px-4 py-2 bg-green-500 text-white rounded-md cursor-pointer">
-                            Subir Foto
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleUpload}
-                                className="hidden"
+                            <label className="px-4 py-2 bg-green-500 text-white rounded-md cursor-pointer">
+                                Subir Foto
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleUpload}
+                                    className="hidden"
+                                />
+                            </label>
+                        </>
+                    ) : (
+                        <>
+                            <Webcam
+                                ref={webcamRef}
+                                screenshotFormat="image/jpeg"
+                                videoConstraints={{
+                                    width: 640,
+                                    height: 480,
+                                    facingMode: "user",
+                                }}
+                                className="border rounded-lg"
                             />
-                        </label>
-                    </>
-                ) : (
-                    <>
-                        <Webcam
-                            ref={webcamRef}
-                            screenshotFormat="image/jpeg"
-                            videoConstraints={{
-                                width: 640,
-                                height: 480,
-                                facingMode: "user",
-                            }}
-                            className="border rounded-lg"
-                        />
 
-                        <Button
-                            onClick={capture}
-                            className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                        >
-                            Tomar Foto
-                        </Button>
-                    </>
-                )}
+                            <Button
+                                onClick={capture}
+                                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                            >
+                                Tomar Foto
+                            </Button>
+                        </>
+                    )}
 
-                <form onSubmit={submit}>
-                    <div className="pt-3 w-full flex justify-center">
-                        <Button className="px-6" variant="default" type="submit" disabled={processing}>
-                            Enviar
-                        </Button>
-                    </div>
-                </form>
-            </div>
+                    <form onSubmit={submit}>
+                        <div className="pt-3 w-full flex justify-center">
+                            <Button className="px-6" variant="default" type="submit" disabled={processing}>
+                                Enviar
+                            </Button>
+                        </div>
+                    </form>
+                </div>
+            </AppCard>
         </MainLayout>
     );
 }

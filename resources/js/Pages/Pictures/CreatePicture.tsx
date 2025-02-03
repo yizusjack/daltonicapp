@@ -26,7 +26,7 @@ export default function PictureCreate({
         Imagen: null,
     });
 
-    const [showWebcam, setShowWebcam] = useState(false);
+    const [showWebcam, setShowWebcam] = useState(true);
     const webcamRef = useRef<Webcam>(null);
     const [image, setImage] = useState<string | null>(null);
 
@@ -49,6 +49,9 @@ export default function PictureCreate({
         }
     };
 
+    const toggleCamera = () => {
+        setShowWebcam(! showWebcam);
+    }
 
     useEffect(() => {
         setData("Imagen", image);
@@ -71,16 +74,18 @@ export default function PictureCreate({
             <AppCard
                 title="Nueva imagen"
             >
+                <Tabs defaultValue="camara" className="w-full">
+                    <TabsList className="w-full">
+                        <TabsTrigger className="w-1/2" value="camara" onClick={toggleCamera}>Cámara</TabsTrigger>
+                        <TabsTrigger className="w-1/2" value="subir" onClick={toggleCamera}>Subir foto</TabsTrigger>
+                    </TabsList>
+                </Tabs>
+                {
+                    image && <img src={image} />
+                }
                 <div className="flex flex-col items-center gap-4">
                     {!showWebcam ? (
                         <>
-                            <Button
-                                onClick={() => setShowWebcam(true)}
-                                className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                            >
-                                Camara
-                            </Button>
-
                             <label className="px-4 py-2 bg-green-500 text-white rounded-md cursor-pointer">
                                 Subir Foto
                                 <input

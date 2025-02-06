@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs"
 import AppCard from "@/Components/AppCard";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/Components/ui/form";
 import { Input } from "@headlessui/react";
+import { Camera } from "lucide-react";
 
 export default function PictureCreate({
     store_url,
@@ -157,9 +158,10 @@ export default function PictureCreate({
                                         </div>
 
                                         <Button
+                                            variant="default"
                                             onClick={capture}
-                                            className="px-4 py-2 bg-blue-500 text-white rounded-md"
                                         >
+                                            <Camera />
                                             Tomar Foto
                                         </Button>
 

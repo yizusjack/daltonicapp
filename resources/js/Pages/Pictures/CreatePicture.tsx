@@ -15,6 +15,28 @@ export default function PictureCreate({
     store_url: string;
 }>) {
 
+    const useMediaQuery = (query: string) => {
+        const [matches, setMatches] = useState(window.matchMedia(query).matches);
+
+        useEffect(() => {
+            const media = window.matchMedia(query);
+            const listener = () => setMatches(media.matches);
+
+            media.addEventListener("change", listener);
+            return () => media.removeEventListener("change", listener);
+        }, [query]);
+
+        return matches;
+    };
+
+    const isMobile = useMediaQuery("(max-width: 768px)");
+
+    const videoConstraints={
+        width: isMobile ? 225 : 640,
+        height: isMobile ? 400 : 480,
+        facingMode: "user",
+    }
+
     const breadcrumb = [
         {
             url: 'active',
@@ -36,7 +58,6 @@ export default function PictureCreate({
         if (webcamRef.current) {
             const screenshot = webcamRef.current.getScreenshot();
             setImage(screenshot);
-            // setShowWebcam(false);
         }
     };
 
@@ -130,11 +151,7 @@ export default function PictureCreate({
                                             <Webcam
                                                 ref={webcamRef}
                                                 screenshotFormat="image/jpeg"
-                                                videoConstraints={{
-                                                    width: 640,
-                                                    height: 480,
-                                                    facingMode: "user",
-                                                }}
+                                                videoConstraints={videoConstraints}
                                                 className="border rounded-lg"
                                             />
                                         </div>

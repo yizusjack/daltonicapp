@@ -35,7 +35,7 @@ export default function PictureCreate({
     const videoConstraints={
         width: isMobile ? 225 : 640,
         height: isMobile ? 400 : 480,
-        facingMode: "user",
+        facingMode: "environment",
     }
 
     const breadcrumb = [

@@ -6,6 +6,8 @@ import { Button } from "@/Components/ui/button";
 import Webcam from "react-webcam";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs"
 import AppCard from "@/Components/AppCard";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/Components/ui/form";
+import { Input } from "@headlessui/react";
 
 export default function PictureCreate({
     store_url,
@@ -34,7 +36,7 @@ export default function PictureCreate({
         if (webcamRef.current) {
             const screenshot = webcamRef.current.getScreenshot();
             setImage(screenshot);
-            setShowWebcam(false);
+            // setShowWebcam(false);
         }
     };
 
@@ -50,12 +52,16 @@ export default function PictureCreate({
     };
 
     const toggleCamera = () => {
-        setShowWebcam(! showWebcam);
+        setShowWebcam(!showWebcam);
     }
 
     useEffect(() => {
         setData("Imagen", image);
     }, [image])
+
+    const cancelar = () => {
+        setImage(null);
+    }
 
 
     function submit(e: React.FormEvent<HTMLFormElement>) {
@@ -81,51 +87,71 @@ export default function PictureCreate({
                     </TabsList>
                 </Tabs>
                 {
-                    image && <img src={image} />
-                }
-                <div className="flex flex-col items-center gap-4">
-                    {!showWebcam ? (
+                    image ? (
                         <>
-                            <label className="px-4 py-2 bg-green-500 text-white rounded-md cursor-pointer">
-                                Subir Foto
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleUpload}
-                                    className="hidden"
-                                />
-                            </label>
+                            <div className="flex flex-col items-center gap-4">
+                                <div className="mt-2 pt-5">
+                                    <img src={image} />
+                                </div>
+                                <form onSubmit={submit}>
+                                    <div className="pt-3 w-full flex justify-center">
+                                        <Button className="px-6 mx-3" variant="outline" type="button" disabled={processing} onClick={cancelar}>
+                                            Cancelar
+                                        </Button>
+
+                                        <Button className="px-6 mx-3" variant="default" type="submit" disabled={processing}>
+                                            Enviar
+                                        </Button>
+                                    </div>
+                                </form>
+                            </div>
                         </>
                     ) : (
                         <>
-                            <Webcam
-                                ref={webcamRef}
-                                screenshotFormat="image/jpeg"
-                                videoConstraints={{
-                                    width: 640,
-                                    height: 480,
-                                    facingMode: "user",
-                                }}
-                                className="border rounded-lg"
-                            />
+                            <div className="flex flex-col items-center gap-4">
+                                {!showWebcam ? (
+                                    <>
+                                        <div className="mt-2 pt-5 max-w-full">
+                                            <div className='px-1 text-sm'>
+                                                Sube una imagen:
+                                            </div>
+                                            <input
+                                                type="file"
+                                                name="Imagen"
+                                                accept="image/*"
+                                                onChange={handleUpload}
+                                                className="h-16 w-full"
+                                            />
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="mt-2 pt-5">
+                                            <Webcam
+                                                ref={webcamRef}
+                                                screenshotFormat="image/jpeg"
+                                                videoConstraints={{
+                                                    width: 640,
+                                                    height: 480,
+                                                    facingMode: "user",
+                                                }}
+                                                className="border rounded-lg"
+                                            />
+                                        </div>
 
-                            <Button
-                                onClick={capture}
-                                className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                            >
-                                Tomar Foto
-                            </Button>
+                                        <Button
+                                            onClick={capture}
+                                            className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                                        >
+                                            Tomar Foto
+                                        </Button>
+
+                                    </>
+                                )}
+                            </div>
                         </>
-                    )}
-
-                    <form onSubmit={submit}>
-                        <div className="pt-3 w-full flex justify-center">
-                            <Button className="px-6" variant="default" type="submit" disabled={processing}>
-                                Enviar
-                            </Button>
-                        </div>
-                    </form>
-                </div>
+                    )
+                }
             </AppCard>
         </MainLayout>
     );

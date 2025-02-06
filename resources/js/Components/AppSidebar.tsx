@@ -50,9 +50,11 @@ export default function AppSidebar() {
                     <SidebarGroup>
                         <SidebarGroupLabel>Cámara</SidebarGroupLabel>
                         <SidebarGroupContent>
-                            <SidebarMenuButton>
-                                <Camera />Nueva imagen
-                            </SidebarMenuButton>
+                            <Link href={route('picture.create')}>
+                                <SidebarMenuButton isActive={url == "/picture/create"}>
+                                    <Camera />Nueva imagen
+                                </SidebarMenuButton>
+                            </Link>
                             <SidebarMenuButton>
                                 <Images />Mi galería
                             </SidebarMenuButton>

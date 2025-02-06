@@ -8,6 +8,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\IshiharaController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\GuiaContribucionController;
+use App\Http\Controllers\ImagenController;
+use App\Http\Controllers\PictureController;
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -45,6 +48,8 @@ Route::middleware('auth')->group(function () {
     //Rutas para imagenes
     Route::resource('imagenes', ImagenController::class)
         ->only(['index', 'create','store']);
+        
+    Route::resource('picture', PictureController::class);
 });
 
 require __DIR__.'/auth.php';

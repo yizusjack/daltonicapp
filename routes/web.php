@@ -8,8 +8,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\IshiharaController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\GuiaContribucionController;
-use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\PictureController;
+use App\Http\Controllers\UserController;
 
 
 Route::get('/', function () {
@@ -50,6 +50,8 @@ Route::middleware('auth')->group(function () {
         ->only(['index', 'create','store']);
         
     Route::resource('picture', PictureController::class);
+
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
 });
 
 require __DIR__.'/auth.php';

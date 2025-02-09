@@ -63,7 +63,11 @@ class PictureController extends Controller
             $body = json_decode($response->body(), true);
 
             if ($status == 200) {
-                dd($body['imagenTransformada']);
+                return redirect()->route('picture.mostrar')->with([
+                    'base64Image' => $body['imagenTransformada'],
+                    'message' => 'Imagen transformada correctamente',
+                    'description' => 'Ahora puedes guardarla y publicarla',
+                ]);
             } else if ($status == 401) {
                 $tokenClass->getToken();
                 $this->store($request);
@@ -74,6 +78,20 @@ class PictureController extends Controller
                 ]);
             }
 
+        }
+    }
+
+    public function mostrar()
+    {
+        if(session('base64Image')) {
+            return Inertia::render('Pictures/ShowTransformedPicture', [
+                'base64Image' => session('base64Image'),
+            ]);
+        } else {
+            return redirect()->route('dashboard')->with([
+                'message' => 'Error',
+                'description' => 'No se ha transformado ninguna imagen',
+            ]);
         }
     }
 

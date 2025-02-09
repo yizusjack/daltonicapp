@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
         ->only(['index', 'create','store']);
         
     Route::resource('picture', PictureController::class);
+    Route::get('mostrarNuevaImagen', [PictureController::class, 'mostrar'])->name('picture.mostrar');
 });
 
 require __DIR__.'/auth.php';

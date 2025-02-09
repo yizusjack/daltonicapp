@@ -42,9 +42,13 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $user->assignRole('Usuario');
+
         event(new Registered($user));
 
         Auth::login($user);
+
+        
 
         return redirect(route('ishihara.create', absolute: false))->with([
             'message' => 'Gracias por registrarte a Daltonicapp',

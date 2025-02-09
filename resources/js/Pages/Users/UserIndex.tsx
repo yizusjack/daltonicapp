@@ -1,46 +1,76 @@
-import { PageProps } from '@/types';
-import { Head } from "@inertiajs/react";
-import MainLayout from '@/Layouts/MainLayout';
-import { ColumnDef } from "@tanstack/react-table"
+import PageProps from "@/types";
+import { useForm } from "@inertiajs/react";
+import MainLayout from "@/Layouts/MainLayout";
+import { ColumnDef } from "@tanstack/react-table";
+import { DataTable } from "@/Components/ui/data-table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
+import { useEffect, useState } from "react";
 
 type User = {
     id: number;
     name: string;
     email: string;
-    roles: string[];
+    roles: string[]; 
 };
 
-interface UsersPageProps extends PageProps {
+interface PageProps {
+    auth: {
+        user: {
+            id: number;
+            name: string;
+            email: string;
+            roles: string[];
+        };
+    };
     users: User[];
+    roles: string[];
 }
 
+export default function Users({ users, roles, auth }: PageProps) {
+    const { post, transform } = useForm<{ role: string | null }>({
+        role: null,
+    });
 
-export default function Users({ users }: UsersPageProps) {
+    const [userID, setID] = useState<number>(0);
+    const [newRole, setRole] = useState<string>("");
+    const [count, setCount] = useState<number>(0);
+
+    useEffect(() => {
+        if (newRole) {
+            transform((data) => ({ ...data, role: newRole }));
+            post(`/users/${userID}/role`);
+        }
+    }, [count, newRole]);
+    
+
+    const columns: ColumnDef<User>[] = [
+        { accessorKey: "id", header: "ID" },
+        { accessorKey: "name", header: "Name" },
+        { accessorKey: "email", header: "Email" },
+        {
+            accessorKey: "roles",
+            header: "Roles",
+            cell: ({ row }) => {
+                const user = row.original;
+                return (
+                    <Select onValueChange={(value) => (setRole(value), setID(user.id), setCount(count + 1))}>
+                        <SelectTrigger>
+                            <SelectValue placeholder={user.roles[0]} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="Administrador">Administrador</SelectItem>
+                            <SelectItem value="Usuario">Usuario</SelectItem>
+                        </SelectContent>
+                    </Select>
+                );
+            },
+        },
+    ];
+
     return (
         <MainLayout>
-            <div className="container mx-auto p-4">
-                <Head title="Users and Roles" />
-                <h2 className="text-2xl font-bold mb-4">Users and Roles</h2>
-                <table className="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr className="bg-gray-200">
-                            <th className="border px-4 py-2">ID</th>
-                            <th className="border px-4 py-2">Name</th>
-                            <th className="border px-4 py-2">Email</th>
-                            <th className="border px-4 py-2">Roles</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.map((user) => (
-                            <tr key={user.id} className="border-t">
-                                <td className="border px-4 py-2">{user.id}</td>
-                                <td className="border px-4 py-2">{user.name}</td>
-                                <td className="border px-4 py-2">{user.email}</td>
-                                <td className="border px-4 py-2">{user.roles.join(", ")}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div className="container mx-auto py-10">
+                <DataTable columns={columns} data={users} />
             </div>
         </MainLayout>
     );

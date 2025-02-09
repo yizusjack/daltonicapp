@@ -52,6 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('picture', PictureController::class);
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/users/{user}/role', [UserController::class, 'updateRole']);
 });
 
 require __DIR__.'/auth.php';

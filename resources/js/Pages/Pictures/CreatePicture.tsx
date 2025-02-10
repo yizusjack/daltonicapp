@@ -6,9 +6,8 @@ import { Button } from "@/Components/ui/button";
 import Webcam from "react-webcam";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs"
 import AppCard from "@/Components/AppCard";
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/Components/ui/form";
-import { Input } from "@headlessui/react";
 import { Camera } from "lucide-react";
+import { Progress } from "@/Components/ui/progress"
 
 export default function PictureCreate({
     store_url,
@@ -45,7 +44,7 @@ export default function PictureCreate({
         }
     ];
 
-    const { data, setData, post, processing, errors } = useForm<{
+    const { data, setData, post, processing, errors, progress } = useForm<{
         Imagen: string | null;
     }>({
         Imagen: null,
@@ -102,12 +101,6 @@ export default function PictureCreate({
             <AppCard
                 title="Nueva imagen"
             >
-                <Tabs defaultValue="camara" className="w-full">
-                    <TabsList className="w-full">
-                        <TabsTrigger className="w-1/2" value="camara" onClick={toggleCamera}>Cámara</TabsTrigger>
-                        <TabsTrigger className="w-1/2" value="subir" onClick={toggleCamera}>Subir foto</TabsTrigger>
-                    </TabsList>
-                </Tabs>
                 {
                     image ? (
                         <>
@@ -116,6 +109,11 @@ export default function PictureCreate({
                                     <img src={image} />
                                 </div>
                                 <form onSubmit={submit}>
+                                    {/* <div>
+                                        {progress && (
+                                            <Progress value={progress.percentage} />
+                                        )}
+                                    </div> */}
                                     <div className="pt-3 w-full flex justify-center">
                                         <Button className="px-6 mx-3" variant="outline" type="button" disabled={processing} onClick={cancelar}>
                                             Cancelar
@@ -130,6 +128,12 @@ export default function PictureCreate({
                         </>
                     ) : (
                         <>
+                            <Tabs defaultValue={showWebcam ? "camara" : "subir"} className="w-full">
+                                <TabsList className="w-full">
+                                    <TabsTrigger className="w-1/2" value="camara" onClick={toggleCamera}>Cámara</TabsTrigger>
+                                    <TabsTrigger className="w-1/2" value="subir" onClick={toggleCamera}>Subir foto</TabsTrigger>
+                                </TabsList>
+                            </Tabs>
                             <div className="flex flex-col items-center gap-4">
                                 {!showWebcam ? (
                                     <>

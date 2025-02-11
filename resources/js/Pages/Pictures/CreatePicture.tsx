@@ -130,8 +130,13 @@ export default function PictureCreate({
                         <>
                             <Tabs defaultValue={showWebcam ? "camara" : "subir"} className="w-full">
                                 <TabsList className="w-full">
-                                    <TabsTrigger className="w-1/2" value="camara" onClick={toggleCamera}>Cámara</TabsTrigger>
-                                    <TabsTrigger className="w-1/2" value="subir" onClick={toggleCamera}>Subir foto</TabsTrigger>
+                                    <TabsTrigger className="w-1/2" value="camara" onClick={() => setShowWebcam(true)}>
+                                        Cámara
+                                    </TabsTrigger>
+
+                                    <TabsTrigger className="w-1/2" value="subir" onClick={() => setShowWebcam(false)}>
+                                        Subir foto
+                                    </TabsTrigger>
                                 </TabsList>
                             </Tabs>
                             <div className="flex flex-col items-center gap-4">

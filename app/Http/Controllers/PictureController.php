@@ -63,8 +63,10 @@ class PictureController extends Controller
             $body = json_decode($response->body(), true);
 
             if ($status == 200) {
+                // dd($body['imagenOriginal']);
                 return redirect()->route('picture.mostrar')->with([
                     'base64Image' => $body['imagenTransformada'],
+                    'base64OldImage' => $body['imagenOriginal'],
                     'message' => 'Imagen transformada correctamente',
                     'description' => 'Ahora puedes guardarla y publicarla',
                 ]);
@@ -86,6 +88,7 @@ class PictureController extends Controller
         if(session('base64Image')) {
             return Inertia::render('Pictures/ShowTransformedPicture', [
                 'base64Image' => session('base64Image'),
+                'base64OldImage' => session('base64OldImage'),
             ]);
         } else {
             return redirect()->route('dashboard')->with([

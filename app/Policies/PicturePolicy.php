@@ -21,7 +21,7 @@ class PicturePolicy
      */
     public function view(User $user, Picture $picture): bool
     {
-        return false;
+        return $picture->user_id == $user->id;
     }
 
     /**

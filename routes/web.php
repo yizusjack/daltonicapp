@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
         
     Route::resource('picture', PictureController::class);
     Route::get('mostrarNuevaImagen', [PictureController::class, 'mostrar'])->name('picture.mostrar');
+    Route::post('save', [PictureController::class, 'save'])->name('picture.save');
 });
 
 require __DIR__.'/auth.php';

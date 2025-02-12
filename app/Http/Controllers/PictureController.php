@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\GetApiToken;
 use Inertia\Inertia;
 use App\Models\Picture;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Enums\TipoArchivoEnum;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StorePictureRequest;
 use App\Http\Requests\UpdatePictureRequest;
 
@@ -83,6 +87,9 @@ class PictureController extends Controller
         }
     }
 
+    /**
+     * Muestra la imagen antes de ser guardada
+     */
     public function mostrar()
     {
         if(session('base64Image')) {
@@ -99,27 +106,40 @@ class PictureController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Guarda la imagen
+     */
+    public function save(Request $request)
+    {
+        $request->validate([
+            'base64' => 'required',
+        ]);
+
+        $picture = Picture::create([
+            'user_id' => Auth::user()->id,
+        ]);
+
+        $nombreArchivo = Str::uuid() . '.jpeg';
+        
+        $picture->addMediaFromBase64($request['base64'])
+        ->usingFileName($nombreArchivo)
+        ->toMediaCollection(TipoArchivoEnum::ImagenPrivada->value, 'private');
+
+        return redirect()->route('dashboard')->with([
+            'message' => 'Imagen guardada correctamente',
+            'description' => 'Ahora la podrá ver en su galería',
+        ]);
+    }
+
+    /**
+     * Recupera la imagen para su visualización
      */
     public function show(Picture $picture)
     {
-        //
-    }
+        Gate::authorize('view', $picture);
+        
+        $archivo = $picture->getMedia(TipoArchivoEnum::ImagenPrivada->value)->first();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Picture $picture)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePictureRequest $request, Picture $picture)
-    {
-        //
+        return Storage::response($archivo->getPathRelativeToRoot());
     }
 
     /**

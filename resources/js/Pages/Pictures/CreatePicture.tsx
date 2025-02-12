@@ -114,7 +114,7 @@ export default function PictureCreate({
                                         </Button>
 
                                         <Button className="px-6 mx-3" variant="default" type="submit" disabled={processing}>
-                                            Enviar
+                                            Transformar
                                         </Button>
                                     </div>
                                 </form>

@@ -3,6 +3,8 @@ import MainLayout from '@/Layouts/MainLayout'
 import { PageProps } from '@/types'
 import { Tabs, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import React, { useState } from 'react'
+import { Button } from '@/Components/ui/button';
+import { Link, useForm } from '@inertiajs/react';
 
 export default function ShowTransformedPicture({
     base64Image,
@@ -12,7 +14,19 @@ export default function ShowTransformedPicture({
     base64OldImage: string,
 }>) {
     const [imagenTransformada, setImagenTransformada] = useState(true);
-    
+
+    const { data, post, processing, errors } = useForm<{
+        base64: string;
+    }>({
+        base64: base64Image,
+    });
+
+    function submit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        post(route('picture.save'), {data});
+    } 
+
     return (
         <MainLayout
             name="Imagen">
@@ -33,13 +47,27 @@ export default function ShowTransformedPicture({
 
                         {
                             imagenTransformada == true
-                            ? (
-                                <img src={`data:image/jpeg;base64,${base64Image}`} />
-                            ) : (
-                                <img src={base64OldImage} />
-                            )
+                                ? (
+                                    <img src={`data:image/jpeg;base64,${base64Image}`} />
+                                ) : (
+                                    <img src={base64OldImage} />
+                                )
                         }
                     </div>
+
+                    <form onSubmit={submit}>
+                        <div className="pt-3 w-full flex justify-center">
+                            <Link href={route('picture.create')}>
+                                <Button className="px-6 mx-3" variant="outline" disabled={processing} type="button">
+                                    Cancelar
+                                </Button>
+                            </Link>
+
+                            <Button className="px-6 mx-3" variant="default" disabled={processing} type="submit">
+                                Guardar imagen
+                            </Button>
+                        </div>
+                    </form>
                 </div>
             </AppCard>
         </MainLayout>

@@ -7,7 +7,6 @@ import Webcam from "react-webcam";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs"
 import AppCard from "@/Components/AppCard";
 import { Camera } from "lucide-react";
-import { Progress } from "@/Components/ui/progress"
 
 export default function PictureCreate({
     store_url,
@@ -44,7 +43,7 @@ export default function PictureCreate({
         }
     ];
 
-    const { data, setData, post, processing, errors, progress } = useForm<{
+    const { data, setData, post, processing, errors } = useForm<{
         Imagen: string | null;
     }>({
         Imagen: null,
@@ -109,11 +108,6 @@ export default function PictureCreate({
                                     <img src={image} />
                                 </div>
                                 <form onSubmit={submit}>
-                                    {/* <div>
-                                        {progress && (
-                                            <Progress value={progress.percentage} />
-                                        )}
-                                    </div> */}
                                     <div className="pt-3 w-full flex justify-center">
                                         <Button className="px-6 mx-3" variant="outline" type="button" disabled={processing} onClick={cancelar}>
                                             Cancelar

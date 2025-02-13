@@ -10,7 +10,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/Components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/Components/ui/button"
 import MainLayout from '@/Layouts/MainLayout'
 import CardPrueba from '@/Components/PruebasDaltonismo/CardPrueba'
 import FormGuiaContribucion from './GuiaContribucion/FormGuiaContribucion'

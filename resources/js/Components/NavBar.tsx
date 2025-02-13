@@ -13,7 +13,7 @@ import { Link, usePage } from '@inertiajs/react';
 
 
 export default function NavBar() {
-    const user = usePage().props.auth.user;
+    const user = usePage().props.auth?.user;
     return (
         <div className="p-3 w-full bg-slate-200 flex justify-end">
             <NavigationMenu>

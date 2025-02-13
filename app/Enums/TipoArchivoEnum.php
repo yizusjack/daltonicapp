@@ -15,4 +15,5 @@ enum TipoArchivoEnum: string
     use EnumToArray;
     
     case Ishihara = 'Imagen Ishihara';
+    case ImagenPrivada = 'Imagen privada';
 }

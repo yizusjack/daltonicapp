@@ -8,7 +8,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\IshiharaController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\GuiaContribucionController;
-use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\PictureController;
 
 
@@ -50,6 +49,8 @@ Route::middleware('auth')->group(function () {
         ->only(['index', 'create','store']);
         
     Route::resource('picture', PictureController::class);
+    Route::get('mostrarNuevaImagen', [PictureController::class, 'mostrar'])->name('picture.mostrar');
+    Route::post('save', [PictureController::class, 'save'])->name('picture.save');
 });
 
 require __DIR__.'/auth.php';

@@ -14,7 +14,7 @@ enum TiposDaltonismoEnum: string
 {
     use EnumToArray;
     
-    case Protanopia = 'Protanopía';
-    case Deuteranopia = 'Deuteranopía';
-    case Tritanopia = 'Tritanopía';
+    case Protanopia = 'Protanopia';
+    case Deuteranopia = 'Deuteranopia';
+    case Tritanopia = 'Tritanopia';
 }

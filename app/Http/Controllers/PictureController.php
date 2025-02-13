@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\GetApiToken;
 use Inertia\Inertia;
 use App\Models\Picture;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Enums\TipoArchivoEnum;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StorePictureRequest;
 use App\Http\Requests\UpdatePictureRequest;
-use Illuminate\Routing\Controller;
-use Illuminate\Http\Request;
 
 class PictureController extends Controller
 {
@@ -34,41 +41,116 @@ class PictureController extends Controller
      */
     public function store(Request $request)
     {
+        //Policy
+
         $imageData = $request->input('Imagen');  
 
         if ($imageData) {
-            $image = base64_decode($imageData);
+            //Genera la clase de obtencion de tokens
+            $tokenClass = new GetApiToken();
+            $token = $tokenClass->retrieveToken();
+
+            if ($token == null) {
+                return redirect()->back()->with([
+                    'message' => 'Ocurrió un error',
+                    'description' => 'Estamos presentando fallas en nuestro sistema. Favor de contactar con un administrador',
+                ]);
+            }
+
+            $response = Http::withToken($token)
+            ->post(env('PYTHON_API_URL') . '/transform-image', [
+                'tipo_daltonismo' => Auth::user()->tipo_daltonismo,
+                'imagen' => $imageData,
+            ]);
+
+            $status = $response->status();
+            $body = json_decode($response->body(), true);
+
+            if ($status == 200) {
+                // dd($body['imagenOriginal']);
+                return redirect()->route('picture.mostrar')->with([
+                    'base64Image' => $body['imagenTransformada'],
+                    'base64OldImage' => $body['imagenOriginal'],
+                    'message' => 'Imagen transformada correctamente',
+                    'description' => 'Ahora puedes guardarla y publicarla',
+                ]);
+            } else if ($status == 401) {
+                $tokenClass->getToken();
+                $this->store($request);
+            } else {
+                return redirect()->back()->with([
+                    'message' => 'Ocurrió un error',
+                    'description' => 'Estamos presentando fallas en nuestro sistema. Favor de contactar con un administrador',
+                ]);
+            }
+
         }
+    }
 
-        dd($imageData);
+    /**
+     * Muestra la imagen antes de ser guardada
+     */
+    public function mostrar()
+    {
+        if(session('base64Image')) {
+            return Inertia::render('Pictures/ShowTransformedPicture', [
+                'base64Image' => session('base64Image'),
+                'base64OldImage' => session('base64OldImage'),
+            ]);
+        } else {
+            return redirect()->route('dashboard')->with([
+                'message' => 'Error',
+                'description' => 'No se ha transformado ninguna imagen',
+            ]);
+        }
+    }
 
-        return redirect()->route('picture.create')->with([
-            'message' => 'Éxito',
+    /**
+     * Guarda la imagen
+     */
+    public function save(Request $request)
+    {
+        $request->validate([
+            'base64' => 'required',
+        ]);
+
+        $picture = Picture::create([
+            'user_id' => Auth::user()->id,
+        ]);
+
+        $nombreArchivo = Str::uuid() . '.jpeg';
+        
+        $picture->addMediaFromBase64($request['base64'])
+        ->usingFileName($nombreArchivo)
+        ->toMediaCollection(TipoArchivoEnum::ImagenPrivada->value, 'private');
+
+        return redirect()->route('dashboard')->with([
+            'message' => 'Imagen guardada correctamente',
+            'description' => 'Ahora la podrá ver en su galería',
         ]);
     }
 
     /**
-     * Display the specified resource.
+     * Recupera la imagen para su visualización
      */
     public function show(Picture $picture)
     {
-        //
+        Gate::authorize('view', $picture);
+        
+        $archivo = $picture->getMedia(TipoArchivoEnum::ImagenPrivada->value)->first();
+
+        return Storage::response($archivo->getPathRelativeToRoot());
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Descarga la imagen
      */
-    public function edit(Picture $picture)
+    public function download(Picture $picture)
     {
-        //
-    }
+        //Gate::authorize('view', $picture);
+        $archivo = $picture->getMedia(TipoArchivoEnum::ImagenPrivada->value)->first();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePictureRequest $request, Picture $picture)
-    {
-        //
+        return response()->download($archivo->getPath(), $archivo->file_name);
     }
 
     /**

@@ -143,6 +143,17 @@ class PictureController extends Controller
     }
 
     /**
+     * Descarga la imagen
+     */
+    public function download(Picture $picture)
+    {
+        //Gate::authorize('view', $picture);
+        $archivo = $picture->getMedia(TipoArchivoEnum::ImagenPrivada->value)->first();
+
+        return response()->download($archivo->getPath(), $archivo->file_name);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Picture $picture)

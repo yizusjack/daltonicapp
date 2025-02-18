@@ -23,7 +23,7 @@ class PictureController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Pictures/IndexPicture');
     }
 
     /**

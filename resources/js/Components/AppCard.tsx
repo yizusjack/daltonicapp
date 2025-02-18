@@ -15,7 +15,7 @@ export default function AppCard({
     <div className='p-6'>
 			<Card className='w-full bg-slate-50'>
 				<CardHeader>
-					<CardTitle>{title}</CardTitle>
+					<CardTitle className='text-lg'>{title}</CardTitle>
 					<CardDescription>{description}</CardDescription>
 				</CardHeader>
 				<CardContent>

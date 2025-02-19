@@ -53,10 +53,10 @@ export default function IndexPicture({
                                 <img src={route('picture.show', imagen.id)} className='w-full h-full object-cover rounded-md' alt="" />
 
                                 <div className="p-3 absolute inset-0 bg-black bg-opacity-50 flex items-end justify-between rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <Button variant="secondary">
+                                    <Button onClick={() => mostrarImagen(imagen)} variant="secondary">
                                         <EyeIcon className='h-6 w-6' />
                                     </Button>
-                                    <Button onClick={() => mostrarImagen(imagen)} variant="secondary">
+                                    <Button variant="secondary">
                                         <FolderDown className='h-6 w-6' />
                                     </Button>
                                 </div>

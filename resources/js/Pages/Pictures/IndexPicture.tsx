@@ -4,19 +4,38 @@ import MainLayout from '@/Layouts/MainLayout'
 import { PageProps } from '@/types';
 import { Picture } from '@/types/picture';
 import { EyeIcon, FolderDown } from 'lucide-react';
-import React from 'react'
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from "@/Components/ui/dialog"
+import React, { useState } from 'react'
 
 export default function IndexPicture({
     imagenes
 }: PageProps<{
     imagenes: Picture[];
 }>) {
+
     const breadcrumb = [
         {
             url: 'active',
             name: 'Mi galería'
         }
     ];
+
+    const [abrirModal, setAbrirModal] = useState(false);
+    const [selectedPicture, setSelectedPicture] = useState<Picture|null>(null);
+
+    const mostrarImagen = (picture: Picture) => {
+        setSelectedPicture(picture);
+
+        setTimeout(() => {
+            setAbrirModal(true);
+        }, 10);
+    }
 
     return (
         <MainLayout
@@ -35,10 +54,10 @@ export default function IndexPicture({
 
                                 <div className="p-3 absolute inset-0 bg-black bg-opacity-50 flex items-end justify-between rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     <Button variant="secondary">
-                                        <EyeIcon className='h-6 w-6'/>
+                                        <EyeIcon className='h-6 w-6' />
                                     </Button>
-                                    <Button variant="secondary">
-                                        <FolderDown className='h-6 w-6'/>
+                                    <Button onClick={() => mostrarImagen(imagen)} variant="secondary">
+                                        <FolderDown className='h-6 w-6' />
                                     </Button>
                                 </div>
                             </div>
@@ -46,6 +65,17 @@ export default function IndexPicture({
                     }
                 </div>
             </AppCard>
+            <Dialog open={abrirModal} onOpenChange={setAbrirModal}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Are you absolutely sure?</DialogTitle>
+                        <DialogDescription>
+                            This action cannot be undone. This will permanently delete your account
+                            and remove your data from our servers.
+                        </DialogDescription>
+                    </DialogHeader>
+                </DialogContent>
+            </Dialog>
         </MainLayout>
     )
 }

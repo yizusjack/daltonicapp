@@ -12,6 +12,7 @@ import {
     DialogTitle,
 } from "@/Components/ui/dialog"
 import React, { useState } from 'react'
+import { Card, CardContent } from '@/Components/ui/card';
 
 export default function IndexPicture({
     imagenes
@@ -49,33 +50,45 @@ export default function IndexPicture({
                 <div className="grid grid-cols-12 gap-x-4 gap-y-8 place-items-center">
                     {
                         imagenes.map((imagen) => (
-                            <div key={imagen.id} className='col-span-4 w-64 h-64 justify-center items-center rounded-md relative group'>
-                                <img src={route('picture.show', imagen.id)} className='w-full h-full object-cover rounded-md' alt="" />
+                            <Card key={imagen.id} className='col-span-4'>
+                                <CardContent className='pt-6 pb-12'>
+                                    <div className='w-64 h-64 justify-center items-center rounded-md relative group'>
+                                        <img src={route('picture.show', imagen.id)} className='w-full h-full object-cover rounded-md' alt="" />
 
-                                <div className="p-3 absolute inset-0 bg-black bg-opacity-50 flex items-end justify-between rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <Button onClick={() => mostrarImagen(imagen)} variant="secondary">
-                                        <EyeIcon className='h-6 w-6' />
-                                    </Button>
-                                    <Button variant="secondary">
-                                        <FolderDown className='h-6 w-6' />
-                                    </Button>
-                                </div>
-                            </div>
+                                        <div className="p-3 absolute inset-0 bg-black bg-opacity-50 flex items-end justify-between rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <Button onClick={() => mostrarImagen(imagen)} variant="secondary">
+                                                <EyeIcon className='h-6 w-6' />
+                                            </Button>
+                                            <a href={route('picture.download', imagen.id)}>
+                                                <Button variant="secondary">
+                                                    <FolderDown className='h-6 w-6' />
+                                                </Button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
                         ))
                     }
                 </div>
             </AppCard>
-            <Dialog open={abrirModal} onOpenChange={setAbrirModal}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Are you absolutely sure?</DialogTitle>
-                        <DialogDescription>
-                            This action cannot be undone. This will permanently delete your account
-                            and remove your data from our servers.
-                        </DialogDescription>
-                    </DialogHeader>
-                </DialogContent>
-            </Dialog>
+            {
+                selectedPicture &&
+                (<Dialog open={abrirModal} onOpenChange={setAbrirModal}>
+                    <DialogContent className='max-w-7xl'>
+                        {/* <DialogHeader>
+                            <DialogTitle>Are you absolutely sure?</DialogTitle>
+                            <DialogDescription>
+                                This action cannot be undone. This will permanently delete your account
+                                and remove your data from our servers.
+                            </DialogDescription>
+                        </DialogHeader> */}
+                        <div className='flex items-center justify-center'>
+                            <img src={route('picture.show', selectedPicture.id)} alt="" />
+                        </div>
+                    </DialogContent>
+                </Dialog>)
+            }
         </MainLayout>
     )
 }

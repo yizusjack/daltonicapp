@@ -52,6 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('picture', PictureController::class);
     Route::get('mostrarNuevaImagen', [PictureController::class, 'mostrar'])->name('picture.mostrar');
     Route::post('save', [PictureController::class, 'save'])->name('picture.save');
+    Route::get('/picture/{picture}/download', [PictureController::class, 'download'])->name('picture.download');
 });
 
 require __DIR__.'/auth.php';

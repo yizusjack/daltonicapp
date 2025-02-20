@@ -38,6 +38,12 @@ export default function IndexPicture({
         }, 10);
     }
 
+    const getDate = (date: Date) => {
+        const formatedDate = new Date(date);
+
+        return formatedDate.toLocaleDateString();
+    }
+
     return (
         <MainLayout
             name='Mi galería'
@@ -51,7 +57,7 @@ export default function IndexPicture({
                     {
                         imagenes.map((imagen) => (
                             <Card key={imagen.id} className='col-span-4'>
-                                <CardContent className='pt-6 pb-12'>
+                                <CardContent className='pt-6 pb-8'>
                                     <div className='w-64 h-64 justify-center items-center rounded-md relative group'>
                                         <img src={route('picture.show', imagen.id)} className='w-full h-full object-cover rounded-md' alt="" />
 
@@ -65,6 +71,9 @@ export default function IndexPicture({
                                                 </Button>
                                             </a>
                                         </div>
+                                    </div>
+                                    <div className="p-3 flex justify-end text-sm text-slate-500 italic">
+                                        { getDate(imagen.created_at) }
                                     </div>
                                 </CardContent>
                             </Card>

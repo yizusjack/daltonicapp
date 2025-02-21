@@ -23,7 +23,7 @@ class PictureController extends Controller
      */
     public function index()
     {
-        $imagenes = Auth::user()->pictures()->get();
+        $imagenes = Auth::user()->pictures()->paginate(6);
 
         return Inertia::render('Pictures/IndexPicture', [
             'imagenes' => $imagenes,
@@ -71,7 +71,6 @@ class PictureController extends Controller
             $body = json_decode($response->body(), true);
 
             if ($status == 200) {
-                // dd($body['imagenOriginal']);
                 return redirect()->route('picture.mostrar')->with([
                     'base64Image' => $body['imagenTransformada'],
                     'base64OldImage' => $body['imagenOriginal'],

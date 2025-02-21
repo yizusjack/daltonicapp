@@ -13,11 +13,16 @@ import {
 } from "@/Components/ui/dialog"
 import React, { useState } from 'react'
 import { Card, CardContent } from '@/Components/ui/card';
+import { Link as LinkType } from '@/types/link';
+import { Link } from '@inertiajs/react';
 
 export default function IndexPicture({
     imagenes
 }: PageProps<{
-    imagenes: Picture[];
+    imagenes: {
+        data: Picture[];
+        links: LinkType[];
+    };
 }>) {
 
     const breadcrumb = [
@@ -55,7 +60,7 @@ export default function IndexPicture({
             >
                 <div className="grid grid-cols-12 gap-x-4 gap-y-8 place-items-center">
                     {
-                        imagenes.map((imagen) => (
+                        imagenes.data.map((imagen) => (
                             <Card key={imagen.id} className='col-span-12 md:col-span-6 lg:col-span-4'>
                                 <CardContent className='pt-6 pb-8'>
                                     <div className='max-w-64 h-64 justify-center items-center rounded-md relative group'>
@@ -89,6 +94,24 @@ export default function IndexPicture({
                                     </div>
                                 </CardContent>
                             </Card>
+                        ))
+                    }
+                </div>
+
+                <div className="py-10 text-center">
+                    {
+                        imagenes.links.map(link => (
+                            link.url ?
+
+                                <Link
+                                    className={`p-1 mx-1 ${link.active ? 'font-bold text-blue-400 underline' : ''}`}
+                                    key={link.label} href={link.url} dangerouslySetInnerHTML={{ __html: link.label }} />
+                                :
+
+                                <span
+                                    className="cursor-not-allowed text-gray-300"
+                                    key={link.label} dangerouslySetInnerHTML={{ __html: link.label }}>
+                                </span>
                         ))
                     }
                 </div>

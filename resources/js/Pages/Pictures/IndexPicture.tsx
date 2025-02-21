@@ -28,7 +28,7 @@ export default function IndexPicture({
     ];
 
     const [abrirModal, setAbrirModal] = useState(false);
-    const [selectedPicture, setSelectedPicture] = useState<Picture|null>(null);
+    const [selectedPicture, setSelectedPicture] = useState<Picture | null>(null);
 
     const mostrarImagen = (picture: Picture) => {
         setSelectedPicture(picture);
@@ -56,12 +56,12 @@ export default function IndexPicture({
                 <div className="grid grid-cols-12 gap-x-4 gap-y-8 place-items-center">
                     {
                         imagenes.map((imagen) => (
-                            <Card key={imagen.id} className='col-span-4'>
+                            <Card key={imagen.id} className='col-span-12 md:col-span-6 lg:col-span-4'>
                                 <CardContent className='pt-6 pb-8'>
-                                    <div className='w-64 h-64 justify-center items-center rounded-md relative group'>
+                                    <div className='max-w-64 h-64 justify-center items-center rounded-md relative group'>
                                         <img src={route('picture.show', imagen.id)} className='w-full h-full object-cover rounded-md' alt="" />
 
-                                        <div className="p-3 absolute inset-0 bg-black bg-opacity-50 flex items-end justify-between rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <div className="p-3 absolute inset-0 bg-black bg-opacity-50 flex items-end justify-between rounded-xl opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
                                             <Button onClick={() => mostrarImagen(imagen)} variant="secondary">
                                                 <EyeIcon className='h-6 w-6' />
                                             </Button>
@@ -72,8 +72,20 @@ export default function IndexPicture({
                                             </a>
                                         </div>
                                     </div>
+
+                                    <div className="mt-2 opacity-100 md:opacity-0 grid grid-cols-2 gap-2">
+                                        <Button onClick={() => mostrarImagen(imagen)} className='w-full'>
+                                            <EyeIcon className='h-6 w-6' />
+                                        </Button>
+                                        <a href={route('picture.download', imagen.id)}>
+                                            <Button className='w-full'>
+                                                <FolderDown className='h-6 w-6' />
+                                            </Button>
+                                        </a>
+                                    </div>
+
                                     <div className="p-3 flex justify-end text-sm text-slate-500 italic">
-                                        { getDate(imagen.created_at) }
+                                        {getDate(imagen.created_at)}
                                     </div>
                                 </CardContent>
                             </Card>
@@ -85,13 +97,6 @@ export default function IndexPicture({
                 selectedPicture &&
                 (<Dialog open={abrirModal} onOpenChange={setAbrirModal}>
                     <DialogContent className='max-w-7xl'>
-                        {/* <DialogHeader>
-                            <DialogTitle>Are you absolutely sure?</DialogTitle>
-                            <DialogDescription>
-                                This action cannot be undone. This will permanently delete your account
-                                and remove your data from our servers.
-                            </DialogDescription>
-                        </DialogHeader> */}
                         <div className='flex items-center justify-center'>
                             <img src={route('picture.show', selectedPicture.id)} alt="" />
                         </div>

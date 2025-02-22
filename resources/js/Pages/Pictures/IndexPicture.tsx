@@ -15,6 +15,7 @@ import React, { useState } from 'react'
 import { Card, CardContent } from '@/Components/ui/card';
 import { Link as LinkType } from '@/types/link';
 import { Link } from '@inertiajs/react';
+import Paginator from '@/Components/partials/Paginator';
 
 export default function IndexPicture({
     imagenes
@@ -22,6 +23,8 @@ export default function IndexPicture({
     imagenes: {
         data: Picture[];
         links: LinkType[];
+        current_page: number,
+        last_page: number,
     };
 }>) {
 
@@ -97,24 +100,12 @@ export default function IndexPicture({
                         ))
                     }
                 </div>
-
-                <div className="py-10 text-center">
-                    {
-                        imagenes.links.map(link => (
-                            link.url ?
-
-                                <Link
-                                    className={`p-1 mx-1 ${link.active ? 'font-bold text-blue-400 underline' : ''}`}
-                                    key={link.label} href={link.url} dangerouslySetInnerHTML={{ __html: link.label }} />
-                                :
-
-                                <span
-                                    className="cursor-not-allowed text-gray-300"
-                                    key={link.label} dangerouslySetInnerHTML={{ __html: link.label }}>
-                                </span>
-                        ))
-                    }
-                </div>
+                <Paginator 
+                    links={imagenes.links}
+                    current_page={imagenes.current_page}
+                    last_page={imagenes.last_page}
+                    elements={3}
+                />
             </AppCard>
             {
                 selectedPicture &&

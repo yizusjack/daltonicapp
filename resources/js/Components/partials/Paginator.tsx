@@ -1,6 +1,8 @@
 import React, { PropsWithChildren } from 'react'
 import { Link as LinkType } from '@/types/link';
 import { Link } from '@inertiajs/react';
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/Components/ui/pagination";
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function Paginator({
     links,
@@ -19,7 +21,7 @@ export default function Paginator({
 
     primerSegmento[1] = last_page >= elements ? elements : last_page;
 
-    if(current_page <= elements && last_page > elements) {
+    if (current_page <= elements && last_page > elements) {
         segundoSegmento[0] = ((Math.ceil(last_page / elements) - 1) * elements) + 1;
         segundoSegmento[1] = (((Math.ceil(last_page / elements) - 1) * elements) + elements) <= last_page
             ? ((Math.ceil(last_page / elements) - 1) * elements) + elements
@@ -35,59 +37,70 @@ export default function Paginator({
 
     return (
         <div className="py-10 text-center">
-            {
-                links[0].url ?
+            <Pagination>
+                <PaginationContent>
+                    <PaginationItem>
+                        {
+                            links[0].url ?
+                                <PaginationPrevious
+                                    href={links[0].url}
+                                />
+                                // <Link
+                                //     className={`p-1 mx-1 ${links[0].active ? 'font-bold text-blue-400 underline' : ''}`}
+                                //     key={links[0].label} href={links[0].url} dangerouslySetInnerHTML={{ __html: links[0].label }} />
+                                :
 
-                    <Link
-                        className={`p-1 mx-1 ${links[0].active ? 'font-bold text-blue-400 underline' : ''}`}
-                        key={links[0].label} href={links[0].url} dangerouslySetInnerHTML={{ __html: links[0].label }} />
-                    :
+                                <div className="flex items-center text-sm mr-5 cursor-not-allowed text-gray-300 gap-1 pr-2.5" key={links[0].label}>
+                                    <ChevronLeft className="h-4 w-4" />
+                                    <span>Anterior</span>
+                                </div>
+                        }
+                    </PaginationItem>
 
-                    <span
-                        className="cursor-not-allowed text-gray-300"
-                        key={links[0].label} dangerouslySetInnerHTML={{ __html: links[0].label }}>
-                    </span>
-            }
-
-            {
-                links.slice(primerSegmento[0], primerSegmento[1] + 1).map(link => (
-                    <Link
-                        className={`p-1 mx-1 ${link.active ? 'font-bold text-blue-400 underline' : ''}`}
-                        key={link.label} href={link.url} dangerouslySetInnerHTML={{ __html: link.label }} 
-                    />
-                ))
-            }
-
-            {
-                cargarPuntos &&
-                <span>...</span>
-            }
-
-            {
-                last_page > elements &&
-                    (
-                        links.slice(segundoSegmento[0], segundoSegmento[1] + 1).map(link => (
-                            <Link
-                                className={`p-1 mx-1 ${link.active ? 'font-bold text-blue-400 underline' : ''}`}
-                                key={link.label} href={link.url} dangerouslySetInnerHTML={{ __html: link.label }} 
-                            />
+                    {
+                        links.slice(primerSegmento[0], primerSegmento[1] + 1).map(link => (
+                            <PaginationItem key={link.label}>
+                                <PaginationLink href={link.url} isActive={link.active}>
+                                    {link.label}
+                                </PaginationLink>
+                            </PaginationItem>
                         ))
-                    )
-            }
+                    }
 
-            {
-                links[last_page + 1].url ?
+                    {
+                        cargarPuntos &&
+                        <PaginationItem>
+                            <PaginationEllipsis />
+                        </PaginationItem>
+                    }
 
-                    <Link
-                        className={`p-1 mx-1 ${links[last_page + 1].active ? 'font-bold text-blue-400 underline' : ''}`}
-                        key={links[last_page + 1].label} href={links[last_page + 1].url} dangerouslySetInnerHTML={{ __html: links[last_page + 1].label }} />
-                    :
+                    {
+                        last_page > elements &&
+                        (
+                            links.slice(segundoSegmento[0], segundoSegmento[1] + 1).map(link => (
+                                <PaginationItem key={link.label}>
+                                    <PaginationLink href={link.url} isActive={link.active}>
+                                        {link.label}
+                                    </PaginationLink>
+                                </PaginationItem>
+                            ))
+                        )
+                    }
 
-                    <span
-                        className="cursor-not-allowed text-gray-300"
-                        key={links[last_page + 1].label} dangerouslySetInnerHTML={{ __html: links[last_page + 1].label }}>
-                    </span>
-            }
+                    <PaginationItem>
+                        {
+                            links[last_page + 1].url ?
+                                <PaginationNext href={links[last_page + 1].url} />
+                                :
+                                <div className="flex items-center text-sm ml-5 cursor-not-allowed text-gray-300 gap-1 pr-2.5" key={links[last_page + 1].label}>
+                                    <span>Siguiente</span>
+                                    <ChevronRight className="h-4 w-4" />
+                                </div>
+                        }
+                    </PaginationItem>
+
+                </PaginationContent>
+            </Pagination>
         </div>
     )
 }

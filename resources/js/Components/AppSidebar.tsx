@@ -55,9 +55,11 @@ export default function AppSidebar() {
                                     <Camera />Nueva imagen
                                 </SidebarMenuButton>
                             </Link>
-                            <SidebarMenuButton>
-                                <Images />Mi galería
-                            </SidebarMenuButton>
+                            <Link href={route('picture.index')}>
+                                <SidebarMenuButton isActive={url == "/picture" || url.startsWith("/picture?page=")}>
+                                    <Images />Mi galería
+                                </SidebarMenuButton>
+                            </Link>
                         </SidebarGroupContent>
                     </SidebarGroup>
                 </Can>

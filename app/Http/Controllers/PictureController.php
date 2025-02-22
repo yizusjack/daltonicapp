@@ -23,7 +23,11 @@ class PictureController extends Controller
      */
     public function index()
     {
-        //
+        $imagenes = Auth::user()->pictures()->paginate(6);
+
+        return Inertia::render('Pictures/IndexPicture', [
+            'imagenes' => $imagenes,
+        ]);
     }
 
     /**
@@ -67,7 +71,6 @@ class PictureController extends Controller
             $body = json_decode($response->body(), true);
 
             if ($status == 200) {
-                // dd($body['imagenOriginal']);
                 return redirect()->route('picture.mostrar')->with([
                     'base64Image' => $body['imagenTransformada'],
                     'base64OldImage' => $body['imagenOriginal'],
@@ -124,7 +127,7 @@ class PictureController extends Controller
         ->usingFileName($nombreArchivo)
         ->toMediaCollection(TipoArchivoEnum::ImagenPrivada->value, 'private');
 
-        return redirect()->route('dashboard')->with([
+        return redirect()->route('picture.index')->with([
             'message' => 'Imagen guardada correctamente',
             'description' => 'Ahora la podrá ver en su galería',
         ]);
@@ -147,7 +150,7 @@ class PictureController extends Controller
      */
     public function download(Picture $picture)
     {
-        //Gate::authorize('view', $picture);
+        Gate::authorize('view', $picture);
         $archivo = $picture->getMedia(TipoArchivoEnum::ImagenPrivada->value)->first();
 
         return response()->download($archivo->getPath(), $archivo->file_name);

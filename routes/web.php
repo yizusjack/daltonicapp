@@ -48,9 +48,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('imagenes', ImagenController::class)
         ->only(['index', 'create','store']);
         
+    //Rutas para las imagenes transformadas
     Route::resource('picture', PictureController::class);
     Route::get('mostrarNuevaImagen', [PictureController::class, 'mostrar'])->name('picture.mostrar');
     Route::post('save', [PictureController::class, 'save'])->name('picture.save');
+    Route::get('/picture/{picture}/download', [PictureController::class, 'download'])->name('picture.download');
 });
 
 require __DIR__.'/auth.php';

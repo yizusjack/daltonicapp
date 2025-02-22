@@ -45,11 +45,7 @@ export default function Paginator({
                                 <PaginationPrevious
                                     href={links[0].url}
                                 />
-                                // <Link
-                                //     className={`p-1 mx-1 ${links[0].active ? 'font-bold text-blue-400 underline' : ''}`}
-                                //     key={links[0].label} href={links[0].url} dangerouslySetInnerHTML={{ __html: links[0].label }} />
                                 :
-
                                 <div className="flex items-center text-sm mr-5 cursor-not-allowed text-gray-300 gap-1 pr-2.5" key={links[0].label}>
                                     <ChevronLeft className="h-4 w-4" />
                                     <span>Anterior</span>

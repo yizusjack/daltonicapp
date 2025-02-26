@@ -34,6 +34,7 @@ export default function Users({ users, roles, auth }: PageProps) {
     const [userID, setID] = useState<number>(0);
     const [newRole, setRole] = useState<string>("");
     const [count, setCount] = useState<number>(0);
+    const [search, setSearch] = useState<string>("");
 
     useEffect(() => {
         if (newRole) {
@@ -42,6 +43,9 @@ export default function Users({ users, roles, auth }: PageProps) {
         }
     }, [count, newRole]);
     
+    const filteredUsers = users.filter(user =>
+        user.name.toLowerCase().includes(search.toLowerCase())
+    );
 
     const columns: ColumnDef<User>[] = [
         { accessorKey: "id", header: "ID" },
@@ -70,7 +74,14 @@ export default function Users({ users, roles, auth }: PageProps) {
     return (
         <MainLayout>
             <div className="container mx-auto py-10">
-                <DataTable columns={columns} data={users} />
+                <input 
+                    type="text" 
+                    placeholder="Buscar por nombre..." 
+                    value={search} 
+                    onChange={(e) => setSearch(e.target.value)} 
+                    className="mb-4 p-2 border border-gray-300 rounded w-full"
+                />
+                <DataTable columns={columns} data={filteredUsers} />
             </div>
         </MainLayout>
     );

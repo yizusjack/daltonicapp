@@ -12,6 +12,9 @@ export interface Permissions {
     guiaContribucion: {
         create: boolean;
     };
+    users: {
+        viewAny: boolean;
+    };
 }
 
 export interface Flash {

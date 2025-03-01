@@ -95,7 +95,7 @@ networks:
   default:
     name: nginx-proxy
   app-network:
-    driver: bridge
+    external: true
 volumes:
   dbdata:
     driver: local

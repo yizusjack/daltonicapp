@@ -110,9 +110,13 @@ export default function IndexPicture({
             {
                 selectedPicture &&
                 (<Dialog open={abrirModal} onOpenChange={setAbrirModal}>
-                    <DialogContent className='max-w-7xl'>
-                        <div className='flex items-center justify-center'>
-                            <img src={route('picture.show', selectedPicture.id)} alt="" />
+                    <DialogContent className="max-w-7xl max-h-full flex items-center justify-center">
+                        <div className="max-w-full max-h-[80vh] overflow-auto flex items-center justify-center">
+                            <img 
+                                src={route('picture.show', selectedPicture.id)} 
+                                className="max-w-full max-h-full object-contain" 
+                                alt="" 
+                            />
                         </div>
                     </DialogContent>
                 </Dialog>)

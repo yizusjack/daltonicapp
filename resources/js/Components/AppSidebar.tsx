@@ -18,6 +18,7 @@ import DropdownLogin from './partials/DropdownLogin';
 import LoginButtons from './partials/LoginButtons';
 import Can from './Auth/Can';
 
+
 export default function AppSidebar() {
     const user = usePage().props.auth?.user;
     const permissions = usePage().props.auth?.permissions;
@@ -96,31 +97,35 @@ export default function AppSidebar() {
                     </SidebarGroup>
                 </Can>
 
-                <SidebarGroup>
-                    <SidebarGroupLabel>Administración</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenuButton>
-                            <UsersRound /> Usuarios
-                        </SidebarMenuButton>
-                    </SidebarGroupContent>
-                    <SidebarGroupContent>
-                        <SidebarMenuButton>
-                            <Diff /> Permisos
-                        </SidebarMenuButton>
-                    </SidebarGroupContent>
-                    <SidebarGroupContent>
-                        <SidebarMenuButton>
-                            <ClipboardX /> Reportes
-                        </SidebarMenuButton>
-                    </SidebarGroupContent>
-                    <SidebarGroupContent>
-                        <Link href='/imagenes'>
-                            <SidebarMenuButton isActive={url === '/imagenes'}>
-                                <ScanEye /> Imágenes de test
+                <Can permission={permissions ? permissions.users.viewAny : false}>
+                    <SidebarGroup>
+                        <SidebarGroupLabel>Administración</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <Link href='/users'>
+                                <SidebarMenuButton isActive={url === '/users'}>
+                                    <UsersRound /> Usuarios
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarGroupContent>
+                        <SidebarGroupContent>
+                            <SidebarMenuButton>
+                                <Diff /> Permisos
                             </SidebarMenuButton>
-                        </Link>
-                    </SidebarGroupContent>
-                </SidebarGroup>
+                        </SidebarGroupContent>
+                        <SidebarGroupContent>
+                            <SidebarMenuButton>
+                                <ClipboardX /> Reportes
+                            </SidebarMenuButton>
+                        </SidebarGroupContent>
+                        <SidebarGroupContent>
+                            <Link href='/imagenes'>
+                                <SidebarMenuButton isActive={url === '/imagenes'}>
+                                    <ScanEye /> Imágenes de test
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                </Can>
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>

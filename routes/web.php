@@ -9,6 +9,7 @@ use App\Http\Controllers\IshiharaController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\GuiaContribucionController;
 use App\Http\Controllers\PictureController;
+use App\Http\Controllers\UserController;
 
 
 Route::get('/', function () {
@@ -35,6 +36,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+  
+    //Rutas para administración de usuarios
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/users/{user}/role', [UserController::class, 'updateRole']);
 
     //Rutas para obtener el tipo de daltonismo
     Route::get('/test', [IshiharaController::class, 'test'])->name('ishihara.create');

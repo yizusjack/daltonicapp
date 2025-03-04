@@ -55,6 +55,8 @@ class GoogleAuthController extends Controller
                 'email_verified_at' => now(),
             ]);
 
+            $nuevoUsuario->assignRole('Usuario');
+
             Auth::login($nuevoUsuario);
 
             return redirect(route('ishihara.create', absolute: false))->with([

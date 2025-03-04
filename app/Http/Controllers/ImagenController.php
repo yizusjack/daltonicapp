@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Imagen;
-use Illuminate\Routing\Controller;
+use Illuminate\Http\Request;
 use App\Enums\TipoArchivoEnum;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Gate;
 
 class ImagenController extends Controller
 {
@@ -15,6 +16,8 @@ class ImagenController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', Imagen::class);
+
         return Inertia::render('ImagenesTest/ImagenIndex', [
             'pruebas' => Imagen::get(),
             'create_url' => route('imagenes.create'),
@@ -26,6 +29,8 @@ class ImagenController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Imagen::class);
+
         return Inertia::render('ImagenesTest/ImagenCreate', [
             'store_url' => route('imagenes.store'),
         ]);
@@ -36,6 +41,8 @@ class ImagenController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create', Imagen::class);
+        
         $request->validate([
             'Imagen' => 'required|file|mimes:jpg,jpeg,png|max:2048',
             'Respuesta_1' => 'required|numeric|min:0',

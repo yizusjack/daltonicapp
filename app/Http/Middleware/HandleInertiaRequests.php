@@ -42,6 +42,9 @@ class HandleInertiaRequests extends Middleware
                     'guiaContribucion' => [
                         'create' => $request->user()?->can('create', GuiaContribucion::class),
                     ],
+                    'users' => [
+                        'viewAny' => $request->user()?->can('viewAny', User::class),
+                    ],
                 ],
             ],
             'flash' => [

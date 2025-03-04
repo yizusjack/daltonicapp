@@ -6,8 +6,6 @@ import { Button } from "@/Components/ui/button";
 import Webcam from "react-webcam";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs"
 import AppCard from "@/Components/AppCard";
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/Components/ui/form";
-import { Input } from "@headlessui/react";
 import { Camera } from "lucide-react";
 
 export default function PictureCreate({
@@ -102,12 +100,6 @@ export default function PictureCreate({
             <AppCard
                 title="Nueva imagen"
             >
-                <Tabs defaultValue="camara" className="w-full">
-                    <TabsList className="w-full">
-                        <TabsTrigger className="w-1/2" value="camara" onClick={toggleCamera}>Cámara</TabsTrigger>
-                        <TabsTrigger className="w-1/2" value="subir" onClick={toggleCamera}>Subir foto</TabsTrigger>
-                    </TabsList>
-                </Tabs>
                 {
                     image ? (
                         <>
@@ -122,7 +114,7 @@ export default function PictureCreate({
                                         </Button>
 
                                         <Button className="px-6 mx-3" variant="default" type="submit" disabled={processing}>
-                                            Enviar
+                                            Transformar
                                         </Button>
                                     </div>
                                 </form>
@@ -130,6 +122,17 @@ export default function PictureCreate({
                         </>
                     ) : (
                         <>
+                            <Tabs defaultValue={showWebcam ? "camara" : "subir"} className="w-full">
+                                <TabsList className="w-full">
+                                    <TabsTrigger className="w-1/2" value="camara" onClick={() => setShowWebcam(true)}>
+                                        Cámara
+                                    </TabsTrigger>
+
+                                    <TabsTrigger className="w-1/2" value="subir" onClick={() => setShowWebcam(false)}>
+                                        Subir foto
+                                    </TabsTrigger>
+                                </TabsList>
+                            </Tabs>
                             <div className="flex flex-col items-center gap-4">
                                 {!showWebcam ? (
                                     <>

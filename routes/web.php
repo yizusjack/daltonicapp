@@ -36,6 +36,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+  
+    //Rutas para administración de usuarios
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/users/{user}/role', [UserController::class, 'updateRole']);
 
     //Rutas para obtener el tipo de daltonismo
     Route::get('/test', [IshiharaController::class, 'test'])->name('ishihara.create');
@@ -49,10 +53,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('imagenes', ImagenController::class)
         ->only(['index', 'create','store']);
         
+    //Rutas para las imagenes transformadas
     Route::resource('picture', PictureController::class);
-
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    Route::post('/users/{user}/role', [UserController::class, 'updateRole']);
+    Route::get('mostrarNuevaImagen', [PictureController::class, 'mostrar'])->name('picture.mostrar');
+    Route::post('save', [PictureController::class, 'save'])->name('picture.save');
+    Route::get('/picture/{picture}/download', [PictureController::class, 'download'])->name('picture.download');
 });
 
 require __DIR__.'/auth.php';

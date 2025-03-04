@@ -22,4 +22,12 @@ class UserPolicy
     {
         return $user->tipo_daltonismo == null;
     }
+
+    /**
+     * El usuario puede ver el listado de usuarios
+     */
+    public function viewAny(User $user)
+    {
+        return $user->hasRole('Administrador');
+    }
 }

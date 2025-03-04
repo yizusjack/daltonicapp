@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/Components/ui/data-table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import { useEffect, useState } from "react";
+import AppCard from "@/Components/AppCard";
 
 type User = {
     id: number;
@@ -71,18 +72,33 @@ export default function Users({ users, roles, auth }: PageProps) {
         },
     ];
 
+    const breadcrumb = [
+        {
+            url: 'active',
+            name: 'Usuarios'
+        }
+    ];
+
     return (
-        <MainLayout>
-            <div className="container mx-auto py-10">
-                <input 
-                    type="text" 
-                    placeholder="Buscar por nombre..." 
-                    value={search} 
-                    onChange={(e) => setSearch(e.target.value)} 
-                    className="mb-4 p-2 border border-gray-300 rounded w-full"
-                />
-                <DataTable columns={columns} data={filteredUsers} />
-            </div>
+        <MainLayout
+            name="Listado de usuarios"
+            breadcrumb={breadcrumb}
+        >
+            <AppCard
+                title="Listado de usuarios"
+                description="Lista de los usuarios del sistema y los roles que poseen"
+            >
+                <div className="container mx-auto py-10">
+                    <input 
+                        type="text" 
+                        placeholder="Buscar por nombre..." 
+                        value={search} 
+                        onChange={(e) => setSearch(e.target.value)} 
+                        className="mb-4 p-2 border border-gray-300 rounded w-full"
+                    />
+                    <DataTable columns={columns} data={filteredUsers} />
+                </div>
+            </AppCard>
         </MainLayout>
     );
 }

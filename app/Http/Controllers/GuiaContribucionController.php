@@ -10,13 +10,14 @@ use App\Enums\TiposDaltonismoEnum;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\StoreGuiaContribucionRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class GuiaContribucionController extends Controller
 {
     use AuthorizesRequests;
-    
+
     /**
      * Create the controller instance.
      *
@@ -26,7 +27,7 @@ class GuiaContribucionController extends Controller
     {
         $this->authorizeResource(GuiaContribucion::class, 'guiaContribucion');
     }
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -41,7 +42,7 @@ class GuiaContribucionController extends Controller
     public function create()
     {
         Gate::authorize('create', GuiaContribucion::class);
-        
+
         return Inertia::render('GuiaContribucion/FormGuiaContribucion', [
             'pruebas' => Imagen::get(),
             'tipos_daltonismo' => TiposDaltonismoEnum::keysValues(),
@@ -55,9 +56,9 @@ class GuiaContribucionController extends Controller
     public function store(StoreGuiaContribucionRequest $request)
     {
         Gate::authorize('create', GuiaContribucion::class);
-        
+
         $response = $request->all();
-        
+
         $guiaContribucion = GuiaContribucion::create([
             'tipo_daltonismo' => $response['tipo_daltonismo'],
             'user_id' => Auth::user()->id,
@@ -71,7 +72,20 @@ class GuiaContribucionController extends Controller
             ]);
         }
 
-        return redirect()->route('prueba')->with([
+        if($response['tipo_daltonismo'] != Auth::user()->tipo_daltonismo) {
+            Auth::user()->update([
+                'tipo_daltonismo' => $response['tipo_daltonismo'],
+            ]);
+
+            Session::forget('resultados');
+
+            return redirect()->route('dashboard')->with([
+                'message' => 'Tipo de daltonismo modificado exitosamente',
+                'description' => 'Tu corrección se usará para mejorar nuestro sistema',
+            ]);
+        }
+
+        return redirect()->route('dashboard')->with([
             'message' => 'Gracias por tu contribución',
             'description' => 'Tu información se almacenó correctamente y se usará para mejorar nuestro sistema',
         ]);

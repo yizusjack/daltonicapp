@@ -34,6 +34,17 @@ export default function Dashboard({
         });
     }
 
+    const descripciones = {
+        "Deuteranopia": {
+            'descripcion': "La deuteranopía es un tipo de deficiencia en la visión del color que afecta específicamente a los fotorreceptores verdes de la retina. Las personas con deuteranopía tienen dificultad para distinguir entre tonos verdes y rojos, lo que puede afectar su vida diaria de manera sutil pero significativa.",
+            'colores': [{name: "Verde", class:'bg-green-800'}, {name: "Amarillo", class: 'bg-yellow-300'}, {name: "Azul", class: 'bg-blue-900'}, {name: "Morado", class: 'bg-purple-500'}, {name: "Rojo", class: 'bg-red-600'}],
+        },
+        "Protanopia": {
+            'descripcion': "La protanopia es la carencia de sensibilidad al color rojo, una disfunción visual relacionada con la percepción del color. Se denomina también dicromacia roja. Consiste en la ausencia de actividad funcional de los protoconos, que son sensibles a la porción roja del espectro visible.",
+            'colores': [{name: "Verde", class: 'bg-green-800'}, {name: "Amarillo", class: 'bg-yellow-300'}, {name: "Naranja", class: 'bg-orange-500'}, {name: "Rojo", class: 'bg-red-600'}, {name: "Café", class: 'bg-red-950'}],
+        }
+    }
+
     return (
         <MainLayout>
             <Head title="Dashboard" />
@@ -68,14 +79,24 @@ export default function Dashboard({
 
                                                     <div className='max-w-2xl text-center'>
                                                         <p>
-                                                            La deuteranopía es un tipo de deficiencia en la visión del color que afecta específicamente a
-                                                            los fotorreceptores verdes de la retina. Las personas con deuteranopía tienen dificultad para
-                                                            distinguir entre tonos verdes y rojos, lo que puede afectar su vida diaria de manera sutil pero
-                                                            significativa.
+                                                            {descripciones[user.tipo_daltonismo as keyof typeof descripciones].descripcion}
                                                         </p>
 
-                                                        <div>
-                                                            Aqui van los colores
+                                                        <div className='p-4'>
+                                                            <div className='text-md italic font-semi-bold'>
+                                                                Las personas con {user.tipo_daltonismo} pueden tener problemas para ver los colores:
+                                                            </div>
+
+                                                            <div className="p-4 flex justify-center">
+                                                                {
+                                                                    descripciones[user.tipo_daltonismo as keyof typeof descripciones].colores.map((color) => (
+                                                                        <div className="flex flex-col items-center mx-2">
+                                                                            <div className={`h-16 w-16 rounded-full mx-2 ${color.class}`} />
+                                                                            <span className="mt-2 text-sm">{color.name}</span>
+                                                                        </div>
+                                                                    ))
+                                                                }
+                                                            </div>
                                                         </div>
 
                                                         <p>

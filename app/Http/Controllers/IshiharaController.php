@@ -7,6 +7,7 @@ use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Imagen;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
 use App\Http\Requests\SendTipoDaltonismoRequest;
@@ -56,7 +57,14 @@ class IshiharaController extends Controller
         $body = json_decode($response->body(), true);
 
         if ($status == 200) {
-            dump("Aqui se debe de guardar la parte del usuario");
+            Auth::user()->update([
+                'tipo_daltonismo' => $body['tipo_daltonismo']
+            ]);
+
+            return redirect()->route('dashboard')->with([
+                'message' => 'Éxito',
+                'description' => 'Ya puedes consultar tu tipo de daltonismo o cambiarlo si consideras que el resultado es incorrecto',
+            ]);
         } else if ($status == 401) {
             $tokenClass->getToken();
             $this->getTipoDaltonismo($request);

@@ -1,15 +1,17 @@
 <?php
 
 use Inertia\Inertia;
+use App\Enums\TiposDaltonismoEnum;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ImagenController;
+use App\Http\Controllers\PictureController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\IshiharaController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\GuiaContribucionController;
-use App\Http\Controllers\PictureController;
-use App\Http\Controllers\UserController;
 
 
 Route::get('/', function () {
@@ -28,7 +30,11 @@ Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->
 Route::get('/api/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $resultados = Session::get('resultados');
+    return Inertia::render('Dashboard', [
+        'resultados' => $resultados,
+        'tipos_daltonismo' => TiposDaltonismoEnum::keysValues(),
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -36,7 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-  
+
     //Rutas para administración de usuarios
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users/{user}/role', [UserController::class, 'updateRole']);
@@ -52,7 +58,7 @@ Route::middleware('auth')->group(function () {
     //Rutas para imagenes
     Route::resource('imagenes', ImagenController::class)
         ->only(['index', 'create','store']);
-        
+
     //Rutas para las imagenes transformadas
     Route::resource('picture', PictureController::class);
     Route::get('mostrarNuevaImagen', [PictureController::class, 'mostrar'])->name('picture.mostrar');

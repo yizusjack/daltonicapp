@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\SendTipoDaltonismoRequest;
 
 class IshiharaController extends Controller
@@ -33,7 +34,7 @@ class IshiharaController extends Controller
     public function getTipoDaltonismo(SendTipoDaltonismoRequest $request)
     {
         Gate::authorize('hacerTest', User::class);
-        
+
         //Obtiene la informacion validada
         $data = $request->all();
 
@@ -60,6 +61,8 @@ class IshiharaController extends Controller
             Auth::user()->update([
                 'tipo_daltonismo' => $body['tipo_daltonismo']
             ]);
+
+            Session::put('resultados', $data['resultados']);
 
             return redirect()->route('dashboard')->with([
                 'message' => 'Éxito',

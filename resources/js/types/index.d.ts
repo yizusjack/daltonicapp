@@ -2,6 +2,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
+    tipo_daltonismo?: string;
     email_verified_at?: string;
 }
 

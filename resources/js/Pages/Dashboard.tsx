@@ -42,6 +42,10 @@ export default function Dashboard({
         "Protanopia": {
             'descripcion': "La protanopia es la carencia de sensibilidad al color rojo, una disfunción visual relacionada con la percepción del color. Se denomina también dicromacia roja. Consiste en la ausencia de actividad funcional de los protoconos, que son sensibles a la porción roja del espectro visible.",
             'colores': [{name: "Verde", class: 'bg-green-800'}, {name: "Amarillo", class: 'bg-yellow-300'}, {name: "Naranja", class: 'bg-orange-500'}, {name: "Rojo", class: 'bg-red-600'}, {name: "Café", class: 'bg-red-950'}],
+        },
+        "Tritanopia": {
+            'descripcion': "La tritanopía es una afección en la que una persona no puede distinguir entre los colores azul y amarillo. La alteración de la visión del azul y el amarillo es el síntoma principal asociado con esta afección. Sin embargo, las personas con tritanopía tienen una visión normal del rojo y el verde.",
+            'colores': [{name: "Verde", class: 'bg-green-800'}, {name: "Azul", class: 'bg-blue-900'}, {name: "Amarillo", class: 'bg-yellow-300'}],
         }
     }
 

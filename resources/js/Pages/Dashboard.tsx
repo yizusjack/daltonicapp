@@ -62,7 +62,7 @@ export default function Dashboard({
                                                     <div className="text-md italic font-semi-bold">
                                                         Tu tipo de daltonismo es:
                                                     </div>
-                                                    <div className="p-4 text-4xl font-black uppercase  text-slate-700">
+                                                    <div className="p-4 text-3xl md:text-4xl font-black uppercase  text-slate-700">
                                                         {user.tipo_daltonismo}
                                                     </div>
 
@@ -77,7 +77,7 @@ export default function Dashboard({
                                                         )
                                                     }
 
-                                                    <div className='max-w-2xl text-center'>
+                                                    <div className='max-w-full lg:max-w-2xl text-center'>
                                                         <p>
                                                             {descripciones[user.tipo_daltonismo as keyof typeof descripciones].descripcion}
                                                         </p>
@@ -87,7 +87,7 @@ export default function Dashboard({
                                                                 Las personas con {user.tipo_daltonismo} pueden tener problemas para ver los colores:
                                                             </div>
 
-                                                            <div className="p-4 flex justify-center">
+                                                            <div className="p-4 flex justify-center max-w-full flex-wrap">
                                                                 {
                                                                     descripciones[user.tipo_daltonismo as keyof typeof descripciones].colores.map((color) => (
                                                                         <div className="flex flex-col items-center mx-2">

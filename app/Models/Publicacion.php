@@ -4,13 +4,14 @@ namespace App\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Publicacion extends Model
 {
     /** @use HasFactory<\Database\Factories\PublicacionFactory> */
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     /**
      * La tabla de la base de datos relacionada

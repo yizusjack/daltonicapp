@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Comentario;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Comentario extends Model
 {
     /** @use HasFactory<\Database\Factories\ComentarioFactory> */
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     /**
      * El nombre de la tabla

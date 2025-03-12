@@ -4,13 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Picture;
+use App\Models\Publicacion;
 use App\Models\GuiaContribucion;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -18,7 +19,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     use HasRoles;
-    
+
 
     /**
      * The attributes that are mass assignable.
@@ -57,7 +58,7 @@ class User extends Authenticatable
 
     /**
      * Un usuario pertenece a una GuiaContribucion
-     * 
+     *
      * @return HasOne
      */
     public function guiaContribucion(): HasOne
@@ -67,11 +68,21 @@ class User extends Authenticatable
 
     /**
      * Un usuario tiene varias imagenes
-     * 
+     *
      * @return HasMany
      */
     public function pictures(): HasMany
     {
         return $this->hasMany(Picture::class);
+    }
+
+    /**
+     * Un usuario puede crear muhcas publicaciones
+     *
+     * @return HasMany
+     */
+    public function publicaciones(): HasMany
+    {
+        return $this->hasMany(Publicacion::class);
     }
 }

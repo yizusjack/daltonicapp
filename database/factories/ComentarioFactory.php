@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\Publicacion;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,10 @@ class ComentarioFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'comentario' => $this->faker->sentence(5),
+            'comentable_type' => 'App\Models\Publicacion',
+            'comentable_id' => Publicacion::inRandomOrder()->take(1)->first()->id,
+            'user_id' => User::inRandomOrder()->take(1)->first()->id,
         ];
     }
 }

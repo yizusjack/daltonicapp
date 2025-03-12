@@ -53,4 +53,14 @@ class Publicacion extends Model
     {
         return $this->morphMany(Comentario::class, 'comentable', 'comentable_type', 'comentable_id');
     }
+
+    /**
+     * Una publicación puede tener muchos reportes
+     *
+     * @return MorphMany
+     */
+    public function reportes(): MorphMany
+    {
+        return $this->morphMany(Reporte::class, 'reportable', 'reportable_type', 'reportable_id');
+    }
 }

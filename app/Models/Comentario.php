@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Reporte;
 use App\Models\Comentario;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -62,5 +63,15 @@ class Comentario extends Model
     public function comentarios(): MorphMany
     {
         return $this->morphMany(Comentario::class, 'comentable', 'comentable_type', 'comentable_id');
+    }
+
+    /**
+     * Un comentario puede tener muchos reportes
+     *
+     * @return MorphMany
+     */
+    public function reportes(): MorphMany
+    {
+        return $this->morphMany(Reporte::class, 'reportable', 'reportable_type', 'reportable_id');
     }
 }

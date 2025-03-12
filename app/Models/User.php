@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Picture;
+use App\Models\Reporte;
 use App\Models\Comentario;
 use App\Models\Publicacion;
 use App\Models\GuiaContribucion;
@@ -95,5 +96,15 @@ class User extends Authenticatable
     public function comentarios(): HasMany
     {
         return $this->hasMany(Comentario::class);
+    }
+
+    /**
+     * Un usuario puede crear muchos reportes
+     *
+     * @return HasMany
+     */
+    public function reportes(): HasMany
+    {
+        return $this->hasMany(Reporte::class);
     }
 }

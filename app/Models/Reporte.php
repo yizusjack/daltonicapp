@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Reporte extends Model
 {
@@ -29,4 +32,24 @@ class Reporte extends Model
         'reportable_type',
         'reportable_id',
     ];
+
+    /**
+     * Un reporte pertenece a un usuario
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+     /**
+     * Un reporte está relacionado con varios modelos
+     *
+     * @return MorphTo
+     */
+    public function reportable() : MorphTo
+    {
+        return $this->morphTo(__FUNCTION__, 'reportable_type', 'reportable_id');
+    }
 }

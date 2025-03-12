@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\User;
+use App\Enums\TipoReporteEnum;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -13,6 +15,11 @@ return new class extends Migration
     {
         Schema::create('reportes', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(User::class);
+            $table->enum('tipo', TipoReporteEnum::names());
+            $table->string('explicacion')->nullable()->default(null);
+            $table->string('reportable_type');
+            $table->bigInteger('reportable_id');
             $table->timestamps();
         });
     }

@@ -11,6 +11,7 @@ use App\Http\Controllers\PictureController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\IshiharaController;
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\PublicacionController;
 use App\Http\Controllers\GuiaContribucionController;
 
 
@@ -64,6 +65,9 @@ Route::middleware('auth')->group(function () {
     Route::get('mostrarNuevaImagen', [PictureController::class, 'mostrar'])->name('picture.mostrar');
     Route::post('save', [PictureController::class, 'save'])->name('picture.save');
     Route::get('/picture/{picture}/download', [PictureController::class, 'download'])->name('picture.download');
+
+    //Rutas para los foros
+    Route::resource('publicacion', PublicacionController::class);
 });
 
 require __DIR__.'/auth.php';

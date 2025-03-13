@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
+use App\Models\Publicacion;
 use App\Http\Requests\StorePublicacionRequest;
 use App\Http\Requests\UpdatePublicacionRequest;
-use App\Models\Publicacion;
 
 class PublicacionController extends Controller
 {
@@ -13,7 +14,7 @@ class PublicacionController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Publicacion/IndexPublicacion');
     }
 
     /**

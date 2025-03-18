@@ -7,6 +7,7 @@ import Webcam from "react-webcam";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs"
 import AppCard from "@/Components/AppCard";
 import { Camera } from "lucide-react";
+import Loader from "@/Components/Loader";
 
 export default function PictureCreate({
     store_url,
@@ -83,9 +84,13 @@ export default function PictureCreate({
         setImage(null);
     }
 
+    const [loader, setLoader] = useState(false);
+
 
     function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+
+        setLoader(true);
 
         if (image) {
             post(store_url, { data });
@@ -100,6 +105,11 @@ export default function PictureCreate({
             <AppCard
                 title="Nueva imagen"
             >
+                {
+                    loader &&
+                    <Loader />
+                }
+
                 {
                     image ? (
                         <>

@@ -1,6 +1,6 @@
 import MainLayout from "@/Layouts/MainLayout";
 import { PageProps } from "@/types";
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/Components/ui/button";
 import Webcam from "react-webcam";
@@ -14,6 +14,8 @@ export default function PictureCreate({
 }: PageProps<{
     store_url: string;
 }>) {
+
+    const tipo_daltonismo = usePage().props.auth?.user.tipo_daltonismo;
 
     const useMediaQuery = (query: string) => {
         const [matches, setMatches] = useState(window.matchMedia(query).matches);
@@ -107,7 +109,10 @@ export default function PictureCreate({
             >
                 {
                     loader &&
-                    <Loader />
+                    <Loader
+                        mensaje="Transformando imagen"
+                        tipo_daltonismo={tipo_daltonismo}
+                    />
                 }
 
                 {

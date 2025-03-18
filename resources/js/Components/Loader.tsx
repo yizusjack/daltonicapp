@@ -1,8 +1,33 @@
 import { motion } from "framer-motion";
+import { PropsWithChildren } from "react";
 
-const colors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500", "bg-purple-500"];
+export default function Loader({
+    mensaje,
+    tipo_daltonismo,
+}: PropsWithChildren<{
+    mensaje?: string;
+    tipo_daltonismo?: string;
+}>) {
+    let colors: string[] = [];
 
-export default function Loader() {
+    switch (tipo_daltonismo) {
+        case "Deuteranopia":
+          colors = ['bg-green-800', 'bg-yellow-300', 'bg-blue-900', 'bg-purple-500', 'bg-red-600'];
+        break;
+
+        case "Protanopia":
+          colors = ['bg-green-800', 'bg-yellow-300', 'bg-orange-500', 'bg-red-600', 'bg-red-950'];
+        break;
+
+        case "Tritanopia":
+          colors = ['bg-green-800', 'bg-blue-900', 'bg-yellow-300', 'bg-black', 'bg-white'];
+        break;
+
+        default:
+          colors = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-yellow-500", "bg-purple-500"];
+        break;
+      }
+
     return (
         <div className="fixed inset-0 z-50 flex flex-col justify-center items-center h-screen bg-gray-900 bg-opacity-75 backdrop-blur-sm">
             <div className="relative w-20 h-20">
@@ -28,7 +53,7 @@ export default function Loader() {
             </div>
 
             <div className="text-white text-sm">
-                Cargando...
+                {mensaje ? mensaje : 'Cargando'}...
             </div>
         </div>
     );

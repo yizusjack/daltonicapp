@@ -16,6 +16,7 @@ import { Card, CardContent } from '@/Components/ui/card';
 import { Link as LinkType } from '@/types/link';
 import { Link } from '@inertiajs/react';
 import Paginator from '@/Components/partials/Paginator';
+import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider';
 
 export default function IndexPicture({
     imagenes
@@ -100,7 +101,7 @@ export default function IndexPicture({
                         ))
                     }
                 </div>
-                <Paginator 
+                <Paginator
                     links={imagenes.links}
                     current_page={imagenes.current_page}
                     last_page={imagenes.last_page}
@@ -112,10 +113,14 @@ export default function IndexPicture({
                 (<Dialog open={abrirModal} onOpenChange={setAbrirModal}>
                     <DialogContent className="max-w-7xl max-h-full flex items-center justify-center">
                         <div className="max-w-full max-h-[80vh] overflow-auto flex items-center justify-center">
-                            <img 
-                                src={route('picture.show', selectedPicture.id)} 
-                                className="max-w-full max-h-full object-contain" 
-                                alt="" 
+                            {/* <img
+                                src={route('picture.show', selectedPicture.id)}
+                                className="max-w-full max-h-full object-contain"
+                                alt=""
+                            /> */}
+                            <ReactCompareSlider
+                                itemOne={<ReactCompareSliderImage src={route('picture.show', selectedPicture.id)}  alt="Image one" />}
+                                itemTwo={<ReactCompareSliderImage src={route('picture.show-original', selectedPicture.id)}  alt="Image two" />}
                             />
                         </div>
                     </DialogContent>

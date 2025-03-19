@@ -116,17 +116,22 @@ class PictureController extends Controller
     {
         $request->validate([
             'base64' => 'required',
+            'originalBase64' => 'required',
         ]);
 
         $picture = Picture::create([
             'user_id' => Auth::user()->id,
         ]);
 
-        $nombreArchivo = Str::uuid() . '.jpeg';
+        $nombreArchivo = Str::uuid();
 
         $picture->addMediaFromBase64($request['base64'])
-        ->usingFileName($nombreArchivo)
-        ->toMediaCollection(TipoArchivoEnum::ImagenPrivada->value, 'private');
+            ->usingFileName($nombreArchivo . '.jpeg')
+            ->toMediaCollection(TipoArchivoEnum::ImagenPrivada->value, 'private');
+
+        $picture->addMediaFromBase64($request['originalBase64'])
+            ->usingFileName($nombreArchivo . '_original.jpeg')
+            ->toMediaCollection(TipoArchivoEnum::ImagenOriginal->value, 'private');
 
         return redirect()->route('picture.index')->with([
             'message' => 'Imagen guardada correctamente',
@@ -142,6 +147,18 @@ class PictureController extends Controller
         Gate::authorize('view', $picture);
 
         $archivo = $picture->getMedia(TipoArchivoEnum::ImagenPrivada->value)->first();
+
+        return Storage::response($archivo->getPathRelativeToRoot());
+    }
+
+    /**
+     * Recupera la imagen original para su visualización
+     */
+    public function showOriginal(Picture $picture)
+    {
+        Gate::authorize('view', $picture);
+
+        $archivo = $picture->getMedia(TipoArchivoEnum::ImagenOriginal->value)->first();
 
         return Storage::response($archivo->getPathRelativeToRoot());
     }

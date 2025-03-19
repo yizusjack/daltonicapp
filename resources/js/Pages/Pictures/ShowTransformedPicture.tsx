@@ -18,8 +18,10 @@ export default function ShowTransformedPicture({
 
     const { data, post, processing, errors } = useForm<{
         base64: string;
+        originalBase64: string;
     }>({
         base64: base64Image,
+        originalBase64: base64OldImage,
     });
 
     function submit(e: React.FormEvent<HTMLFormElement>) {

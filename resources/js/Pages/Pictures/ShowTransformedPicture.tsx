@@ -5,6 +5,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import React, { useState } from 'react'
 import { Button } from '@/Components/ui/button';
 import { Link, useForm } from '@inertiajs/react';
+import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider';
 
 export default function ShowTransformedPicture({
     base64Image,
@@ -25,7 +26,7 @@ export default function ShowTransformedPicture({
         e.preventDefault();
 
         post(route('picture.save'), {data});
-    } 
+    }
 
     return (
         <MainLayout
@@ -53,6 +54,13 @@ export default function ShowTransformedPicture({
                                     <img src={base64OldImage} />
                                 )
                         }
+                    </div>
+
+                    <div className="mt-2 pt-5">
+                    <ReactCompareSlider
+                        itemOne={<ReactCompareSliderImage src={`data:image/jpeg;base64,${base64Image}`} alt="Image one" />}
+                        itemTwo={<ReactCompareSliderImage src={base64OldImage} alt="Image two" />}
+                        />
                     </div>
 
                     <form onSubmit={submit}>

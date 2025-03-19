@@ -1,18 +1,21 @@
 import MainLayout from "@/Layouts/MainLayout";
 import { PageProps } from "@/types";
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/Components/ui/button";
 import Webcam from "react-webcam";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs"
 import AppCard from "@/Components/AppCard";
 import { Camera } from "lucide-react";
+import Loader from "@/Components/Loader";
 
 export default function PictureCreate({
     store_url,
 }: PageProps<{
     store_url: string;
 }>) {
+
+    const tipo_daltonismo = usePage().props.auth?.user.tipo_daltonismo;
 
     const useMediaQuery = (query: string) => {
         const [matches, setMatches] = useState(window.matchMedia(query).matches);
@@ -83,9 +86,13 @@ export default function PictureCreate({
         setImage(null);
     }
 
+    const [loader, setLoader] = useState(false);
+
 
     function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+
+        setLoader(true);
 
         if (image) {
             post(store_url, { data });
@@ -100,6 +107,14 @@ export default function PictureCreate({
             <AppCard
                 title="Nueva imagen"
             >
+                {
+                    loader &&
+                    <Loader
+                        mensaje="Transformando imagen"
+                        tipo_daltonismo={tipo_daltonismo}
+                    />
+                }
+
                 {
                     image ? (
                         <>

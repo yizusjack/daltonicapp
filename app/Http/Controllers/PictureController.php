@@ -47,7 +47,7 @@ class PictureController extends Controller
     {
         //Policy
 
-        $imageData = $request->input('Imagen');  
+        $imageData = $request->input('Imagen');
 
         if ($imageData) {
             //Genera la clase de obtencion de tokens
@@ -62,6 +62,7 @@ class PictureController extends Controller
             }
 
             $response = Http::withToken($token)
+            ->timeout(120)
             ->post(env('PYTHON_API_URL') . '/transform-image', [
                 'tipo_daltonismo' => Auth::user()->tipo_daltonismo,
                 'imagen' => $imageData,
@@ -122,7 +123,7 @@ class PictureController extends Controller
         ]);
 
         $nombreArchivo = Str::uuid() . '.jpeg';
-        
+
         $picture->addMediaFromBase64($request['base64'])
         ->usingFileName($nombreArchivo)
         ->toMediaCollection(TipoArchivoEnum::ImagenPrivada->value, 'private');
@@ -139,7 +140,7 @@ class PictureController extends Controller
     public function show(Picture $picture)
     {
         Gate::authorize('view', $picture);
-        
+
         $archivo = $picture->getMedia(TipoArchivoEnum::ImagenPrivada->value)->first();
 
         return Storage::response($archivo->getPathRelativeToRoot());

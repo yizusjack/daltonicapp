@@ -62,6 +62,7 @@ Route::middleware('auth')->group(function () {
     //Rutas para las imagenes transformadas
     Route::resource('picture', PictureController::class);
     Route::get('mostrarNuevaImagen', [PictureController::class, 'mostrar'])->name('picture.mostrar');
+    Route::get('/picture/{picture}/show-original', [PictureController::class, 'showOriginal'])->name('picture.show-original');
     Route::post('save', [PictureController::class, 'save'])->name('picture.save');
     Route::get('/picture/{picture}/download', [PictureController::class, 'download'])->name('picture.download');
 });

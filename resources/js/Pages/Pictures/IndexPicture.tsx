@@ -3,7 +3,7 @@ import { Button } from '@/Components/ui/button';
 import MainLayout from '@/Layouts/MainLayout'
 import { PageProps } from '@/types';
 import { Picture } from '@/types/picture';
-import { EyeIcon, FolderDown } from 'lucide-react';
+import { EyeIcon, FolderDown, MoveLeft, MoveRight } from 'lucide-react';
 import {
     Dialog,
     DialogContent,
@@ -16,6 +16,7 @@ import { Card, CardContent } from '@/Components/ui/card';
 import { Link as LinkType } from '@/types/link';
 import { Link } from '@inertiajs/react';
 import Paginator from '@/Components/partials/Paginator';
+import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider';
 
 export default function IndexPicture({
     imagenes
@@ -100,7 +101,7 @@ export default function IndexPicture({
                         ))
                     }
                 </div>
-                <Paginator 
+                <Paginator
                     links={imagenes.links}
                     current_page={imagenes.current_page}
                     last_page={imagenes.last_page}
@@ -110,15 +111,27 @@ export default function IndexPicture({
             {
                 selectedPicture &&
                 (<Dialog open={abrirModal} onOpenChange={setAbrirModal}>
-                    <DialogContent className="max-w-7xl max-h-full flex items-center justify-center">
+                    <DialogContent className="max-w-7xl max-h-full flex flex-col items-center justify-center">
+                        {/* Contenedor de los textos */}
+                        <div className="mt-2 flex flex-col md:flex-row justify-between text-xs md:text-sm w-full lg:w-1/2">
+                            <div className="flex gap-x-2 items-center">
+                                <MoveLeft /> Imagen original
+                            </div>
+
+                            <div className="flex gap-x-2 text-right items-center">
+                                Imagen transformada <MoveRight />
+                            </div>
+                        </div>
+
+                        {/* Contenedor de la imagen */}
                         <div className="max-w-full max-h-[80vh] overflow-auto flex items-center justify-center">
-                            <img 
-                                src={route('picture.show', selectedPicture.id)} 
-                                className="max-w-full max-h-full object-contain" 
-                                alt="" 
+                            <ReactCompareSlider
+                                itemOne={<ReactCompareSliderImage src={route('picture.show', selectedPicture.id)} alt="Image one" />}
+                                itemTwo={<ReactCompareSliderImage src={route('picture.show-original', selectedPicture.id)} alt="Image two" />}
                             />
                         </div>
                     </DialogContent>
+
                 </Dialog>)
             }
         </MainLayout>

@@ -1,10 +1,11 @@
-import AppCard from '@/Components/AppCard'
-import MainLayout from '@/Layouts/MainLayout'
-import { PageProps } from '@/types'
-import { Tabs, TabsList, TabsTrigger } from "@/Components/ui/tabs";
+import AppCard from '@/Components/AppCard';
+import MainLayout from '@/Layouts/MainLayout';
+import { PageProps } from '@/types';
 import React, { useState } from 'react'
 import { Button } from '@/Components/ui/button';
 import { Link, useForm } from '@inertiajs/react';
+import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider';
+import { MoveLeft, MoveRight } from 'lucide-react';
 
 export default function ShowTransformedPicture({
     base64Image,
@@ -17,56 +18,57 @@ export default function ShowTransformedPicture({
 
     const { data, post, processing, errors } = useForm<{
         base64: string;
+        originalBase64: string;
     }>({
         base64: base64Image,
+        originalBase64: base64OldImage,
     });
 
     function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
         post(route('picture.save'), {data});
-    } 
+    }
 
     return (
         <MainLayout
             name="Imagen">
             <AppCard
-                title='Mostrar imagen nueva'
+                title='Imagen transformada'
             >
-                <Tabs defaultValue="nueva" className="w-full">
-                    <TabsList className="w-full">
-                        <TabsTrigger className="w-1/2" value="nueva" onClick={() => setImagenTransformada(true)}>
-                            Imagen transformada
-                        </TabsTrigger>
-                        <TabsTrigger className="w-1/2" value="original" onClick={() => setImagenTransformada(false)}>Imagen original</TabsTrigger>
-                    </TabsList>
-                </Tabs>
 
-                <div className="flex flex-col items-center gap-4">
-                    <div className="mt-2 pt-5">
+                <div className="flex flex-col items-center gap-4 w-full">
+                    <div className="mt-2 flex justify-between text-xs md:text-sm w-full lg:w-1/2">
+                        <div className='flex gap-x-2 items-center'>
+                            <MoveLeft /> Imagen original
+                        </div>
 
-                        {
-                            imagenTransformada == true
-                                ? (
-                                    <img src={`data:image/jpeg;base64,${base64Image}`} />
-                                ) : (
-                                    <img src={base64OldImage} />
-                                )
-                        }
+                        <div className='flex gap-x-2 text-right items-center'>
+                            Imagen transformada <MoveRight />
+                        </div>
+                    </div>
+
+                    <div className="mt-2">
+                        <ReactCompareSlider
+                            itemOne={<ReactCompareSliderImage src={`data:image/jpeg;base64,${base64Image}`} alt="Image one" />}
+                            itemTwo={<ReactCompareSliderImage src={base64OldImage} alt="Image two" />}
+                        />
                     </div>
 
                     <form onSubmit={submit}>
-                        <div className="pt-3 w-full flex justify-center">
-                            <Link href={route('picture.create')}>
-                                <Button className="px-6 mx-3" variant="outline" disabled={processing} type="button">
+                        <div className="pt-3 w-full flex flex-col flex-col-reverse items-center sm:flex-row sm:justify-center">
+                            <Link href={route('picture.create')} className="w-full sm:w-auto">
+                                <Button className="px-6 py-4 md:mx-3 w-full sm:w-auto" variant="outline" disabled={processing} type="button">
                                     Cancelar
                                 </Button>
                             </Link>
 
-                            <Button className="px-6 mx-3" variant="default" disabled={processing} type="submit">
+                            <Button className="px-6 my-4 md:mx-3 w-full sm:w-auto" variant="default" disabled={processing} type="submit">
                                 Guardar imagen
                             </Button>
                         </div>
+
+
                     </form>
                 </div>
             </AppCard>

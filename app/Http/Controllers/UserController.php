@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Enums\TiposDaltonismoEnum;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class UserController extends Controller
 {
     use AuthorizesRequests;
-    
+
     public function index()
     {
         $this->authorize('viewAny', User::class);
@@ -21,7 +23,7 @@ class UserController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'roles' => $user->roles->pluck('name')->toArray(), 
+                'roles' => $user->roles->pluck('name')->toArray(),
             ];
         });
 
@@ -49,5 +51,14 @@ class UserController extends Controller
             'message' => 'Éxito',
             'description' => 'Rol actualizado',
         ]);
+    }
+
+    public function cambiarTipoDaltonismo(Request $request)
+    {
+        $request->validate([
+            'tipo_daltonismo' => ['required', Rule::in(TiposDaltonismoEnum::names())],
+        ]);
+
+
     }
 }

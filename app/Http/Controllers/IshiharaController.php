@@ -7,6 +7,7 @@ use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Imagen;
 use Illuminate\Http\Request;
+use App\Enums\TiposDaltonismoEnum;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
@@ -25,6 +26,7 @@ class IshiharaController extends Controller
         return Inertia::render('Auth/TipoDaltonismo', [
             'pruebas' => Imagen::get(),
             'store_url' => route('ishihara.store'),
+            'tipos_daltonismo' => TiposDaltonismoEnum::keysValues(),
         ]);
     }
 

@@ -25,7 +25,7 @@ export default function CardTipoDaltonismo({
             <Card className='w-full bg-slate-50'>
                 <CardHeader>
                     <CardTitle>Guía de contribución</CardTitle>
-                    <CardDescription>TIpo de daltonismo</CardDescription>
+                    <CardDescription>Tipo de daltonismo</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="flex justify-center">

@@ -7,10 +7,12 @@
 /storage/*.key
 /storage/pail
 !/storage/app/
-/storage/app/*
-!/storage/app/public/
+-/storage/app/*
+-!/storage/app/public/
+-/storage/app/public/*
 /storage/app/public/*
 !/storage/app/public/ishihara/
+!/storage/app/public/ishihara/*
 /vendor
 .env
 .env.backup

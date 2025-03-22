@@ -51,6 +51,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/test', [IshiharaController::class, 'test'])->name('ishihara.create');
     Route::post('/test', [IshiharaController::class, 'getTipoDaltonismo'])->name('ishihara.store');
 
+    Route::post('/cambiar-tipo-daltonismo', [UserController::class, 'cambiarTipoDaltonismo'])->name('users.cambiarTipoDaltonismo');
+
     //Rutas para la guia de contribucion
     Route::resource('guiaContribucion', GuiaContribucionController::class)
         ->only(['create', 'store']);

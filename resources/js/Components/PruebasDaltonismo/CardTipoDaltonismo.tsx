@@ -14,18 +14,24 @@ export default function CardTipoDaltonismo({
     errors,
     setData,
     onSubmit,
+    title,
+    description,
+    footer,
 }: PropsWithChildren<{
     tipos_daltonismo: { [index: string]: string }
     errors: Partial<Record<string, string>>
     setData: (field: string, value: any) => void;
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+    title?: string;
+    description?: string;
+    footer?: string;
 }>) {
     return (
         <div className='p-6'>
             <Card className='w-full bg-slate-50'>
                 <CardHeader>
-                    <CardTitle>Guía de contribución</CardTitle>
-                    <CardDescription>TIpo de daltonismo</CardDescription>
+                    <CardTitle>{title ? title : 'Guía de contribución'}</CardTitle>
+                    <CardDescription>{description ? description : 'Tipo de daltonismo'}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="flex justify-center">
@@ -55,7 +61,7 @@ export default function CardTipoDaltonismo({
                     </div>
                 </CardContent>
                 <CardFooter className='flex justify-end'>
-                    <p className='text-xs'>Ingresa tu tipo de daltonismo para finalizar</p>
+                    <p className='text-xs'>{footer ? footer : 'Ingresa tu tipo de daltonismo para finalizar'}</p>
                 </CardFooter>
             </Card>
         </div>

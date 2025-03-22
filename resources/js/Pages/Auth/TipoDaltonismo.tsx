@@ -123,6 +123,9 @@ export default function TipoDaltonismo(
                             errors={formTipo.errors}
                             setData={formTipo.setData}
                             onSubmit={submitTipo}
+                            title='Tipo de daltonismo'
+                            description='Selecciona tu tipo de daltonismo'
+                            footer='El tipo de daltonismo que selecciones será configurado en tu perfil'
                         />
                     </>
                 }

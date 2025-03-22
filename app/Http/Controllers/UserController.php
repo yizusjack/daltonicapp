@@ -55,6 +55,8 @@ class UserController extends Controller
 
     public function cambiarTipoDaltonismo(Request $request)
     {
+        Gate::authorize('hacerTest', User::class);
+
         $request->validate([
             'tipo_daltonismo' => ['required', Rule::in(TiposDaltonismoEnum::names())],
         ]);

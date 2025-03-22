@@ -70,7 +70,7 @@ export default function TipoDaltonismo(
 
     function submitTipo(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        formTipo.post(store_url);
+        formTipo.post(route('users.cambiarTipoDaltonismo'));
     }
 
     return (

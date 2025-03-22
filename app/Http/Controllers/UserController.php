@@ -59,6 +59,13 @@ class UserController extends Controller
             'tipo_daltonismo' => ['required', Rule::in(TiposDaltonismoEnum::names())],
         ]);
 
+        Auth::user()->update([
+            'tipo_daltonismo' => $request->tipo_daltonismo,
+        ]);
 
+        return redirect()->route('dashboard')->with([
+            'message' => 'Tipo de daltonismo guardado exitosamente',
+            'description' => 'Ahora puedes hacer uso de la cámara',
+        ]);
     }
 }

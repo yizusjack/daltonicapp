@@ -32,7 +32,7 @@ export default function CardPrueba({
 				</CardHeader>
 				<CardContent>
 					<div className="flex justify-center">
-						<div className="h-44 w-44 md:h-72 md:w-72 object-contain">
+						<div className="h-44 w-44 md:h-72 md:w-72 m-6 object-contain">
 							<img src={imagen.URL} alt="" />
 						</div>
 					</div>

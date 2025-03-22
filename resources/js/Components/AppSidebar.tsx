@@ -27,9 +27,11 @@ export default function AppSidebar() {
     return (
         <Sidebar>
             <SidebarHeader>
-                <div className='text-center text-2xl font-extrabold	'>
-                    DALTONICAPP
-                </div>
+                <Link href='/dashboard'>
+                    <div className='text-center text-2xl font-extrabold	'>
+                        DALTONICAPP
+                    </div>
+                </Link>
             </SidebarHeader>
             <SidebarContent>
                 <Can permission={permissions ? (! permissions.imagenes.useCamera) : false}>

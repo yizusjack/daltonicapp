@@ -55,7 +55,7 @@ class ImagenSeeder extends Seeder
             if (file_exists($imagePath)) {
                 $imagen->addMedia($imagePath)
                     ->preservingOriginal()
-                    ->toMediaCollection(TipoArchivoEnum::Ishihara->value, 'public');
+                    ->toMediaCollection(TipoArchivoEnum::Ishihara->value, 'ishihara');
             } else {
                 dump("Image not found: " . $imagePath);
             }

@@ -13,7 +13,7 @@ import { FormProvider, useForm as useFormContext } from 'react-hook-form'
 export default function IndexPublicacion() {
     const [abrirModal, setAbrirModal] = useState(false);
 
-    const { data, setData, post, processing, errors } = useForm<{
+    const { data, setData, post, processing, errors, reset } = useForm<{
         titulo?: string;
         contenido: string;
     }>({
@@ -28,8 +28,16 @@ export default function IndexPublicacion() {
         },
     });
 
-    function submit() {
+    function submit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
 
+        post(route('publicacion.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                reset();
+                setAbrirModal(false);
+            },
+        });
     }
 
     return (

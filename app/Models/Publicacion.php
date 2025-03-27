@@ -34,6 +34,14 @@ class Publicacion extends Model
         'tipo',
     ];
 
+    protected $casts = [
+        'created_at' => 'date:Y-m-d'
+    ];
+
+    protected $appends = [
+        'fecha'
+    ];
+
     /**
      * Una publicación pertenece a un usuario
      *
@@ -62,5 +70,13 @@ class Publicacion extends Model
     public function reportes(): MorphMany
     {
         return $this->morphMany(Reporte::class, 'reportable', 'reportable_type', 'reportable_id');
+    }
+
+    /**
+     * Formato de la fecha
+     */
+    public function getFechaAttribute(): string
+    {
+        return $this->created_at->format('d-m-Y');
     }
 }

@@ -15,7 +15,9 @@ class PublicacionController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Publicacion/IndexPublicacion');
+        return Inertia::render('Publicacion/IndexPublicacion', [
+            'publicaciones' => Publicacion::with('user')->paginate(3),
+        ]);
     }
 
     /**

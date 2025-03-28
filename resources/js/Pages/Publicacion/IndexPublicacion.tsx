@@ -63,8 +63,30 @@ export default function IndexPublicacion({
     //Estado para la creación de comentarios o edición de publicaciones
     const [publicacionSeleccionada, setPublicacionSeleccionada] = useState<null|number>(null);
 
+    //Formulario para comentarios
+    const comentarioForm = useForm<{
+        comentario: string;
+        comentable_id?: number;
+    }>({
+        comentario :'',
+    });
+
     const setFormComentario = (publicacion: number) => {
+        comentarioForm.setData('comentable_id', publicacion);
+
         setPublicacionSeleccionada(publicacion);
+    }
+
+    function submitComentario(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        comentarioForm.post(route('comentario.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                setPublicacionSeleccionada(null);
+                comentarioForm.reset();
+            },
+        });
     }
 
     return (
@@ -85,7 +107,7 @@ export default function IndexPublicacion({
                 <div className='max-w-7xl m-auto'>
                     {
                         publicaciones.data.map((publicacion) => (
-                            <div className='w-full my-4 py-4 border-b border-slate-200'>
+                            <div className='w-full my-4 py-4 border-b border-slate-200' key={publicacion.id}>
                                 <div className="font-bold flex justify-between">
                                     <div>
                                         {publicacion.titulo}
@@ -123,21 +145,41 @@ export default function IndexPublicacion({
                                     </div>
 
                                     { publicacionSeleccionada != publicacion.id &&
-                                        <div onClick={() => setPublicacionSeleccionada(publicacion.id)} className='text-slate-500 hover:text-slate-800 hover:underline cursor-pointer'>
+                                        <div onClick={() => setFormComentario(publicacion.id)} className='text-slate-500 hover:text-slate-800 hover:underline cursor-pointer'>
                                             Agregar un comentario
                                         </div>
                                     }
                                 </div>
 
                                 { publicacionSeleccionada == publicacion.id &&
-                                    <div className='mt-4'>
-                                        <Textarea
-                                            className='h-20'
-                                            name='contenido'
-                                            placeholder='Escribe un comentario...'
-                                            onChange={(e) => setData('contenido', e.target.value)}
-                                        />
-                                    </div>
+                                    <form onSubmit={submitComentario}>
+                                        <div className='mt-4'>
+                                            <Textarea
+                                                className='h-20'
+                                                name='comentario'
+                                                placeholder='Escribe un comentario...'
+                                                onChange={(e) => comentarioForm.setData('comentario', e.target.value)}
+                                            />
+
+                                            <div className="mt-2 flex justify-end gap-x-2">
+                                                <Button
+                                                    type='button'
+                                                    variant='outline'
+                                                    size='sm'
+                                                    onClick={() => setPublicacionSeleccionada(null)}
+                                                >
+                                                    Cancelar
+                                                </Button>
+
+                                                <Button
+                                                    type='submit'
+                                                    size='sm'
+                                                >
+                                                    Comentar
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 }
                             </div>
                         ))

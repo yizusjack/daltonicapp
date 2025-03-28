@@ -10,6 +10,7 @@ use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\PictureController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\IshiharaController;
+use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\PublicacionController;
 use App\Http\Controllers\GuiaContribucionController;
@@ -68,6 +69,9 @@ Route::middleware('auth')->group(function () {
 
     //Rutas para los foros
     Route::resource('publicacion', PublicacionController::class);
+
+    //Rutas para los fotos
+    Route::resource('comentario', ComentarioController::class)->only('store', 'update', 'destroy');
 });
 
 require __DIR__.'/auth.php';

@@ -31,8 +31,8 @@ class ComentarioController extends Controller
     public function store(StoreComentarioRequest $request)
     {
         $data = $request->all();
-        $data['comentable_type'] => 'App\Models\Publicacion';
-        $data['user_id'] => Auth::user()->id;
+        $data['comentable_type'] = 'App\Models\Publicacion';
+        $data['user_id'] = Auth::user()->id;
 
         Comentario::create($data);
 

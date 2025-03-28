@@ -151,6 +151,22 @@ export default function IndexPublicacion({
                                     }
                                 </div>
 
+                                <div className="ml-8">
+                                    {
+                                        publicacion.comentarios.map((comentario) => (
+                                            <div className='w-full my-4 py-4 border-b border-slate-100 text-xs' key={comentario.id}>
+                                                <div className='flex items-center text-cyan-900'>
+                                                    {comentario.user.name}
+                                                    <Dot />
+                                                    {publicacion.fecha}
+                                                </div>
+
+                                                {comentario.comentario}
+                                            </div>
+                                        ))
+                                    }
+                                    </div>
+
                                 { publicacionSeleccionada == publicacion.id &&
                                     <form onSubmit={submitComentario}>
                                         <div className='mt-4'>

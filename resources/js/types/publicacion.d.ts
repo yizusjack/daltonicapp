@@ -1,4 +1,5 @@
 import { User } from ".";
+import { ComentarioWithRelations } from "./comentario";
 
 export interface Publicacion {
     id: number;
@@ -11,4 +12,5 @@ export interface Publicacion {
 
 export interface PublicacionWithRelations extends Publicacion {
     user: User;
+    comentarios: ComentarioWithRelations[];
 }

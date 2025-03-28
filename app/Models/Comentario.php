@@ -35,6 +35,14 @@ class Comentario extends Model
         'user_id',
     ];
 
+    protected $casts = [
+        'created_at' => 'date:Y-m-d'
+    ];
+
+    protected $appends = [
+        'fecha'
+    ];
+
     /**
      * Un comentario pertenece a un usuario
      *
@@ -73,5 +81,15 @@ class Comentario extends Model
     public function reportes(): MorphMany
     {
         return $this->morphMany(Reporte::class, 'reportable', 'reportable_type', 'reportable_id');
+    }
+
+    /**
+     * Obtiene la fecha del comentario formateada
+     *
+     * @return string
+     */
+    public function getFechaAttribute(): string
+    {
+        return $this->created_at->format('d-m-Y');
     }
 }

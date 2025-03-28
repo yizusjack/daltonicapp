@@ -11,7 +11,7 @@ class StoreComentarioRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class StoreComentarioRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'comentario' => 'required',
+            'comentable_id' => 'required|numeric'
         ];
     }
 }

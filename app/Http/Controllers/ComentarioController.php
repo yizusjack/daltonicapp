@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comentario;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreComentarioRequest;
 use App\Http\Requests\UpdateComentarioRequest;
-use App\Models\Comentario;
 
 class ComentarioController extends Controller
 {
@@ -29,7 +30,16 @@ class ComentarioController extends Controller
      */
     public function store(StoreComentarioRequest $request)
     {
-        //
+        $data = $request->all();
+        $data['comentable_type'] => 'App\Models\Publicacion';
+        $data['user_id'] => Auth::user()->id;
+
+        Comentario::create($data);
+
+        return redirect()->to(url()->previous())->with([
+            'message' => 'Comentario creado',
+            'description' => 'Los demás usuarios podrán verlo e interactuar con el',
+        ]);
     }
 
     /**

@@ -26,8 +26,11 @@ export default function IndexPublicacion({
     };
 
 }>) {
+
+    //Modal para creación de dudas
     const [abrirModal, setAbrirModal] = useState(false);
 
+    //Forms para la creación de publicación
     const { data, setData, post, processing, errors, reset } = useForm<{
         titulo?: string;
         contenido: string;
@@ -43,6 +46,8 @@ export default function IndexPublicacion({
         },
     });
 
+
+    //Función para guardar publicación
     function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
@@ -53,6 +58,13 @@ export default function IndexPublicacion({
                 setAbrirModal(false);
             },
         });
+    }
+
+    //Estado para la creación de comentarios o edición de publicaciones
+    const [publicacionSeleccionada, setPublicacionSeleccionada] = useState<null|number>(null);
+
+    const setFormComentario = (publicacion: number) => {
+        setPublicacionSeleccionada(publicacion);
     }
 
     return (
@@ -110,10 +122,23 @@ export default function IndexPublicacion({
                                         {publicacion.fecha}
                                     </div>
 
-                                    <div className='text-slate-500 hover:text-slate-800 hover:underline cursor-pointer'>
-                                        Agregar un comentario
-                                    </div>
+                                    { publicacionSeleccionada != publicacion.id &&
+                                        <div onClick={() => setPublicacionSeleccionada(publicacion.id)} className='text-slate-500 hover:text-slate-800 hover:underline cursor-pointer'>
+                                            Agregar un comentario
+                                        </div>
+                                    }
                                 </div>
+
+                                { publicacionSeleccionada == publicacion.id &&
+                                    <div className='mt-4'>
+                                        <Textarea
+                                            className='h-20'
+                                            name='contenido'
+                                            placeholder='Escribe un comentario...'
+                                            onChange={(e) => setData('contenido', e.target.value)}
+                                        />
+                                    </div>
+                                }
                             </div>
                         ))
                     }

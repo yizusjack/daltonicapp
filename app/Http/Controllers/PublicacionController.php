@@ -16,7 +16,7 @@ class PublicacionController extends Controller
     public function index()
     {
         return Inertia::render('Publicacion/IndexPublicacion', [
-            'publicaciones' => Publicacion::with(['user', 'comentarios', 'comentarios.user'])->paginate(3),
+            'publicaciones' => Publicacion::with(['user', 'comentarios', 'comentarios.user'])->orderByDesc('id')->paginate(10),
         ]);
     }
 

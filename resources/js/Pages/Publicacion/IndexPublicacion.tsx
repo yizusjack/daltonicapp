@@ -1,4 +1,5 @@
 import AppCard from '@/Components/AppCard'
+import ConfirmationModal from '@/Components/ConfirmationModal'
 import Paginator from '@/Components/partials/Paginator'
 import { Button } from '@/Components/ui/button'
 import { Dialog, DialogContent } from '@/Components/ui/dialog'
@@ -29,6 +30,8 @@ export default function IndexPublicacion({
 
     //Modal para creación de dudas
     const [abrirModal, setAbrirModal] = useState(false);
+
+    const [abrirModalConfirmacion, setAbrirModalConfirmacion] = useState(false);
 
     //Forms para la creación de publicación
     const { data, setData, post, put, processing, errors, reset } = useForm<{
@@ -87,6 +90,14 @@ export default function IndexPublicacion({
                 setPublicacionSeleccionada(null);
             },
         });
+    }
+
+    const [publicacionAEliminar, setPublicacionAEliminar] = useState<null|string>(null);
+
+    //Funcion para eliminar publicacion
+    const eliminarPublicacion = (publicacion: Publicacion) => {
+        setPublicacionAEliminar(route('publicacion.destroy', publicacion?.id));
+        setAbrirModalConfirmacion(true);
     }
 
     //Estado para la creación de comentarios
@@ -159,7 +170,9 @@ export default function IndexPublicacion({
                                                                 Editar
                                                             </DropdownMenuItem>
                                                             <DropdownMenuSeparator />
-                                                            <DropdownMenuItem>
+                                                            <DropdownMenuItem
+                                                                onClick={() => eliminarPublicacion(publicacion)}
+                                                            >
                                                                 <Trash2 className='w-3 h-3 text-red-400' />
                                                                 Eliminar
                                                             </DropdownMenuItem>
@@ -390,6 +403,16 @@ export default function IndexPublicacion({
                     </FormProvider>
                 </DialogContent>
             </Dialog>
+
+           { publicacionAEliminar &&
+                <ConfirmationModal
+                    ruta={publicacionAEliminar}
+                    modelo='Publicación'
+                    abrirModal={abrirModalConfirmacion}
+                    setAbrirModal={setAbrirModalConfirmacion}
+                    setModelo={setPublicacionAEliminar}
+                />
+            }
         </MainLayout>
     )
 }

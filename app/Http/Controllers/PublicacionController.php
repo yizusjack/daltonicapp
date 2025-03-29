@@ -78,6 +78,11 @@ class PublicacionController extends Controller
      */
     public function destroy(Publicacion $publicacion)
     {
-        //
+        $publicacion->delete();
+
+        return redirect()->to(url()->previous())->with([
+            'message' => 'Publicación eliminada',
+            'description' => '',
+        ]);
     }
 }

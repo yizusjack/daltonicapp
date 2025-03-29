@@ -64,7 +64,13 @@ class PublicacionController extends Controller
      */
     public function update(UpdatePublicacionRequest $request, Publicacion $publicacion)
     {
-        //
+        $data = $request->validated();
+        $publicacion->update($data);
+
+        return redirect()->to(url()->previous())->with([
+            'message' => 'Publicación editada correctamente',
+            'description' => 'Los demás usuarios podrán verla e interactuar con ella',
+        ]);
     }
 
     /**

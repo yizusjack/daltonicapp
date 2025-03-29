@@ -2,14 +2,14 @@ import AppCard from '@/Components/AppCard'
 import Paginator from '@/Components/partials/Paginator'
 import { Button } from '@/Components/ui/button'
 import { Dialog, DialogContent } from '@/Components/ui/dialog'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from '@/Components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuSeparator, DropdownMenuItem } from '@/Components/ui/dropdown-menu'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/form'
 import { Input } from '@/Components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import MainLayout from '@/Layouts/MainLayout'
 import { PageProps } from '@/types'
 import { Link } from '@/types/link'
-import { PublicacionWithRelations } from '@/types/publicacion'
+import { Publicacion, PublicacionWithRelations } from '@/types/publicacion'
 import { useForm } from '@inertiajs/react'
 import { Dot, EllipsisVertical, MessageCircleQuestion, Pencil, Trash2 } from 'lucide-react'
 import React, { useState } from 'react'
@@ -31,7 +31,7 @@ export default function IndexPublicacion({
     const [abrirModal, setAbrirModal] = useState(false);
 
     //Forms para la creación de publicación
-    const { data, setData, post, processing, errors, reset } = useForm<{
+    const { data, setData, post, put, processing, errors, reset } = useForm<{
         titulo?: string;
         contenido: string;
     }>({
@@ -60,8 +60,37 @@ export default function IndexPublicacion({
         });
     }
 
-    //Estado para la creación de comentarios o edición de publicaciones
-    const [publicacionSeleccionada, setPublicacionSeleccionada] = useState<null|number>(null);
+    //Estado para la edición/eliminación de publicaciones
+    const [publicacionSeleccionada, setPublicacionSeleccionada] = useState<null|Publicacion>(null);
+
+    //Abre la edición de una publicación
+    const setEditarPublicacion = (publicacion: Publicacion) => {
+        setData('titulo', publicacion.titulo);
+        setData('contenido', publicacion.contenido);
+        setPublicacionSeleccionada(publicacion);
+    }
+
+    //Cancela la edición de una publicación
+    const cancelarEdicion = () => {
+        reset();
+        setPublicacionSeleccionada(null);
+    }
+
+     //Función para editar publicación
+     function editarPublicacion(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        put(route('publicacion.update', publicacionSeleccionada?.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                reset();
+                setPublicacionSeleccionada(null);
+            },
+        });
+    }
+
+    //Estado para la creación de comentarios
+    const [publicacionAComentar, setpublicacionAComentar] = useState<null|number>(null);
 
     //Formulario para comentarios
     const comentarioForm = useForm<{
@@ -74,7 +103,7 @@ export default function IndexPublicacion({
     const setFormComentario = (publicacion: number) => {
         comentarioForm.setData('comentable_id', publicacion);
 
-        setPublicacionSeleccionada(publicacion);
+        setpublicacionAComentar(publicacion);
     }
 
     function submitComentario(e: React.FormEvent<HTMLFormElement>) {
@@ -83,7 +112,7 @@ export default function IndexPublicacion({
         comentarioForm.post(route('comentario.store'), {
             preserveScroll: true,
             onSuccess: () => {
-                setPublicacionSeleccionada(null);
+                setpublicacionAComentar(null);
                 comentarioForm.reset();
             },
         });
@@ -108,48 +137,126 @@ export default function IndexPublicacion({
                     {
                         publicaciones.data.map((publicacion) => (
                             <div className='w-full my-4 py-4 border-b border-slate-200' key={publicacion.id}>
-                                <div className="font-bold flex justify-between">
-                                    <div>
-                                        {publicacion.titulo}
-                                    </div>
+                                {
+                                    publicacionSeleccionada?.id != publicacion.id ?
+                                    (
+                                        <>
+                                            <div className="font-bold flex justify-between">
+                                                <div>
+                                                    {publicacion.titulo}
+                                                </div>
 
-                                    <div className="justify-end">
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger className='hover:bg-slate-200 rounded-md p-0.5'>
-                                                <EllipsisVertical className='w-4 h-4' />
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent>
-                                                <DropdownMenuItem>
-                                                    <Pencil className='w-3 h-3 text-green-400' />
-                                                    Editar
-                                                </DropdownMenuItem>
-                                                <DropdownMenuSeparator />
-                                                <DropdownMenuItem>
-                                                    <Trash2 className='w-3 h-3 text-red-400' />
-                                                    Eliminar
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </div>
-                                </div>
+                                                <div className="justify-end">
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger className='hover:bg-slate-200 rounded-md p-0.5'>
+                                                            <EllipsisVertical className='w-4 h-4' />
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent>
+                                                            <DropdownMenuItem
+                                                                onClick={() => setEditarPublicacion(publicacion)}
+                                                            >
+                                                                <Pencil className='w-3 h-3 text-green-400' />
+                                                                Editar
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuSeparator />
+                                                            <DropdownMenuItem>
+                                                                <Trash2 className='w-3 h-3 text-red-400' />
+                                                                Eliminar
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </div>
+                                            </div>
 
-                                <div>
-                                    {publicacion.contenido}
-                                </div>
+                                            <div>
+                                                {publicacion.contenido}
+                                            </div>
 
-                                <div className='flex justify-between text-xs'>
-                                    <div className='flex items-center text-cyan-900'>
-                                        {publicacion.user.name}
-                                        <Dot />
-                                        {publicacion.fecha}
-                                    </div>
+                                            <div className='flex justify-between text-xs'>
+                                                <div className='flex items-center text-cyan-900'>
+                                                    {publicacion.user.name}
+                                                    <Dot />
+                                                    {publicacion.fecha}
+                                                </div>
 
-                                    { publicacionSeleccionada != publicacion.id &&
-                                        <div onClick={() => setFormComentario(publicacion.id)} className='text-slate-500 hover:text-slate-800 hover:underline cursor-pointer'>
-                                            Agregar un comentario
-                                        </div>
-                                    }
-                                </div>
+                                                { publicacionAComentar != publicacion.id &&
+                                                    <div onClick={() => setFormComentario(publicacion.id)} className='text-slate-500 hover:text-slate-800 hover:underline cursor-pointer'>
+                                                        Agregar un comentario
+                                                    </div>
+                                                }
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FormProvider {...methods}>
+                                                <form onSubmit={editarPublicacion}>
+                                                    <div className='pb-4'>
+                                                        <FormField
+                                                            name="titulo"
+                                                            render={({ field }) => (
+                                                                <FormItem>
+                                                                    <FormLabel>Título</FormLabel>
+
+                                                                    <FormControl>
+                                                                        <Input
+                                                                            type='text'
+                                                                            name='titulo'
+                                                                            value={data.titulo}
+                                                                            onChange={(e) => setData('titulo', e.target.value)}
+                                                                        />
+                                                                    </FormControl>
+
+                                                                    {errors.titulo && (
+                                                                        <FormMessage>{errors.titulo}</FormMessage>
+                                                                    )}
+                                                                </FormItem>
+                                                            )}
+                                                        >
+                                                        </FormField>
+                                                    </div>
+
+                                                    <div className='pb-4'>
+                                                        <FormField
+                                                            name="contenido"
+                                                            render={({ field }) => (
+                                                                <FormItem>
+                                                                    <FormLabel>Contenido</FormLabel>
+
+                                                                    <FormControl>
+                                                                        <Textarea
+                                                                            className='h-20'
+                                                                            name='contenido'
+                                                                            value={data.contenido}
+                                                                            onChange={(e) => setData('contenido', e.target.value)}
+                                                                        />
+                                                                    </FormControl>
+
+                                                                    {errors.contenido && (
+                                                                        <FormMessage>{errors.contenido}</FormMessage>
+                                                                    )}
+                                                                </FormItem>
+                                                            )}
+                                                        >
+                                                        </FormField>
+                                                    </div>
+
+                                                    <div className="flex justify-end gap-x-4">
+                                                        <Button
+                                                            type='button'
+                                                            variant='outline'
+                                                            onClick={cancelarEdicion}
+                                                        >
+                                                            Cancelar
+                                                        </Button>
+                                                        <Button>
+                                                            Enviar
+                                                        </Button>
+                                                    </div>
+                                                </form>
+                                            </FormProvider>
+                                        </>
+                                    )
+                                }
 
                                 <div className="ml-8">
                                     {
@@ -167,7 +274,7 @@ export default function IndexPublicacion({
                                     }
                                     </div>
 
-                                { publicacionSeleccionada == publicacion.id &&
+                                { publicacionAComentar == publicacion.id &&
                                     <form onSubmit={submitComentario}>
                                         <div className='mt-4'>
                                             <Textarea
@@ -182,7 +289,7 @@ export default function IndexPublicacion({
                                                     type='button'
                                                     variant='outline'
                                                     size='sm'
-                                                    onClick={() => setPublicacionSeleccionada(null)}
+                                                    onClick={() => setpublicacionAComentar(null)}
                                                 >
                                                     Cancelar
                                                 </Button>

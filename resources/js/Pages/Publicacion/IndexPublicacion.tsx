@@ -227,9 +227,13 @@ export default function IndexPublicacion({
                                                 </div>
 
                                                 { publicacionAComentar != publicacion.id &&
-                                                    <div onClick={() => setFormComentario(publicacion.id)} className='text-slate-500 hover:text-slate-800 hover:underline cursor-pointer'>
-                                                        Agregar un comentario
-                                                    </div>
+                                                    <Can
+                                                        permission={publicacion.canComentar}
+                                                    >
+                                                        <div onClick={() => setFormComentario(publicacion.id)} className='text-slate-500 hover:text-slate-800 hover:underline cursor-pointer'>
+                                                            Agregar un comentario
+                                                        </div>
+                                                    </Can>
                                                 }
                                             </div>
                                         </>

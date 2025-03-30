@@ -43,7 +43,8 @@ class Publicacion extends Model implements HasMedia
     protected $appends = [
         'fecha',
         'canEditar',
-        'canEliminar'
+        'canEliminar',
+        'canComentar'
     ];
 
     /**
@@ -98,5 +99,13 @@ class Publicacion extends Model implements HasMedia
     public function getcanEliminarAttribute(): bool
     {
         return Gate::allows('delete', $this);
+    }
+
+    /**
+     * El usuario puede comentae la publicacion
+     */
+    public function getcanComentarAttribute(): bool
+    {
+        return Gate::allows('comentar', $this);
     }
 }

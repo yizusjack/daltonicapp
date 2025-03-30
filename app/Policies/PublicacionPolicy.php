@@ -63,4 +63,12 @@ class PublicacionPolicy
     {
         return false;
     }
+
+    /**
+     * Determina si un usuario puede o no comentar una publicacion
+     */
+    public function comentar(User $user, Publicacion $publicacion): bool
+    {
+        return $publicacion->user_id == $user->id || $user->hasRole('Administrador');
+    }
 }

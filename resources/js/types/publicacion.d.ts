@@ -10,6 +10,7 @@ export interface Publicacion {
     fecha: string;
     canEditar: boolean;
     canEliminar: boolean;
+    canComentar: boolean;
 }
 
 export interface PublicacionWithRelations extends Publicacion {

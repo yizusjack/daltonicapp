@@ -200,7 +200,7 @@ export default function IndexPublicacion({
                                                 </div>
                                             </div>
 
-                                            <div>
+                                            <div className='whitespace-pre-line'>
                                                 {publicacion.contenido}
                                             </div>
 
@@ -300,7 +300,9 @@ export default function IndexPublicacion({
                                                     {publicacion.fecha}
                                                 </div>
 
-                                                {comentario.comentario}
+                                                <div className='whitespace-pre-line'>
+                                                    {comentario.comentario}
+                                                </div>
                                             </div>
                                         ))
                                     }

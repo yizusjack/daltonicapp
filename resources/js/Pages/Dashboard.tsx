@@ -54,7 +54,7 @@ export default function Dashboard({
             <Head title="Dashboard" />
 
             {
-                user?.tipo_daltonismo
+                user?.tipo_daltonismo && user?.tipo_daltonismo != "Sin Daltonismo"
                     ? (
                         <>
                             {

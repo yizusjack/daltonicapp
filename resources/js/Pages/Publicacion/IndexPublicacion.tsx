@@ -29,6 +29,13 @@ export default function IndexPublicacion({
 
 }>) {
 
+    const breadcrumb = [
+        {
+            url: 'active',
+            name: 'Dudas'
+        }
+    ];
+
     //Modal para creación de dudas
     const [abrirModal, setAbrirModal] = useState(false);
 
@@ -152,6 +159,7 @@ export default function IndexPublicacion({
     return (
         <MainLayout
             name="Dudas"
+            breadcrumb={breadcrumb}
         >
             <AppCard
                 title='Dudas - Daltonicapp'

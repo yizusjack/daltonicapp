@@ -92,13 +92,32 @@ export default function IndexPublicacion({
         });
     }
 
-    const [publicacionAEliminar, setPublicacionAEliminar] = useState<null|string>(null);
+    const [publicacionAEliminar, setPublicacionAEliminar] = useState<null|Publicacion>(null);
 
     //Funcion para eliminar publicacion
     const eliminarPublicacion = (publicacion: Publicacion) => {
-        setPublicacionAEliminar(route('publicacion.destroy', publicacion?.id));
-        setAbrirModalConfirmacion(true);
+        setPublicacionAEliminar(publicacion);
+
+        setTimeout(() => {
+            setAbrirModalConfirmacion(true);
+        }, 100);
     }
+
+    const eliminar = useForm({});
+
+    const confirmarEliminacion = () => {
+        if (!publicacionAEliminar) return; // Evitar errores si es null
+
+        let publicacion = publicacionAEliminar.id;
+
+        eliminar.delete(route('publicacion.destroy', publicacion), {
+            preserveScroll: true,
+            onSuccess: () => {
+                setPublicacionAEliminar(null);
+                setAbrirModalConfirmacion(false);
+            },
+        });
+    };
 
     //Estado para la creación de comentarios
     const [publicacionAComentar, setpublicacionAComentar] = useState<null|number>(null);
@@ -406,11 +425,10 @@ export default function IndexPublicacion({
 
            { publicacionAEliminar &&
                 <ConfirmationModal
-                    ruta={publicacionAEliminar}
+                    confirmar={confirmarEliminacion}
                     modelo='Publicación'
                     abrirModal={abrirModalConfirmacion}
                     setAbrirModal={setAbrirModalConfirmacion}
-                    setModelo={setPublicacionAEliminar}
                 />
             }
         </MainLayout>

@@ -5,30 +5,27 @@ import { Button } from './ui/button';
 import { useForm } from '@inertiajs/react';
 
 export default function ConfirmationModal({
-    ruta,
+    confirmar,
     modelo,
     abrirModal,
     setAbrirModal,
-    setModelo,
 }: PageProps<{
-    ruta?: string,
-    modelo?: string,
+    confirmar: () => void,
+    modelo: string,
     abrirModal: boolean,
     setAbrirModal: React.Dispatch<React.SetStateAction<boolean>>,
-    setModelo: React.Dispatch<React.SetStateAction<any | null>>
 }>) {
 
     const {delete: destroy} = useForm({});
 
-    const confirmar = () => {
-        setModelo(null);
-        destroy(ruta as string, {
-            preserveScroll: true,
-            onSuccess: () => {
-                setAbrirModal(false);
-            },
-        });
-    }
+    // const confirmar = () => {
+    //     destroy(ruta as string, {
+    //         preserveScroll: true,
+    //         onSuccess: () => {
+    //             setAbrirModal(false);
+    //         },
+    //     });
+    // }
 
 
     return (

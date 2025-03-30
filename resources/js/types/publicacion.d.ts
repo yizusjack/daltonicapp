@@ -8,6 +8,8 @@ export interface Publicacion {
     user_id: number;
     tipo: number;
     fecha: string;
+    canEditar: boolean;
+    canEliminar: boolean;
 }
 
 export interface PublicacionWithRelations extends Publicacion {

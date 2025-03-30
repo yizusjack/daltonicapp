@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Publicacion;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StorePublicacionRequest;
 use App\Http\Requests\UpdatePublicacionRequest;
 
@@ -64,6 +65,8 @@ class PublicacionController extends Controller
      */
     public function update(UpdatePublicacionRequest $request, Publicacion $publicacion)
     {
+        Gate::authorize('update', $publicacion);
+
         $data = $request->validated();
         $publicacion->update($data);
 
@@ -78,6 +81,8 @@ class PublicacionController extends Controller
      */
     public function destroy(Publicacion $publicacion)
     {
+        Gate::authorize('delete', $publicacion);
+
         $publicacion->delete();
 
         return redirect()->to(url()->previous())->with([

@@ -37,7 +37,7 @@ class PublicacionPolicy
      */
     public function update(User $user, Publicacion $publicacion): bool
     {
-        return false;
+        return $publicacion->user_id == $user->id;
     }
 
     /**
@@ -45,7 +45,7 @@ class PublicacionPolicy
      */
     public function delete(User $user, Publicacion $publicacion): bool
     {
-        return false;
+        return $publicacion->user_id == $user->id;
     }
 
     /**

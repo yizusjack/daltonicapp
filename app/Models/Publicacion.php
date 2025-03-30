@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Comentario;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -40,7 +41,9 @@ class Publicacion extends Model implements HasMedia
     ];
 
     protected $appends = [
-        'fecha'
+        'fecha',
+        'canEditar',
+        'canEliminar'
     ];
 
     /**
@@ -79,5 +82,21 @@ class Publicacion extends Model implements HasMedia
     public function getFechaAttribute(): string
     {
         return $this->created_at->format('d-m-Y');
+    }
+
+    /**
+     * El usuario puede editar la publicacion
+     */
+    public function getcanEditarAttribute(): bool
+    {
+        return Gate::allows('update', $this);
+    }
+
+    /**
+     * El usuario puede eliminar la publicacion
+     */
+    public function getcanEliminarAttribute(): bool
+    {
+        return Gate::allows('delete', $this);
     }
 }

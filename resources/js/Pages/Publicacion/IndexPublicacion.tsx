@@ -1,4 +1,5 @@
 import AppCard from '@/Components/AppCard'
+import Can from '@/Components/Auth/Can'
 import ConfirmationModal from '@/Components/ConfirmationModal'
 import Paginator from '@/Components/partials/Paginator'
 import { Button } from '@/Components/ui/button'
@@ -176,28 +177,42 @@ export default function IndexPublicacion({
                                                     {publicacion.titulo}
                                                 </div>
 
-                                                <div className="justify-end">
-                                                    <DropdownMenu>
-                                                        <DropdownMenuTrigger className='hover:bg-slate-200 rounded-md p-0.5'>
-                                                            <EllipsisVertical className='w-4 h-4' />
-                                                        </DropdownMenuTrigger>
-                                                        <DropdownMenuContent>
-                                                            <DropdownMenuItem
-                                                                onClick={() => setEditarPublicacion(publicacion)}
-                                                            >
-                                                                <Pencil className='w-3 h-3 text-green-400' />
-                                                                Editar
-                                                            </DropdownMenuItem>
-                                                            <DropdownMenuSeparator />
-                                                            <DropdownMenuItem
-                                                                onClick={() => eliminarPublicacion(publicacion)}
-                                                            >
-                                                                <Trash2 className='w-3 h-3 text-red-400' />
-                                                                Eliminar
-                                                            </DropdownMenuItem>
-                                                        </DropdownMenuContent>
-                                                    </DropdownMenu>
-                                                </div>
+                                                <Can
+                                                    permission={publicacion.canEditar || publicacion.canEliminar}
+                                                >
+                                                    <div className="justify-end">
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger className='hover:bg-slate-200 rounded-md p-0.5'>
+                                                                <EllipsisVertical className='w-4 h-4' />
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent>
+                                                                <Can
+                                                                    permission={publicacion.canEditar}
+                                                                >
+                                                                    <DropdownMenuItem
+                                                                        onClick={() => setEditarPublicacion(publicacion)}
+                                                                    >
+                                                                        <Pencil className='w-3 h-3 text-green-400' />
+                                                                        Editar
+                                                                    </DropdownMenuItem>
+
+                                                                    <DropdownMenuSeparator />
+                                                                </Can>
+
+                                                                <Can
+                                                                    permission={publicacion.canEliminar}
+                                                                >
+                                                                    <DropdownMenuItem
+                                                                        onClick={() => eliminarPublicacion(publicacion)}
+                                                                    >
+                                                                        <Trash2 className='w-3 h-3 text-red-400' />
+                                                                        Eliminar
+                                                                    </DropdownMenuItem>
+                                                                </Can>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </div>
+                                                </Can>
                                             </div>
 
                                             <div className='whitespace-pre-line'>

@@ -10,7 +10,9 @@ use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\PictureController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\IshiharaController;
+use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\PublicacionController;
 use App\Http\Controllers\GuiaContribucionController;
 
 
@@ -67,6 +69,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/picture/{picture}/show-original', [PictureController::class, 'showOriginal'])->name('picture.show-original');
     Route::post('save', [PictureController::class, 'save'])->name('picture.save');
     Route::get('/picture/{picture}/download', [PictureController::class, 'download'])->name('picture.download');
+
+    //Rutas para los foros
+    Route::resource('publicacion', PublicacionController::class);
+
+    //Rutas para los fotos
+    Route::resource('comentario', ComentarioController::class)->only('store', 'update', 'destroy');
 });
 
 require __DIR__.'/auth.php';

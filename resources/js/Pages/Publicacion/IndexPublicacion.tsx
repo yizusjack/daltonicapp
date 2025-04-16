@@ -18,7 +18,8 @@ import React, { useState } from 'react'
 import { FormProvider, useForm as useFormContext } from 'react-hook-form'
 
 export default function IndexPublicacion({
-    publicaciones
+    publicaciones,
+    tipo,
 }: PageProps<{
     publicaciones: {
         data: PublicacionWithRelations[];
@@ -26,7 +27,7 @@ export default function IndexPublicacion({
         current_page: number,
         last_page: number,
     };
-
+    tipo: number;
 }>) {
 
     const breadcrumb = [
@@ -158,16 +159,16 @@ export default function IndexPublicacion({
 
     return (
         <MainLayout
-            name="Dudas"
+            name={tipo == 1 ? "Dudas" : "Comunidad"}
             breadcrumb={breadcrumb}
         >
             <AppCard
-                title='Dudas - Daltonicapp'
-                description='Si tienes alguna duda puedes escribirla, los administradores te responderán lo más pronto posible'
+                title={(tipo == 1 ? "Dudas" : "Comunidad") + ' - Daltonicapp'}
+                description={tipo == 1 ? 'Si tienes alguna duda puedes escribirla, los administradores te responderán lo más pronto posible' : undefined}
             >
                 <div className="flex justify-center md:justify-end">
                     <Button onClick={() => setAbrirModal(true)}>
-                        Tengo una duda
+                        {tipo == 1 ? 'Tengo una duda' : 'Nueva publicación'}
                         <MessageCircleQuestion />
                     </Button>
                 </div>
@@ -383,7 +384,7 @@ export default function IndexPublicacion({
             <Dialog open={abrirModal} onOpenChange={setAbrirModal}>
                 <DialogContent className="max-w-2xl max-h-full">
                     <h1 className='font-semibold leading-none tracking-tight'>
-                        Agregar duda
+                        {tipo == 1 ? 'Agregar duda' : 'Nueva publicación'}
                     </h1>
                     <FormProvider {...methods}>
                         <form onSubmit={submit}>

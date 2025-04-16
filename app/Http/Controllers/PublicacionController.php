@@ -18,7 +18,7 @@ class PublicacionController extends Controller
     public function index(int $tipo)
     {
 
-        if($tipo == 1) {
+        if ($tipo == 1) {
             $publicaciones = Publicacion::where('tipo', TipoPublicacionEnum::Duda->value)
             ->with(['user', 'comentarios', 'comentarios.user'])
             ->orderByDesc('id')
@@ -34,6 +34,7 @@ class PublicacionController extends Controller
 
         return Inertia::render('Publicacion/IndexPublicacion', [
             'publicaciones' => $publicaciones,
+            'tipo' => $tipo,
         ]);
     }
 

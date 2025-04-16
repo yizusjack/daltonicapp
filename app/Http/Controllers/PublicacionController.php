@@ -49,10 +49,11 @@ class PublicacionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePublicacionRequest $request)
+    public function store(StorePublicacionRequest $request, int $tipo)
     {
         $data = $request->validated();
         $data['user_id'] = Auth::user()->id;
+        $data['tipo'] = $tipo == 1 ? TipoPublicacionEnum::Duda->value : TipoPublicacionEnum::Foro->value;
         Publicacion::create($data);
 
         return redirect()->to(url()->previous())->with([

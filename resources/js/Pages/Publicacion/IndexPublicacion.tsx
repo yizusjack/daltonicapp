@@ -63,7 +63,7 @@ export default function IndexPublicacion({
     function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        post(route('publicacion.store'), {
+        post(route('publicacion.store', tipo), {
             preserveScroll: true,
             onSuccess: () => {
                 reset();

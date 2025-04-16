@@ -71,7 +71,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/picture/{picture}/download', [PictureController::class, 'download'])->name('picture.download');
 
     //Rutas para los foros
-    Route::resource('publicacion', PublicacionController::class);
+    Route::get('publicacion/foro/{tipo}', [PublicacionController::class, 'index'])->name('publicacion.index');
+    Route::post('publicacion/foro/{tipo}', [PublicacionController::class, 'store'])->name('publicacion.store');
+    Route::resource('publicacion', PublicacionController::class)->except(['index', 'store']);
 
     //Rutas para los fotos
     Route::resource('comentario', ComentarioController::class)->only('store', 'update', 'destroy');

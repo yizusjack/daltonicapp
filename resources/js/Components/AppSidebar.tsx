@@ -70,14 +70,16 @@ export default function AppSidebar() {
                 <SidebarGroup>
                     <SidebarGroupLabel>Foro</SidebarGroupLabel>
                     <SidebarGroupContent>
-                        <Link href={route('publicacion.index')}>
-                            <SidebarMenuButton  isActive={url == "/publicacion" || url.startsWith("/publicacion?page=")}>
+                        <Link href={route('publicacion.index', 1)}>
+                            <SidebarMenuButton  isActive={ url.startsWith("/publicacion/foro/1")}>
                                 <CircleHelp />Dudas
                             </SidebarMenuButton>
                         </Link>
-                        <SidebarMenuButton>
-                            <Speech />Comunidad
-                        </SidebarMenuButton>
+                        <Link href={route('publicacion.index', 2)}>
+                            <SidebarMenuButton isActive={ url.startsWith("/publicacion/foro/2")}>
+                                    <Speech />Comunidad
+                            </SidebarMenuButton>
+                        </Link>
                         <Can
                             permission={permissions ? (permissions.imagenes.useCamera) : false}
                         >

@@ -2,8 +2,9 @@
 
 namespace App\Policies;
 
-use App\Models\Publicacion;
 use App\Models\User;
+use App\Models\Publicacion;
+use App\Enums\TipoPublicacionEnum;
 use Illuminate\Auth\Access\Response;
 
 class PublicacionPolicy
@@ -69,6 +70,13 @@ class PublicacionPolicy
      */
     public function comentar(User $user, Publicacion $publicacion): bool
     {
-        return $publicacion->user_id == $user->id || $user->hasRole('Administrador');
+        $permiso = false;
+
+        if($publicacion->tipo == TipoPublicacionEnum::Duda->value) {
+            $permiso = $publicacion->user_id == $user->id || $user->hasRole('Administrador');
+        } else {
+            $permiso = true;
+        }
+        return $permiso;
     }
 }

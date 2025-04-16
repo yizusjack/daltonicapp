@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Publicacion;
+use App\Enums\TipoPublicacionEnum;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StorePublicacionRequest;
@@ -14,10 +15,25 @@ class PublicacionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(int $tipo)
     {
+
+        if($tipo == 1) {
+            $publicaciones = Publicacion::where('tipo', TipoPublicacionEnum::Duda->value)
+            ->with(['user', 'comentarios', 'comentarios.user'])
+            ->orderByDesc('id')
+            ->paginate(10);
+        } else if($tipo == 2) {
+            $publicaciones = Publicacion::where('tipo', TipoPublicacionEnum::Foro->value)
+            ->with(['user', 'comentarios', 'comentarios.user'])
+            ->orderByDesc('id')
+            ->paginate(10);
+        } else {
+            abort(404);
+        }
+
         return Inertia::render('Publicacion/IndexPublicacion', [
-            'publicaciones' => Publicacion::with(['user', 'comentarios', 'comentarios.user'])->orderByDesc('id')->paginate(10),
+            'publicaciones' => $publicaciones,
         ]);
     }
 

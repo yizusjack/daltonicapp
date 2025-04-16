@@ -70,8 +70,8 @@ export default function AppSidebar() {
                 <SidebarGroup>
                     <SidebarGroupLabel>Foro</SidebarGroupLabel>
                     <SidebarGroupContent>
-                        <Link href={route('publicacion.index')}>
-                            <SidebarMenuButton  isActive={url == "/publicacion" || url.startsWith("/publicacion?page=")}>
+                        <Link href={route('publicacion.index', 1)}>
+                            <SidebarMenuButton  isActive={ url.startsWith("/publicacion/foro/")}>
                                 <CircleHelp />Dudas
                             </SidebarMenuButton>
                         </Link>

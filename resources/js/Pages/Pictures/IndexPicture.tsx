@@ -3,7 +3,7 @@ import { Button } from '@/Components/ui/button';
 import MainLayout from '@/Layouts/MainLayout'
 import { PageProps } from '@/types';
 import { Picture } from '@/types/picture';
-import { EyeIcon, FolderDown, MoveLeft, MoveRight } from 'lucide-react';
+import { EyeIcon, FolderDown, MoveLeft, MoveRight, Share2 } from 'lucide-react';
 import {
     Dialog,
     DialogContent,
@@ -79,10 +79,13 @@ export default function IndexPicture({
                                                     <FolderDown className='h-6 w-6' />
                                                 </Button>
                                             </a>
+                                            <Button variant="secondary">
+                                                <Share2 className='h-6 w-6' />
+                                            </Button>
                                         </div>
                                     </div>
 
-                                    <div className="mt-2 opacity-100 md:opacity-0 grid grid-cols-2 gap-2">
+                                    <div className="mt-2 opacity-100 md:opacity-0 grid grid-cols-3 gap-2">
                                         <Button onClick={() => mostrarImagen(imagen)} className='w-full'>
                                             <EyeIcon className='h-6 w-6' />
                                         </Button>
@@ -91,6 +94,9 @@ export default function IndexPicture({
                                                 <FolderDown className='h-6 w-6' />
                                             </Button>
                                         </a>
+                                        <Button className='w-full'>
+                                            <Share2 className='h-6 w-6' />
+                                        </Button>
                                     </div>
 
                                     <div className="p-3 flex justify-end text-sm text-slate-500 italic">

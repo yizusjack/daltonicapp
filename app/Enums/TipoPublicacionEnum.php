@@ -16,4 +16,5 @@ enum TipoPublicacionEnum: string
 
     case Foro = 'Foro';
     case Duda = 'Duda';
+    case Imagen = 'Imagen';
 }

@@ -34,6 +34,7 @@ class Publicacion extends Model implements HasMedia
         'contenido',
         'user_id',
         'tipo',
+        'tipo_daltonismo',
     ];
 
     protected $casts = [

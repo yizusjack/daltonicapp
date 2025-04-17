@@ -51,9 +51,11 @@ class PublicacionController extends Controller
      */
     public function store(StorePublicacionRequest $request, int $tipo)
     {
+        $user = Auth::user();
         $data = $request->validated();
-        $data['user_id'] = Auth::user()->id;
+        $data['user_id'] = $user->id;
         $data['tipo'] = $tipo == 1 ? TipoPublicacionEnum::Duda->value : TipoPublicacionEnum::Foro->value;
+        $data['tipo_daltonismo'] = $data['tipo_daltonismo'] ?? $user->tipo_daltonismo;
         Publicacion::create($data);
 
         return redirect()->to(url()->previous())->with([

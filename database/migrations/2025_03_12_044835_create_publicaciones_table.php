@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('contenido');
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
             $table->enum('tipo', TipoPublicacionEnum::names());
+            $table->string('tipo_daltonismo');
             $table->timestamps();
         });
     }

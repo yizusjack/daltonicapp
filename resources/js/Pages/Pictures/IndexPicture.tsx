@@ -14,9 +14,13 @@ import {
 import React, { useState } from 'react'
 import { Card, CardContent } from '@/Components/ui/card';
 import { Link as LinkType } from '@/types/link';
-import { Link } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import Paginator from '@/Components/partials/Paginator';
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/form';
+import { Input } from '@/Components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { FormProvider, useForm as useFormContext } from 'react-hook-form';
 
 export default function IndexPicture({
     imagenes
@@ -46,6 +50,47 @@ export default function IndexPicture({
             setAbrirModal(true);
         }, 10);
     }
+
+    //Modal para publicar una imagen
+    const [abrirModalPublicar, setAbrirModalPublicar] = useState(false);
+
+    const publicarImagen = (picture: Picture) => {
+        setSelectedPicture(picture);
+
+        setTimeout(() => {
+            setAbrirModalPublicar(true);
+        }, 10);
+    }
+
+    //Forms para la creación de publicación
+        const { data, setData, post, put, processing, errors, reset } = useForm<{
+            titulo?: string;
+            contenido: string;
+        }>({
+            titulo: '',
+            contenido: '',
+        });
+
+        const methods = useFormContext({
+            defaultValues: {
+                titulo: data.titulo,
+                contenido: data.contenido,
+            },
+        });
+
+
+        //Función para guardar publicación
+        function submit(e: React.FormEvent<HTMLFormElement>) {
+            e.preventDefault();
+
+            post(route('publicacion.store'), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    reset();
+                    setAbrirModal(false);
+                },
+            });
+        }
 
     const getDate = (date: Date) => {
         const formatedDate = new Date(date);
@@ -79,7 +124,7 @@ export default function IndexPicture({
                                                     <FolderDown className='h-6 w-6' />
                                                 </Button>
                                             </a>
-                                            <Button variant="secondary">
+                                            <Button onClick={() => publicarImagen(imagen)} variant="secondary">
                                                 <Share2 className='h-6 w-6' />
                                             </Button>
                                         </div>
@@ -94,7 +139,7 @@ export default function IndexPicture({
                                                 <FolderDown className='h-6 w-6' />
                                             </Button>
                                         </a>
-                                        <Button className='w-full'>
+                                        <Button onClick={() => publicarImagen(imagen)} className='w-full'>
                                             <Share2 className='h-6 w-6' />
                                         </Button>
                                     </div>
@@ -114,6 +159,7 @@ export default function IndexPicture({
                     elements={3}
                 />
             </AppCard>
+
             {
                 selectedPicture &&
                 (<Dialog open={abrirModal} onOpenChange={setAbrirModal}>
@@ -139,6 +185,86 @@ export default function IndexPicture({
                     </DialogContent>
 
                 </Dialog>)
+            }
+
+            {/* Modal para publicar imagen */}
+            {
+                selectedPicture &&
+                <Dialog open={abrirModalPublicar} onOpenChange={setAbrirModalPublicar}>
+                    <DialogContent className="max-w-2xl max-h-full">
+                        <h1 className='font-semibold leading-none tracking-tight'>
+                            Publicar imagen
+                        </h1>
+
+                        <div className='flex justify-center'>
+                            <img src={route('picture.show', selectedPicture.id)} alt="" className="max-w-md" />
+                        </div>
+                        <FormProvider {...methods}>
+                            <form onSubmit={submit}>
+                                <div className='pb-4'>
+                                    <FormField
+                                        name="titulo"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Título</FormLabel>
+
+                                                <FormControl>
+                                                    <Input
+                                                        type='text'
+                                                        name='titulo'
+                                                        onChange={(e) => setData('titulo', e.target.value)}
+                                                    />
+                                                </FormControl>
+
+                                                {errors.titulo && (
+                                                    <FormMessage>{errors.titulo}</FormMessage>
+                                                )}
+                                            </FormItem>
+                                        )}
+                                    >
+                                    </FormField>
+                                </div>
+
+                                <div className='pb-4'>
+                                    <FormField
+                                        name="contenido"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Contenido</FormLabel>
+
+                                                <FormControl>
+                                                    <Textarea
+                                                        className='h-20'
+                                                        name='contenido'
+                                                        onChange={(e) => setData('contenido', e.target.value)}
+                                                    />
+                                                </FormControl>
+
+                                                {errors.contenido && (
+                                                    <FormMessage>{errors.contenido}</FormMessage>
+                                                )}
+                                            </FormItem>
+                                        )}
+                                    >
+                                    </FormField>
+                                </div>
+
+                                <div className="flex justify-end gap-x-4">
+                                    <Button
+                                        type='button'
+                                        variant='outline'
+                                        onClick={() => setAbrirModalPublicar(false)}
+                                    >
+                                        Cancelar
+                                    </Button>
+                                    <Button>
+                                        Enviar
+                                    </Button>
+                                </div>
+                            </form>
+                        </FormProvider>
+                    </DialogContent>
+                </Dialog>
             }
         </MainLayout>
     )

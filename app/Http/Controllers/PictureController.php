@@ -210,4 +210,12 @@ class PictureController extends Controller
                 'description' => 'Ahora la podrán ver todos los usuarios',
             ]);
     }
+
+    /**
+     * Muesta la galería pública
+     */
+    public function galeria()
+    {
+        dd("Debí tirar más fotos");
+    }
 }

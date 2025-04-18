@@ -198,5 +198,16 @@ class PictureController extends Controller
         $data['tipo_daltonismo'] = $data['tipo_daltonismo'] ?? $user->tipo_daltonismo;
 
         $publicacion = Publicacion::create($data);
+
+        $archivo = $picture->getMedia(TipoArchivoEnum::ImagenOriginal->value)->first()->getPath();
+
+        $publicacion->addMedia($archivo)
+            ->preservingOriginal()
+            ->toMediaCollection(TipoArchivoEnum::Publicacion->value, 'publicaciones');
+
+        return redirect()->route('picture.index')->with([
+                'message' => 'Imagen publicada correctamente',
+                'description' => 'Ahora la podrán ver todos los usuarios',
+            ]);
     }
 }

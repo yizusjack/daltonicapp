@@ -17,4 +17,5 @@ enum TipoArchivoEnum: string
     case Ishihara = 'Imagen Ishihara';
     case ImagenPrivada = 'Imagen privada';
     case ImagenOriginal = 'Imagen original';
+    case Publicacion = 'Publicacion';
 }

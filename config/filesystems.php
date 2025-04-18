@@ -61,6 +61,14 @@ return [
             'throw' => false,
         ],
 
+        'publicaciones' => [
+            'driver' => 'local',
+            'root' => storage_path('app/publicaciones'),
+            'url' => env('APP_URL').'/publicaciones',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -89,6 +97,7 @@ return [
     'links' => [
         public_path('storage') => storage_path('app/public'),
         public_path('ishihara') => storage_path('app/ishihara'),
+        public_path('publicaciones') => storage_path('app/publicaciones'),
     ],
 
 ];

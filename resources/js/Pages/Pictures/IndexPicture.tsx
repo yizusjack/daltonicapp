@@ -84,7 +84,8 @@ export default function IndexPicture({
                 preserveScroll: true,
                 onSuccess: () => {
                     reset();
-                    setAbrirModal(false);
+                    setAbrirModalPublicar(false);
+                    setSelectedPicture(null);
                 },
             });
         }

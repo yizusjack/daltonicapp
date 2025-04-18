@@ -64,16 +64,13 @@ export default function IndexPicture({
 
     //Forms para la creación de publicación
         const { data, setData, post, put, processing, errors, reset } = useForm<{
-            titulo?: string;
             contenido: string;
         }>({
-            titulo: '',
             contenido: '',
         });
 
         const methods = useFormContext({
             defaultValues: {
-                titulo: data.titulo,
                 contenido: data.contenido,
             },
         });
@@ -83,7 +80,7 @@ export default function IndexPicture({
         function submit(e: React.FormEvent<HTMLFormElement>) {
             e.preventDefault();
 
-            post(route('publicacion.store'), {
+            post(route('picture.publicar', selectedPicture?.id), {
                 preserveScroll: true,
                 onSuccess: () => {
                     reset();
@@ -178,8 +175,8 @@ export default function IndexPicture({
                         {/* Contenedor de la imagen */}
                         <div className="max-w-full max-h-[80vh] overflow-auto flex items-center justify-center">
                             <ReactCompareSlider
-                                itemOne={<ReactCompareSliderImage src={route('picture.show', selectedPicture.id)} alt="Image one" />}
-                                itemTwo={<ReactCompareSliderImage src={route('picture.show-original', selectedPicture.id)} alt="Image two" />}
+                                itemOne={<ReactCompareSliderImage src={route('picture.show', selectedPicture.id)} alt="Imagen transformada" />}
+                                itemTwo={<ReactCompareSliderImage src={route('picture.show-original', selectedPicture.id)} alt="Imagen original" />}
                             />
                         </div>
                     </DialogContent>
@@ -197,40 +194,16 @@ export default function IndexPicture({
                         </h1>
 
                         <div className='flex justify-center'>
-                            <img src={route('picture.show', selectedPicture.id)} alt="" className="max-w-md" />
+                            <img src={route('picture.show', selectedPicture.id)} alt="Vista previa de la imagen" className="max-w-md" />
                         </div>
                         <FormProvider {...methods}>
                             <form onSubmit={submit}>
                                 <div className='pb-4'>
                                     <FormField
-                                        name="titulo"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Título</FormLabel>
-
-                                                <FormControl>
-                                                    <Input
-                                                        type='text'
-                                                        name='titulo'
-                                                        onChange={(e) => setData('titulo', e.target.value)}
-                                                    />
-                                                </FormControl>
-
-                                                {errors.titulo && (
-                                                    <FormMessage>{errors.titulo}</FormMessage>
-                                                )}
-                                            </FormItem>
-                                        )}
-                                    >
-                                    </FormField>
-                                </div>
-
-                                <div className='pb-4'>
-                                    <FormField
                                         name="contenido"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Contenido</FormLabel>
+                                                <FormLabel>Agrega una descripción</FormLabel>
 
                                                 <FormControl>
                                                     <Textarea

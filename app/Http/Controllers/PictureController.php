@@ -216,6 +216,10 @@ class PictureController extends Controller
      */
     public function galeria()
     {
-        dd("Debí tirar más fotos");
+        $imagenes = Publicacion::with('user')->where('tipo', TipoPublicacionEnum::Imagen)->orderByDesc('id')->paginate(6);
+
+        return Inertia::render('Pictures/Galeria', [
+            'imagenes' => $imagenes,
+        ]);
     }
 }

@@ -6,9 +6,11 @@ import AppCard from '@/Components/AppCard';
 import { Card, CardContent } from '@/Components/ui/card';
 import Paginator from '@/Components/partials/Paginator';
 import { PublicacionWithRelations } from '@/types/publicacion';
-import { EyeIcon } from 'lucide-react';
+import { EllipsisVertical, EyeIcon, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/Components/ui/button';
 import { Dialog, DialogContent } from '@/Components/ui/dialog';
+import Can from '@/Components/Auth/Can';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/Components/ui/dropdown-menu';
 
 export default function Galeria({
     imagenes
@@ -99,7 +101,47 @@ export default function Galeria({
 
                             <div className="col-span-12 md:col-span-6 lg:col-span-4">
                                 <div className="flex flex-col items-end justify-end text-cyan-900">
-                                    <div className='font-semibold'>{selectedPicture.user.name}</div>
+                                    <div className='flex items-center font-semibold'>
+                                        {selectedPicture.user.name}
+
+                                        <Can
+                                            permission={selectedPicture.canEditar || selectedPicture.canEliminar}
+                                        >
+                                            {/* <div className="justify-end"> */}
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger className='hover:bg-slate-200 rounded-md p-0.5'>
+                                                        <EllipsisVertical className='w-4 h-4' />
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent>
+                                                        <Can
+                                                            permission={selectedPicture.canEditar}
+                                                        >
+                                                            <DropdownMenuItem
+                                                                // onClick={() => setEditarPublicacion(publicacion)}
+                                                            >
+                                                                <Pencil className='w-3 h-3 text-green-400' />
+                                                                Editar
+                                                            </DropdownMenuItem>
+
+                                                            <DropdownMenuSeparator />
+                                                        </Can>
+
+                                                        <Can
+                                                            permission={selectedPicture.canEliminar}
+                                                        >
+                                                            <DropdownMenuItem
+                                                                //onClick={() => eliminarPublicacion(selectedPicture)}
+                                                            >
+                                                                <Trash2 className='w-3 h-3 text-red-400' />
+                                                                Eliminar
+                                                            </DropdownMenuItem>
+                                                        </Can>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            {/* </div> */}
+                                        </Can>
+                                    </div>
+
                                     <div className='italic'>{selectedPicture.fecha}</div>
                                 </div>
 

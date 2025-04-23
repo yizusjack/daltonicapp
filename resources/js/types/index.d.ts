@@ -9,6 +9,7 @@ export interface User {
 export interface Permissions {
     imagenes: {
         useCamera: boolean;
+        galeria: boolean;
     }
     guiaContribucion: {
         create: boolean;

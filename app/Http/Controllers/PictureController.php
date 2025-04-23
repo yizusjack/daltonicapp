@@ -190,7 +190,8 @@ class PictureController extends Controller
      */
     public function publicar(PublicarImagenRequest $request, Picture $picture)
     {
-        //Policy
+        Gate::authorize('publicar', $picture);
+
         $user = Auth::user();
         $data = $request->validated();
         $data['user_id'] = $user->id;
@@ -216,6 +217,8 @@ class PictureController extends Controller
      */
     public function galeria()
     {
+        Gate::authorize('galeria', Picture::class);
+
         $imagenes = Publicacion::with('user')
             ->where('tipo', TipoPublicacionEnum::Imagen)
             ->where('tipo_daltonismo', Auth::user()->tipo_daltonismo)

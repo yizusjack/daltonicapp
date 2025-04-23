@@ -113,7 +113,7 @@ export default function Galeria({
 
     return (
         <MainLayout
-            name='Mi galería'
+            name='Galería'
             breadcrumb={breadcrumb}
         >
             <AppCard

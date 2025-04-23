@@ -69,6 +69,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/picture/{picture}/show-original', [PictureController::class, 'showOriginal'])->name('picture.show-original');
     Route::post('save', [PictureController::class, 'save'])->name('picture.save');
     Route::get('/picture/{picture}/download', [PictureController::class, 'download'])->name('picture.download');
+    Route::post('/picture/{picture}/publicar', [PictureController::class, 'publicar'])->name('picture.publicar');
+    Route::get('/imagenes-para-mi', [PictureController::class, 'galeria'])->name('picture.galeria');
 
     //Rutas para los foros
     Route::get('publicacion/foro/{tipo}', [PublicacionController::class, 'index'])->name('publicacion.index');

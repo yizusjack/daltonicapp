@@ -81,11 +81,13 @@ export default function AppSidebar() {
                             </SidebarMenuButton>
                         </Link>
                         <Can
-                            permission={permissions ? (permissions.imagenes.useCamera) : false}
+                            permission={permissions ? (permissions.imagenes.galeria) : false}
                         >
-                            <SidebarMenuButton>
-                                <GalleryHorizontal />Imágenes para mi
-                            </SidebarMenuButton>
+                            <Link href={route('picture.galeria')}>
+                                <SidebarMenuButton isActive={ url.startsWith("/imagenes-para-mi")}>
+                                    <GalleryHorizontal />Imágenes para mi
+                                </SidebarMenuButton>
+                            </Link>
                         </Can>
                     </SidebarGroupContent>
                 </SidebarGroup>

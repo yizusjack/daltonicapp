@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Comentario;
+use App\Enums\TipoArchivoEnum;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Model;
@@ -34,6 +35,7 @@ class Publicacion extends Model implements HasMedia
         'contenido',
         'user_id',
         'tipo',
+        'tipo_daltonismo',
     ];
 
     protected $casts = [
@@ -44,7 +46,8 @@ class Publicacion extends Model implements HasMedia
         'fecha',
         'canEditar',
         'canEliminar',
-        'canComentar'
+        'canComentar',
+        'imagenes'
     ];
 
     /**
@@ -107,5 +110,13 @@ class Publicacion extends Model implements HasMedia
     public function getcanComentarAttribute(): bool
     {
         return Gate::allows('comentar', $this);
+    }
+
+    /**
+     * Obtiene la URL de las imágenes que están relacionadas con la publicación
+     */
+    public function getImagenesAttribute(): array
+    {
+        return $this->getMedia('*')->pluck('original_url')->toArray();
     }
 }

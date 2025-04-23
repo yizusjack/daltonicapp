@@ -3,7 +3,7 @@ import { Button } from '@/Components/ui/button';
 import MainLayout from '@/Layouts/MainLayout'
 import { PageProps } from '@/types';
 import { Picture } from '@/types/picture';
-import { EyeIcon, FolderDown, MoveLeft, MoveRight } from 'lucide-react';
+import { EyeIcon, FolderDown, MoveLeft, MoveRight, Share2 } from 'lucide-react';
 import {
     Dialog,
     DialogContent,
@@ -14,9 +14,13 @@ import {
 import React, { useState } from 'react'
 import { Card, CardContent } from '@/Components/ui/card';
 import { Link as LinkType } from '@/types/link';
-import { Link } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import Paginator from '@/Components/partials/Paginator';
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/form';
+import { Input } from '@/Components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { FormProvider, useForm as useFormContext } from 'react-hook-form';
 
 export default function IndexPicture({
     imagenes
@@ -46,6 +50,45 @@ export default function IndexPicture({
             setAbrirModal(true);
         }, 10);
     }
+
+    //Modal para publicar una imagen
+    const [abrirModalPublicar, setAbrirModalPublicar] = useState(false);
+
+    const publicarImagen = (picture: Picture) => {
+        setSelectedPicture(picture);
+
+        setTimeout(() => {
+            setAbrirModalPublicar(true);
+        }, 10);
+    }
+
+    //Forms para la creación de publicación
+        const { data, setData, post, put, processing, errors, reset } = useForm<{
+            contenido: string;
+        }>({
+            contenido: '',
+        });
+
+        const methods = useFormContext({
+            defaultValues: {
+                contenido: data.contenido,
+            },
+        });
+
+
+        //Función para guardar publicación
+        function submit(e: React.FormEvent<HTMLFormElement>) {
+            e.preventDefault();
+
+            post(route('picture.publicar', selectedPicture?.id), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    reset();
+                    setAbrirModalPublicar(false);
+                    setSelectedPicture(null);
+                },
+            });
+        }
 
     const getDate = (date: Date) => {
         const formatedDate = new Date(date);
@@ -79,10 +122,13 @@ export default function IndexPicture({
                                                     <FolderDown className='h-6 w-6' />
                                                 </Button>
                                             </a>
+                                            <Button onClick={() => publicarImagen(imagen)} variant="secondary">
+                                                <Share2 className='h-6 w-6' />
+                                            </Button>
                                         </div>
                                     </div>
 
-                                    <div className="mt-2 opacity-100 md:opacity-0 grid grid-cols-2 gap-2">
+                                    <div className="mt-2 opacity-100 md:opacity-0 grid grid-cols-3 gap-2">
                                         <Button onClick={() => mostrarImagen(imagen)} className='w-full'>
                                             <EyeIcon className='h-6 w-6' />
                                         </Button>
@@ -91,6 +137,9 @@ export default function IndexPicture({
                                                 <FolderDown className='h-6 w-6' />
                                             </Button>
                                         </a>
+                                        <Button onClick={() => publicarImagen(imagen)} className='w-full'>
+                                            <Share2 className='h-6 w-6' />
+                                        </Button>
                                     </div>
 
                                     <div className="p-3 flex justify-end text-sm text-slate-500 italic">
@@ -108,6 +157,7 @@ export default function IndexPicture({
                     elements={3}
                 />
             </AppCard>
+
             {
                 selectedPicture &&
                 (<Dialog open={abrirModal} onOpenChange={setAbrirModal}>
@@ -126,13 +176,69 @@ export default function IndexPicture({
                         {/* Contenedor de la imagen */}
                         <div className="max-w-full max-h-[80vh] overflow-auto flex items-center justify-center">
                             <ReactCompareSlider
-                                itemOne={<ReactCompareSliderImage src={route('picture.show', selectedPicture.id)} alt="Image one" />}
-                                itemTwo={<ReactCompareSliderImage src={route('picture.show-original', selectedPicture.id)} alt="Image two" />}
+                                itemOne={<ReactCompareSliderImage src={route('picture.show', selectedPicture.id)} alt="Imagen transformada" />}
+                                itemTwo={<ReactCompareSliderImage src={route('picture.show-original', selectedPicture.id)} alt="Imagen original" />}
                             />
                         </div>
                     </DialogContent>
 
                 </Dialog>)
+            }
+
+            {/* Modal para publicar imagen */}
+            {
+                selectedPicture &&
+                <Dialog open={abrirModalPublicar} onOpenChange={setAbrirModalPublicar}>
+                    <DialogContent className="max-w-2xl max-h-full">
+                        <h1 className='font-semibold leading-none tracking-tight'>
+                            Publicar imagen
+                        </h1>
+
+                        <div className='flex justify-center'>
+                            <img src={route('picture.show', selectedPicture.id)} alt="Vista previa de la imagen" className="max-w-md" />
+                        </div>
+                        <FormProvider {...methods}>
+                            <form onSubmit={submit}>
+                                <div className='pb-4'>
+                                    <FormField
+                                        name="contenido"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Agrega una descripción</FormLabel>
+
+                                                <FormControl>
+                                                    <Textarea
+                                                        className='h-20'
+                                                        name='contenido'
+                                                        onChange={(e) => setData('contenido', e.target.value)}
+                                                    />
+                                                </FormControl>
+
+                                                {errors.contenido && (
+                                                    <FormMessage>{errors.contenido}</FormMessage>
+                                                )}
+                                            </FormItem>
+                                        )}
+                                    >
+                                    </FormField>
+                                </div>
+
+                                <div className="flex justify-end gap-x-4">
+                                    <Button
+                                        type='button'
+                                        variant='outline'
+                                        onClick={() => setAbrirModalPublicar(false)}
+                                    >
+                                        Cancelar
+                                    </Button>
+                                    <Button>
+                                        Enviar
+                                    </Button>
+                                </div>
+                            </form>
+                        </FormProvider>
+                    </DialogContent>
+                </Dialog>
             }
         </MainLayout>
     )

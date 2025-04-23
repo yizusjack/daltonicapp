@@ -38,6 +38,7 @@ class HandleInertiaRequests extends Middleware
                 'permissions' => [
                     'imagenes' => [
                         'useCamera' => $request->user()?->can('useCamera', User::class),
+                        'galeria' => $request->user()?->can('galeria', Picture::class),
                     ],
                     'guiaContribucion' => [
                         'create' => $request->user()?->can('create', GuiaContribucion::class),

@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\GetApiToken;
 use Inertia\Inertia;
 use App\Models\Picture;
+use App\Models\Publicacion;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Enums\TipoArchivoEnum;
+use App\Enums\TipoPublicacionEnum;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -15,6 +17,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StorePictureRequest;
 use App\Http\Requests\UpdatePictureRequest;
+use App\Http\Requests\PublicarImagenRequest;
 
 class PictureController extends Controller
 {
@@ -180,5 +183,50 @@ class PictureController extends Controller
     public function destroy(Picture $picture)
     {
         //
+    }
+
+    /**
+     * Permite publicar la imagen
+     */
+    public function publicar(PublicarImagenRequest $request, Picture $picture)
+    {
+        Gate::authorize('publicar', $picture);
+
+        $user = Auth::user();
+        $data = $request->validated();
+        $data['user_id'] = $user->id;
+        $data['tipo'] = TipoPublicacionEnum::Imagen->value;
+        $data['tipo_daltonismo'] = $data['tipo_daltonismo'] ?? $user->tipo_daltonismo;
+
+        $publicacion = Publicacion::create($data);
+
+        $archivo = $picture->getMedia(TipoArchivoEnum::ImagenPrivada->value)->first()->getPath();
+
+        $publicacion->addMedia($archivo)
+            ->preservingOriginal()
+            ->toMediaCollection(TipoArchivoEnum::Publicacion->value, 'publicaciones');
+
+        return redirect()->route('picture.galeria')->with([
+                'message' => 'Imagen publicada correctamente',
+                'description' => 'Ahora la podrán ver todos los usuarios',
+            ]);
+    }
+
+    /**
+     * Muesta la galería pública
+     */
+    public function galeria()
+    {
+        Gate::authorize('galeria', Picture::class);
+
+        $imagenes = Publicacion::with('user')
+            ->where('tipo', TipoPublicacionEnum::Imagen)
+            ->where('tipo_daltonismo', Auth::user()->tipo_daltonismo)
+            ->orderByDesc('id')
+            ->paginate(6);
+
+        return Inertia::render('Pictures/Galeria', [
+            'imagenes' => $imagenes,
+        ]);
     }
 }

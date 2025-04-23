@@ -205,7 +205,7 @@ class PictureController extends Controller
             ->preservingOriginal()
             ->toMediaCollection(TipoArchivoEnum::Publicacion->value, 'publicaciones');
 
-        return redirect()->route('picture.index')->with([
+        return redirect()->route('picture.galeria')->with([
                 'message' => 'Imagen publicada correctamente',
                 'description' => 'Ahora la podrán ver todos los usuarios',
             ]);

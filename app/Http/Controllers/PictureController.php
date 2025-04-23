@@ -199,7 +199,7 @@ class PictureController extends Controller
 
         $publicacion = Publicacion::create($data);
 
-        $archivo = $picture->getMedia(TipoArchivoEnum::ImagenOriginal->value)->first()->getPath();
+        $archivo = $picture->getMedia(TipoArchivoEnum::ImagenPrivada->value)->first()->getPath();
 
         $publicacion->addMedia($archivo)
             ->preservingOriginal()
@@ -216,7 +216,11 @@ class PictureController extends Controller
      */
     public function galeria()
     {
-        $imagenes = Publicacion::with('user')->where('tipo', TipoPublicacionEnum::Imagen)->orderByDesc('id')->paginate(6);
+        $imagenes = Publicacion::with('user')
+            ->where('tipo', TipoPublicacionEnum::Imagen)
+            ->where('tipo_daltonismo', Auth::user()->tipo_daltonismo)
+            ->orderByDesc('id')
+            ->paginate(6);
 
         return Inertia::render('Pictures/Galeria', [
             'imagenes' => $imagenes,

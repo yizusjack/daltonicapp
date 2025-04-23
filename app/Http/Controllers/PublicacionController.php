@@ -107,7 +107,7 @@ class PublicacionController extends Controller
 
         return redirect()->to(url()->previous())->with([
             'message' => 'Publicación eliminada',
-            'description' => '',
+            'description' => ' ',
         ]);
     }
 }

@@ -15,6 +15,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Comp
 import { Textarea } from '@/components/ui/textarea';
 import { router, useForm } from '@inertiajs/react';
 import { FormProvider, useForm as useFormContext } from 'react-hook-form';
+import ConfirmationModal from '@/Components/ConfirmationModal';
 
 
 export default function Galeria({
@@ -79,8 +80,31 @@ export default function Galeria({
         });
     }
 
-    useEffect(()=> {
-        if(selectedPicture) {
+    const [abrirModalConfirmacion, setAbrirModalConfirmacion] = useState(false);
+
+    //Funcion para eliminar publicacion
+    const eliminarPublicacion = () => {
+        setTimeout(() => {
+            setAbrirModalConfirmacion(true);
+        }, 100);
+    }
+
+    const eliminar = useForm({});
+
+    const confirmarEliminacion = () => {
+        let picture = selectedPicture?.id;
+
+        eliminar.delete(route('publicacion.destroy', picture), {
+            preserveScroll: true,
+            onSuccess: () => {
+                setSelectedPicture(null);
+                setAbrirModalConfirmacion(false);
+            },
+        });
+    };
+
+    useEffect(() => {
+        if (selectedPicture) {
             let imagen = imagenes.data.find(i => i.id === selectedPicture.id);
 
             setSelectedPicture(imagen as PublicacionWithRelations);
@@ -177,7 +201,7 @@ export default function Galeria({
                                                         permission={selectedPicture.canEliminar}
                                                     >
                                                         <DropdownMenuItem
-                                                        //onClick={() => eliminarPublicacion(selectedPicture)}
+                                                            onClick={eliminarPublicacion}
                                                         >
                                                             <Trash2 className='w-3 h-3 text-red-400' />
                                                             Eliminar
@@ -247,6 +271,15 @@ export default function Galeria({
                     </DialogContent>
 
                 </Dialog>)
+            }
+
+            {selectedPicture &&
+                <ConfirmationModal
+                    confirmar={confirmarEliminacion}
+                    modelo='Publicación'
+                    abrirModal={abrirModalConfirmacion}
+                    setAbrirModal={setAbrirModalConfirmacion}
+                />
             }
         </MainLayout>
     )

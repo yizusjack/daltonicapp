@@ -1,6 +1,6 @@
 import { PageProps } from '@/types';
 import { Link as LinkType } from '@/types/link';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MainLayout from '@/Layouts/MainLayout';
 import AppCard from '@/Components/AppCard';
 import { Card, CardContent } from '@/Components/ui/card';
@@ -73,16 +73,19 @@ export default function Galeria({
         put(route('publicacion.update', selectedPicture?.id), {
             preserveScroll: true,
             onSuccess: () => {
-                // let selected = selectedPicture;
-                if(selectedPicture) {
-                    selectedPicture.contenido = data.contenido;
-                }
-
                 reset();
                 setEditarPublicacion(false);
             },
         });
     }
+
+    useEffect(()=> {
+        if(selectedPicture) {
+            let imagen = imagenes.data.find(i => i.id === selectedPicture.id);
+
+            setSelectedPicture(imagen as PublicacionWithRelations);
+        }
+    }, [imagenes])
 
     return (
         <MainLayout

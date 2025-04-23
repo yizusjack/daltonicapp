@@ -103,6 +103,8 @@ class PublicacionController extends Controller
     {
         Gate::authorize('delete', $publicacion);
 
+        $publicacion->comentarios()->delete();
+
         $publicacion->delete();
 
         return redirect()->to(url()->previous())->with([

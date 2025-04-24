@@ -182,7 +182,14 @@ class PictureController extends Controller
      */
     public function destroy(Picture $picture)
     {
-        //
+        Gate::authorize('delete', $picture);
+
+        $picture->delete();
+
+        return redirect()->route('picture.index')->with([
+            'message' => 'Imagen eliminada correctamente',
+            'description' => ' ',
+        ]);
     }
 
     /**

@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs"
 import AppCard from "@/Components/AppCard";
 import { Camera } from "lucide-react";
 import Loader from "@/Components/Loader";
+import { Input } from "@/Components/ui/input";
 
 export default function PictureCreate({
     store_url,
@@ -155,7 +156,7 @@ export default function PictureCreate({
                                             <div className='px-1 text-sm'>
                                                 Sube una imagen:
                                             </div>
-                                            <input
+                                            <Input
                                                 type="file"
                                                 name="Imagen"
                                                 accept="image/*"

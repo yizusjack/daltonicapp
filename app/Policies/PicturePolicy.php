@@ -46,7 +46,7 @@ class PicturePolicy
      */
     public function delete(User $user, Picture $picture): bool
     {
-        return false;
+        return $picture->user_id == $user->id;
     }
 
     /**

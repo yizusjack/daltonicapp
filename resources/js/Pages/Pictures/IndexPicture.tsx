@@ -3,7 +3,7 @@ import { Button } from '@/Components/ui/button';
 import MainLayout from '@/Layouts/MainLayout'
 import { PageProps } from '@/types';
 import { Picture } from '@/types/picture';
-import { EyeIcon, FolderDown, MoveLeft, MoveRight, Share2 } from 'lucide-react';
+import { EyeIcon, FolderDown, MoveLeft, MoveRight, Share2, Trash } from 'lucide-react';
 import {
     Dialog,
     DialogContent,
@@ -63,32 +63,32 @@ export default function IndexPicture({
     }
 
     //Forms para la creación de publicación
-        const { data, setData, post, put, processing, errors, reset } = useForm<{
-            contenido: string;
-        }>({
-            contenido: '',
-        });
+    const { data, setData, post, put, processing, errors, reset } = useForm<{
+        contenido: string;
+    }>({
+        contenido: '',
+    });
 
-        const methods = useFormContext({
-            defaultValues: {
-                contenido: data.contenido,
+    const methods = useFormContext({
+        defaultValues: {
+            contenido: data.contenido,
+        },
+    });
+
+
+    //Función para guardar publicación
+    function submit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        post(route('picture.publicar', selectedPicture?.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                reset();
+                setAbrirModalPublicar(false);
+                setSelectedPicture(null);
             },
         });
-
-
-        //Función para guardar publicación
-        function submit(e: React.FormEvent<HTMLFormElement>) {
-            e.preventDefault();
-
-            post(route('picture.publicar', selectedPicture?.id), {
-                preserveScroll: true,
-                onSuccess: () => {
-                    reset();
-                    setAbrirModalPublicar(false);
-                    setSelectedPicture(null);
-                },
-            });
-        }
+    }
 
     const getDate = (date: Date) => {
         const formatedDate = new Date(date);
@@ -110,25 +110,28 @@ export default function IndexPicture({
                         imagenes.data.map((imagen) => (
                             <Card key={imagen.id} className='col-span-12 md:col-span-6 lg:col-span-4'>
                                 <CardContent className='pt-6 pb-8'>
-                                    <div className='max-w-64 h-64 justify-center items-center rounded-md relative group'>
+                                    <div className='max-w-64 xs:min-w-64 xl:min-w-64 h-64 justify-center items-center rounded-md relative group'>
                                         <img src={route('picture.show', imagen.id)} className='w-full h-full object-cover rounded-md' alt="" />
 
-                                        <div className="p-3 absolute inset-0 bg-black bg-opacity-50 flex items-end justify-between rounded-xl opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
-                                            <Button onClick={() => mostrarImagen(imagen)} variant="secondary">
+                                        <div className="p-3 absolute inset-0 bg-black bg-opacity-50 grid grid-cols-4 gap-2 items-end rounded-xl opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+                                            <Button onClick={() => mostrarImagen(imagen)} variant="secondary" className='w-full'>
                                                 <EyeIcon className='h-6 w-6' />
                                             </Button>
                                             <a href={route('picture.download', imagen.id)}>
-                                                <Button variant="secondary">
+                                                <Button variant="secondary" className='w-full'>
                                                     <FolderDown className='h-6 w-6' />
                                                 </Button>
                                             </a>
-                                            <Button onClick={() => publicarImagen(imagen)} variant="secondary">
+                                            <Button onClick={() => publicarImagen(imagen)} variant="secondary" className='w-full'>
                                                 <Share2 className='h-6 w-6' />
+                                            </Button>
+                                            <Button variant="secondary" className='w-full'>
+                                                <Trash className='h-6 w-6' />
                                             </Button>
                                         </div>
                                     </div>
 
-                                    <div className="mt-2 opacity-100 md:opacity-0 grid grid-cols-3 gap-2">
+                                    <div className="mt-2 opacity-100 md:opacity-0 grid grid-cols-4 gap-2">
                                         <Button onClick={() => mostrarImagen(imagen)} className='w-full'>
                                             <EyeIcon className='h-6 w-6' />
                                         </Button>
@@ -139,6 +142,10 @@ export default function IndexPicture({
                                         </a>
                                         <Button onClick={() => publicarImagen(imagen)} className='w-full'>
                                             <Share2 className='h-6 w-6' />
+                                        </Button>
+
+                                        <Button className='w-full'>
+                                            <Trash className='h-6 w-6' />
                                         </Button>
                                     </div>
 

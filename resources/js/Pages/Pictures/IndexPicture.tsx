@@ -21,6 +21,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Comp
 import { Input } from '@/Components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { FormProvider, useForm as useFormContext } from 'react-hook-form';
+import ConfirmationModal from '@/Components/ConfirmationModal';
 
 export default function IndexPicture({
     imagenes
@@ -90,6 +91,28 @@ export default function IndexPicture({
         });
     }
 
+    const [modalConfirmacion, setModalConfirmacion] = useState(false);
+
+    const abrirModalConfirmacion = (picture: Picture) => {
+        setSelectedPicture(picture);
+
+        setTimeout(() => {
+            setModalConfirmacion(true);
+        }, 10);
+    }
+
+    const eliminar = useForm({});
+
+    const confirmarEliminacion = () => {
+        eliminar.delete(route('picture.destroy', selectedPicture?.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                setSelectedPicture(null);
+                setModalConfirmacion(false);
+            },
+        });
+    };
+
     const getDate = (date: Date) => {
         const formatedDate = new Date(date);
 
@@ -125,7 +148,7 @@ export default function IndexPicture({
                                             <Button onClick={() => publicarImagen(imagen)} variant="secondary" className='w-full'>
                                                 <Share2 className='h-6 w-6' />
                                             </Button>
-                                            <Button variant="secondary" className='w-full'>
+                                            <Button onClick={() => abrirModalConfirmacion(imagen)} variant="secondary" className='w-full'>
                                                 <Trash className='h-6 w-6' />
                                             </Button>
                                         </div>
@@ -144,7 +167,7 @@ export default function IndexPicture({
                                             <Share2 className='h-6 w-6' />
                                         </Button>
 
-                                        <Button className='w-full'>
+                                        <Button onClick={() => abrirModalConfirmacion(imagen)} className='w-full'>
                                             <Trash className='h-6 w-6' />
                                         </Button>
                                     </div>
@@ -246,6 +269,16 @@ export default function IndexPicture({
                         </FormProvider>
                     </DialogContent>
                 </Dialog>
+            }
+
+            {/* Modal para eliminar */}
+            {selectedPicture &&
+                <ConfirmationModal
+                    confirmar={confirmarEliminacion}
+                    modelo='Imagen'
+                    abrirModal={modalConfirmacion}
+                    setAbrirModal={setModalConfirmacion}
+                />
             }
         </MainLayout>
     )

@@ -10,9 +10,10 @@ import {
 import { Input } from "@/Components/ui/input"
 import { Label } from "@/Components/ui/label"
 import { Link, useForm } from "@inertiajs/react"
-import { FormEventHandler } from "react"
+import { FormEventHandler, useState } from "react"
 import InputError from "./InputError"
 import Checkbox from "./Checkbox"
+import Terminos from "./Terminos"
 
 export function RegisterForm() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -20,6 +21,7 @@ export function RegisterForm() {
         email: '',
         password: '',
         password_confirmation: '',
+        terms: false,
     });
 
     const submit: FormEventHandler = (e) => {
@@ -29,6 +31,14 @@ export function RegisterForm() {
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };
+
+    const [abrirModal, setAbrirModal] = useState(false);
+    const [terminosAceptados, setTerminosAceptados] = useState(false);
+
+    const aceptarTerminos = () => {
+        setAbrirModal(true);
+        setTerminosAceptados(true);
+    }
 
     return (
         <div className="flex flex-col gap-6">
@@ -117,7 +127,21 @@ export function RegisterForm() {
                                     <InputError message={errors.password_confirmation} className="mt-2" />
                                 </div>
 
-                                <Button type="submit" className="w-full" disabled={processing}>
+                                <div className="mt-2 block flex items-center">
+                                    <Checkbox
+                                        id="terms"
+                                        name="terms"
+                                        checked={data.terms}
+                                        onChange={(e) =>
+                                            setData('terms', e.target.checked)
+                                        }
+                                        disabled={! terminosAceptados}
+                                    />
+                                    <Label className="pl-2" htmlFor="terms">He leído y acepto el </Label>
+                                    <div onClick={aceptarTerminos} className="text-sm font-medium leading-none ml-1 underline cursor-pointer hover:font-semibold">aviso de privacidad</div>
+                                </div>
+
+                                <Button type="submit" className="w-full" disabled={processing || data.terms == false}>
                                     Registrarme
                                 </Button>
                             </div>
@@ -132,9 +156,13 @@ export function RegisterForm() {
                 </CardContent>
             </Card>
             <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
-                By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-                and <a href="#">Privacy Policy</a>.
+                Al registrarte estás aceptando nuestro <a onClick={aceptarTerminos}>aviso de privacidad</a>
             </div>
+
+            <Terminos
+                abrirModal={abrirModal}
+                setAbrirModal={setAbrirModal}
+            />
         </div>
     )
 }

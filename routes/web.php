@@ -25,6 +25,10 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('prueba', function(){
+    return Inertia::render('Landing');
+});
+
 // Route to redirect to Google's OAuth page
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
 

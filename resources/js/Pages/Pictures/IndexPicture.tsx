@@ -22,6 +22,7 @@ import { Input } from '@/Components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { FormProvider, useForm as useFormContext } from 'react-hook-form';
 import ConfirmationModal from '@/Components/ConfirmationModal';
+import Can from '@/Components/Auth/Can';
 
 export default function IndexPicture({
     imagenes
@@ -152,9 +153,11 @@ export default function IndexPicture({
                                                     <FolderDown className='h-6 w-6' />
                                                 </Button>
                                             </a>
-                                            <Button onClick={() => publicarImagen(imagen)} variant="secondary" className='w-full'>
-                                                <Share2 className='h-6 w-6' />
-                                            </Button>
+                                            <Can permission={!imagen.tipo_daltonismo}>
+                                                <Button onClick={() => publicarImagen(imagen)} variant="secondary" className='w-full'>
+                                                    <Share2 className='h-6 w-6' />
+                                                </Button>
+                                            </Can>
                                             <Button onClick={() => abrirModalConfirmacion(imagen)} variant="secondary" className='w-full'>
                                                 <Trash className='h-6 w-6' />
                                             </Button>
@@ -170,9 +173,11 @@ export default function IndexPicture({
                                                 <FolderDown className='h-6 w-6' />
                                             </Button>
                                         </a>
-                                        <Button onClick={() => publicarImagen(imagen)} className='w-full'>
-                                            <Share2 className='h-6 w-6' />
-                                        </Button>
+                                        <Can permission={!imagen.tipo_daltonismo}>
+                                            <Button onClick={() => publicarImagen(imagen)} className='w-full'>
+                                                <Share2 className='h-6 w-6' />
+                                            </Button>
+                                        </Can>
 
                                         <Button onClick={() => abrirModalConfirmacion(imagen)} className='w-full'>
                                             <Trash className='h-6 w-6' />

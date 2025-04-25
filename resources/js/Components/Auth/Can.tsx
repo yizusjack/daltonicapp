@@ -7,7 +7,7 @@ export default function Can({
     permission: boolean
 }>) {
   return (
-    <div>
+    <div className="contents">
         {
             permission == true &&
             <div> {children} </div>

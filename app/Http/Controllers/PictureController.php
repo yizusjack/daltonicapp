@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Enums\TipoArchivoEnum;
 use App\Enums\TipoPublicacionEnum;
+use App\Enums\TiposDaltonismoEnum;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -40,6 +41,7 @@ class PictureController extends Controller
     {
         return Inertia::render('Pictures/CreatePicture', [
             'store_url' => route('picture.store'),
+            'tipos_daltonismo' => TiposDaltonismoEnum::keysValues(),
         ]);
     }
 

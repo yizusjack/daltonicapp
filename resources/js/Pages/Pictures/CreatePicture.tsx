@@ -102,7 +102,15 @@ export default function PictureCreate({
         setLoader(true);
 
         if (image) {
-            post(store_url, { data });
+            post(store_url, {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setLoader(false);
+                },
+                onError: () => {
+                    setLoader(false);
+                }
+            });
         }
     }
 

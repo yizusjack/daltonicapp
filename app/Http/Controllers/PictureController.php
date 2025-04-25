@@ -48,11 +48,11 @@ class PictureController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePictureRequest $request)
     {
         //Policy
-
-        $imageData = $request->input('Imagen');
+        $data = $request->all();
+        $imageData = $data['Imagen'];
 
         if ($imageData) {
             //Genera la clase de obtencion de tokens

@@ -46,6 +46,10 @@ export default function Dashboard({
         "Tritanopia": {
             'descripcion': "La tritanopía es una afección en la que una persona no puede distinguir entre los colores azul y amarillo. La alteración de la visión del azul y el amarillo es el síntoma principal asociado con esta afección. Sin embargo, las personas con tritanopía tienen una visión normal del rojo y el verde.",
             'colores': [{name: "Verde", class: 'bg-green-800'}, {name: "Azul", class: 'bg-blue-900'}, {name: "Amarillo", class: 'bg-yellow-300'}],
+        },
+        "Sin Daltonismo": {
+            'descripcion': "¡Felicidades! perteneces al 90% de la población que no confunde los colores. Que original...\nAún así, no es una excusa para no estar informado. Usando Daltonicapp puedes usar los foros para ayudar a personas con daltonismo o acceder a la cámara para simular la visión de las personas daltónicas.\nSolo no preguntes de que color ven cada cosa por favor.",
+            'colores': [{name: "Verde", class: 'bg-green-800'}, {name: "Azul", class: 'bg-blue-900'}, {name: "Amarillo", class: 'bg-yellow-300'}],
         }
     }
 
@@ -54,7 +58,7 @@ export default function Dashboard({
             <Head title="Dashboard" />
 
             {
-                user?.tipo_daltonismo && user?.tipo_daltonismo != "Sin Daltonismo"
+                user?.tipo_daltonismo
                     ? (
                         <>
                             {
@@ -86,27 +90,31 @@ export default function Dashboard({
                                                             {descripciones[user.tipo_daltonismo as keyof typeof descripciones].descripcion}
                                                         </p>
 
-                                                        <div className='p-4'>
-                                                            <div className='text-md italic font-semi-bold'>
-                                                                Las personas con {user.tipo_daltonismo} pueden tener problemas para ver los colores:
+                                                        { user.tipo_daltonismo != 'Sin Daltonismo' &&
+                                                            <div>
+                                                                <div className='p-4'>
+                                                                <div className='text-md italic font-semi-bold'>
+                                                                    Las personas con {user.tipo_daltonismo} pueden tener problemas para ver los colores:
+                                                                </div>
+
+                                                                <div className="p-4 flex justify-center max-w-full flex-wrap">
+                                                                    {
+                                                                        descripciones[user.tipo_daltonismo as keyof typeof descripciones].colores.map((color) => (
+                                                                            <div className="flex flex-col items-center mx-2">
+                                                                                <div className={`h-16 w-16 rounded-full mx-2 ${color.class}`} />
+                                                                                <span className="mt-2 text-sm">{color.name}</span>
+                                                                            </div>
+                                                                        ))
+                                                                    }
+                                                                </div>
                                                             </div>
 
-                                                            <div className="p-4 flex justify-center max-w-full flex-wrap">
-                                                                {
-                                                                    descripciones[user.tipo_daltonismo as keyof typeof descripciones].colores.map((color) => (
-                                                                        <div className="flex flex-col items-center mx-2">
-                                                                            <div className={`h-16 w-16 rounded-full mx-2 ${color.class}`} />
-                                                                            <span className="mt-2 text-sm">{color.name}</span>
-                                                                        </div>
-                                                                    ))
-                                                                }
-                                                            </div>
+                                                            <p>
+                                                                ¡No te preocupes! Al usar nuestra cámara podrás tener una percepción de los colores más acercada
+                                                                a la realidad.
+                                                            </p>
                                                         </div>
-
-                                                        <p>
-                                                            ¡No te preocupes! Al usar nuestra cámara podrás tener una percepción de los colores más acercada
-                                                            a la realidad.
-                                                        </p>
+                                                        }
 
                                                         <div className="p-4">
                                                             <Link href={route('picture.create')}>
@@ -140,7 +148,7 @@ export default function Dashboard({
                                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                                         <div className="p-6 text-gray-900">
-                                            You're logged in!
+                                            Has el test de daltonismo para poder utilizar este sito
                                         </div>
                                     </div>
                                 </div>

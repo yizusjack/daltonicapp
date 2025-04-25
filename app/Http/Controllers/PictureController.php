@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Enums\TipoArchivoEnum;
 use App\Enums\TipoPublicacionEnum;
+use App\Enums\TiposDaltonismoEnum;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -40,17 +41,18 @@ class PictureController extends Controller
     {
         return Inertia::render('Pictures/CreatePicture', [
             'store_url' => route('picture.store'),
+            'tipos_daltonismo' => TiposDaltonismoEnum::keysValues(),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePictureRequest $request)
     {
         //Policy
-
-        $imageData = $request->input('Imagen');
+        $data = $request->all();
+        $imageData = $data['Imagen'];
 
         if ($imageData) {
             //Genera la clase de obtencion de tokens
@@ -67,8 +69,9 @@ class PictureController extends Controller
             $response = Http::withToken($token)
             ->timeout(120)
             ->post(env('PYTHON_API_URL') . '/transform-image', [
-                'tipo_daltonismo' => Auth::user()->tipo_daltonismo,
+                'tipo_daltonismo' => $data['tipo_daltonismo'] ?? Auth::user()->tipo_daltonismo,
                 'imagen' => $imageData,
+                'simulacion' => $data['tipo_daltonismo'] != null,
             ]);
 
             $status = $response->status();
@@ -78,6 +81,7 @@ class PictureController extends Controller
                 return redirect()->route('picture.mostrar')->with([
                     'base64Image' => $body['imagenTransformada'],
                     'base64OldImage' => $body['imagenOriginal'],
+                    'tipo_daltonismo' => $data['tipo_daltonismo'],
                     'message' => 'Imagen transformada correctamente',
                     'description' => 'Ahora puedes guardarla y publicarla',
                 ]);
@@ -103,6 +107,7 @@ class PictureController extends Controller
             return Inertia::render('Pictures/ShowTransformedPicture', [
                 'base64Image' => session('base64Image'),
                 'base64OldImage' => session('base64OldImage'),
+                'tipo_daltonismo' => session('tipo_daltonismo'),
             ]);
         } else {
             return redirect()->route('dashboard')->with([
@@ -120,10 +125,12 @@ class PictureController extends Controller
         $request->validate([
             'base64' => 'required',
             'originalBase64' => 'required',
+            'tipo_daltonismo' => 'nullable',
         ]);
 
         $picture = Picture::create([
             'user_id' => Auth::user()->id,
+            'tipo_daltonismo' => $request['tipo_daltonismo'],
         ]);
 
         $nombreArchivo = Str::uuid();

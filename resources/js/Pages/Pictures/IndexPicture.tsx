@@ -22,6 +22,7 @@ import { Input } from '@/Components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { FormProvider, useForm as useFormContext } from 'react-hook-form';
 import ConfirmationModal from '@/Components/ConfirmationModal';
+import Can from '@/Components/Auth/Can';
 
 export default function IndexPicture({
     imagenes
@@ -133,6 +134,13 @@ export default function IndexPicture({
                         imagenes.data.map((imagen) => (
                             <Card key={imagen.id} className='col-span-12 md:col-span-6 lg:col-span-4'>
                                 <CardContent className='pt-6 pb-8'>
+                                    {imagen.tipo_daltonismo &&
+                                        <div className="flex justify-end text-xs text-white">
+                                            <div className='my-1 p-1 rounded-md bg-slate-900'>
+                                                {imagen.tipo_daltonismo}
+                                            </div>
+                                        </div>
+                                    }
                                     <div className='max-w-64 xs:min-w-64 xl:min-w-64 h-64 justify-center items-center rounded-md relative group'>
                                         <img src={route('picture.show', imagen.id)} className='w-full h-full object-cover rounded-md' alt="" />
 
@@ -145,9 +153,11 @@ export default function IndexPicture({
                                                     <FolderDown className='h-6 w-6' />
                                                 </Button>
                                             </a>
-                                            <Button onClick={() => publicarImagen(imagen)} variant="secondary" className='w-full'>
-                                                <Share2 className='h-6 w-6' />
-                                            </Button>
+                                            <Can permission={!imagen.tipo_daltonismo}>
+                                                <Button onClick={() => publicarImagen(imagen)} variant="secondary" className='w-full'>
+                                                    <Share2 className='h-6 w-6' />
+                                                </Button>
+                                            </Can>
                                             <Button onClick={() => abrirModalConfirmacion(imagen)} variant="secondary" className='w-full'>
                                                 <Trash className='h-6 w-6' />
                                             </Button>
@@ -163,9 +173,11 @@ export default function IndexPicture({
                                                 <FolderDown className='h-6 w-6' />
                                             </Button>
                                         </a>
-                                        <Button onClick={() => publicarImagen(imagen)} className='w-full'>
-                                            <Share2 className='h-6 w-6' />
-                                        </Button>
+                                        <Can permission={!imagen.tipo_daltonismo}>
+                                            <Button onClick={() => publicarImagen(imagen)} className='w-full'>
+                                                <Share2 className='h-6 w-6' />
+                                            </Button>
+                                        </Can>
 
                                         <Button onClick={() => abrirModalConfirmacion(imagen)} className='w-full'>
                                             <Trash className='h-6 w-6' />

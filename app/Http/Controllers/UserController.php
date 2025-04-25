@@ -57,8 +57,11 @@ class UserController extends Controller
     {
         Gate::authorize('hacerTest', User::class);
 
+        $tipos = TiposDaltonismoEnum::names();
+        $tipos[] = 'Sin Daltonismo';
+
         $request->validate([
-            'tipo_daltonismo' => ['required', Rule::in(TiposDaltonismoEnum::names())],
+            'tipo_daltonismo' => ['required', Rule::in($tipos)],
         ]);
 
         Auth::user()->update([

@@ -6,7 +6,7 @@ import { Button } from '@/Components/ui/button';
 import MainLayout from '@/Layouts/MainLayout';
 import { PageProps } from '@/types'
 import { useForm } from '@inertiajs/react';
-import { Info, Terminal } from 'lucide-react';
+import { Info, Terminal, X } from 'lucide-react';
 import React, { useState } from 'react'
 
 export default function TipoDaltonismo(
@@ -65,11 +65,14 @@ export default function TipoDaltonismo(
     const formTipo = useForm<{
         tipo_daltonismo: string;
     }>({
-        tipo_daltonismo :'', // Inicializa como un array vacío
+        tipo_daltonismo :'Sin Daltonismo', // Inicializa como un array vacío
     });
 
-    function submitTipo(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
+    function submitTipo(e?: React.FormEvent<HTMLFormElement>) {
+        if(e) {
+            e.preventDefault();
+        }
+
         formTipo.post(route('users.cambiarTipoDaltonismo'));
     }
 
@@ -92,6 +95,14 @@ export default function TipoDaltonismo(
                                     <AlertDescription>
                                         Puedes registrarlo haciendo clic <span onClick={() => setSeleccionarTipo(true)} className='text-slate-900 font-bold hover:underline cursor-pointer'>aquí</span>
                                     </AlertDescription>
+                                </Alert>
+                            </div>
+                            <div className='mt-4 px-5'>
+                                <Alert onClick={submitTipo as any} className='hover:bg-slate-100'>
+                                    <div className="flex items-center gap-x-2">
+                                    <X className="h-4 w-4" />
+                                    <AlertTitle className='font-bold cursor-pointer'>No tengo daltonismo</AlertTitle>
+                                    </div>
                                 </Alert>
                             </div>
                             <CardPrueba

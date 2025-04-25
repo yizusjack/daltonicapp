@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePictureRequest extends FormRequest
@@ -11,7 +13,7 @@ class StorePictureRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +24,8 @@ class StorePictureRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'Imagen' => 'required',
+            'tipo_daltonismo' => Rule::requiredIf(Auth::user()->tipo_daltonismo == 'Sin Daltonismo'),
         ];
     }
 }

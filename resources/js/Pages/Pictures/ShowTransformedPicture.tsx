@@ -9,19 +9,23 @@ import { MoveLeft, MoveRight } from 'lucide-react';
 
 export default function ShowTransformedPicture({
     base64Image,
-    base64OldImage
+    base64OldImage,
+    tipo_daltonismo,
 }: PageProps<{
     base64Image: string,
     base64OldImage: string,
+    tipo_daltonismo?: string,
 }>) {
     const [imagenTransformada, setImagenTransformada] = useState(true);
 
     const { data, post, processing, errors } = useForm<{
         base64: string;
         originalBase64: string;
+        tipo_daltonismo?: string;
     }>({
         base64: base64Image,
         originalBase64: base64OldImage,
+        tipo_daltonismo: tipo_daltonismo,
     });
 
     function submit(e: React.FormEvent<HTMLFormElement>) {

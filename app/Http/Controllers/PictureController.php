@@ -81,6 +81,7 @@ class PictureController extends Controller
                 return redirect()->route('picture.mostrar')->with([
                     'base64Image' => $body['imagenTransformada'],
                     'base64OldImage' => $body['imagenOriginal'],
+                    'tipo_daltonismo' => $data['tipo_daltonismo'],
                     'message' => 'Imagen transformada correctamente',
                     'description' => 'Ahora puedes guardarla y publicarla',
                 ]);
@@ -106,6 +107,7 @@ class PictureController extends Controller
             return Inertia::render('Pictures/ShowTransformedPicture', [
                 'base64Image' => session('base64Image'),
                 'base64OldImage' => session('base64OldImage'),
+                'tipo_daltonismo' => session('tipo_daltonismo'),
             ]);
         } else {
             return redirect()->route('dashboard')->with([
@@ -123,10 +125,12 @@ class PictureController extends Controller
         $request->validate([
             'base64' => 'required',
             'originalBase64' => 'required',
+            'tipo_daltonismo' => 'nullable',
         ]);
 
         $picture = Picture::create([
             'user_id' => Auth::user()->id,
+            'tipo_daltonismo' => $request['tipo_daltonismo'],
         ]);
 
         $nombreArchivo = Str::uuid();

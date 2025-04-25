@@ -16,16 +16,17 @@ class Picture extends Model implements HasMedia
 
     /**
      * Los campos para asignaciones masivas
-     * 
+     *
      * @var array
      */
     protected $fillable = [
         'user_id',
+        'tipo_daltonismo'
     ];
 
     /**
      * Una imagen pertenece a un usuario
-     * 
+     *
      * @return BelongsTo
      */
     public function user(): BelongsTo

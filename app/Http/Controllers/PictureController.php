@@ -69,8 +69,9 @@ class PictureController extends Controller
             $response = Http::withToken($token)
             ->timeout(120)
             ->post(env('PYTHON_API_URL') . '/transform-image', [
-                'tipo_daltonismo' => Auth::user()->tipo_daltonismo,
+                'tipo_daltonismo' => $data['tipo_daltonismo'] ?? Auth::user()->tipo_daltonismo,
                 'imagen' => $imageData,
+                'simulacion' => $data['tipo_daltonismo'] != null,
             ]);
 
             $status = $response->status();

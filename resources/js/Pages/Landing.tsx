@@ -1,21 +1,28 @@
+import { Link } from '@inertiajs/react'
 import React from 'react'
 
 export default function Landing() {
     return (
-        <body>
-            <header className="sticky top-0 z-50 bg-white shadow-md">
+        <div>
+            <header className="sticky top-0 z-50 bg-card shadow-md">
                 <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
                     {/* Logo o nombre del sitio */}
-                    <h1 className="text-xl font-bold text-gray-800">MiSitio</h1>
+                    <h1 className="text-xl font-bold text-gray-800">Daltonicapp</h1>
 
                     {/* Botones */}
-                    <div className="space-x-4">
-                        <button className="px-4 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition">
-                            Login
-                        </button>
-                        <button className="px-4 py-2 rounded-full bg-green-500 text-white hover:bg-green-600 transition">
-                            Registrarse
-                        </button>
+                    <div className='flex justify-end'>
+                        <Link
+                            href={route('login')}
+                            className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                        >
+                            Log in
+                        </Link>
+                        <Link
+                            href={route('register')}
+                            className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                        >
+                            Register
+                        </Link>
                     </div>
                 </div>
             </header>
@@ -42,6 +49,7 @@ export default function Landing() {
                     ></path>
                 </svg>
             </section>
-        </body>
+            <div className="h-screen"></div>
+        </div>
     )
 }

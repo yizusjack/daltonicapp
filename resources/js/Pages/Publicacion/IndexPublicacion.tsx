@@ -51,6 +51,7 @@ export default function IndexPublicacion({
     const [imagenes, setImagenes] = useState<File[]>([]);
 
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+    const [previewUrlComment, setPreviewUrlComment] = useState<string[]>([]);
 
     const [imagenSeleccionada, setImagenSeleccionada] = useState<string | null>(null);
 
@@ -167,6 +168,7 @@ export default function IndexPublicacion({
     });
 
     const setFormComentario = (publicacion: number) => {
+        setPreviewUrls([]);
         comentarioForm.setData('comentable_id', publicacion);
 
         setpublicacionAComentar(publicacion);
@@ -180,7 +182,7 @@ export default function IndexPublicacion({
             onSuccess: () => {
                 setpublicacionAComentar(null);
                 comentarioForm.reset();
-                setPreviewUrls([]);
+                setPreviewUrlComment([]);
             },
         });
     }
@@ -437,7 +439,7 @@ export default function IndexPublicacion({
                                                     accept="image/*"
                                                     style={{ display: 'none' }}
                                                     onChange={(e) => {
-                                                        setPreviewUrls([]);
+                                                        setPreviewUrlComment([]);
                                                         if (e.target.files?.[0]) {
                                                             const filesArray = Array.from(e.target.files);
                                                     
@@ -451,7 +453,7 @@ export default function IndexPublicacion({
                                                     
                                                             if (imagenesValidas.length == 1) {
                                                                 const nuevosPreviews = imagenesValidas.map(file => URL.createObjectURL(file));
-                                                                setPreviewUrls(prev => [...prev, ...nuevosPreviews]);
+                                                                setPreviewUrlComment(prev => [...prev, ...nuevosPreviews]);
                                                             }
                                                             
                                                             const file = e.target.files?.[0];
@@ -462,9 +464,9 @@ export default function IndexPublicacion({
                                                         }
                                                     }}
                                                 />
-                                                {previewUrls.length > 0 && (
+                                                {previewUrlComment.length > 0 && (
                                                     <div className="flex flex-wrap gap-2 mt-2">
-                                                        {previewUrls.map((url, index) => (
+                                                        {previewUrlComment.map((url, index) => (
                                                             <div key={index} className="relative w-24 h-24">
                                                                 <img
                                                                     src={url}
@@ -473,7 +475,10 @@ export default function IndexPublicacion({
                                                                 />
                                                                 <button
                                                                     type="button"
-                                                                    onClick={() => handleRemoveImage(index)}
+                                                                    onClick={() => {
+                                                                        comentarioForm.setData('imagen', null);
+                                                                        setPreviewUrlComment([]);
+                                                                    }}
                                                                     className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
                                                                 >
                                                                     ×

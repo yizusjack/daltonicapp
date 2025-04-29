@@ -180,6 +180,7 @@ export default function IndexPublicacion({
             onSuccess: () => {
                 setpublicacionAComentar(null);
                 comentarioForm.reset();
+                setPreviewUrls([]);
             },
         });
     }
@@ -436,12 +437,51 @@ export default function IndexPublicacion({
                                                     accept="image/*"
                                                     style={{ display: 'none' }}
                                                     onChange={(e) => {
-                                                        const file = e.target.files?.[0];
-                                                        if (file) {
-                                                            comentarioForm.setData('imagen', file);
+                                                        setPreviewUrls([]);
+                                                        if (e.target.files?.[0]) {
+                                                            const filesArray = Array.from(e.target.files);
+                                                    
+                                                            const imagenesValidas = filesArray.filter(file =>
+                                                                file.type.startsWith('image/')
+                                                            );
+                                                    
+                                                            if (imagenesValidas.length !== filesArray.length) {
+                                                                alert('Solo puedes subir imagenes.');
+                                                            }
+                                                    
+                                                            if (imagenesValidas.length == 1) {
+                                                                const nuevosPreviews = imagenesValidas.map(file => URL.createObjectURL(file));
+                                                                setPreviewUrls(prev => [...prev, ...nuevosPreviews]);
+                                                            }
+                                                            
+                                                            const file = e.target.files?.[0];
+
+                                                            if (file) {
+                                                                comentarioForm.setData('imagen', file);
+                                                            }
                                                         }
                                                     }}
                                                 />
+                                                {previewUrls.length > 0 && (
+                                                    <div className="flex flex-wrap gap-2 mt-2">
+                                                        {previewUrls.map((url, index) => (
+                                                            <div key={index} className="relative w-24 h-24">
+                                                                <img
+                                                                    src={url}
+                                                                    alt={`Preview ${index}`}
+                                                                    className="w-full h-full object-cover rounded border"
+                                                                />
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleRemoveImage(index)}
+                                                                    className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                                                                >
+                                                                    ×
+                                                                </button>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
                                             </div>
                                     
                                             <div className="mt-2 flex justify-end gap-x-2">

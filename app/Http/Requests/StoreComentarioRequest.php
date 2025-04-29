@@ -23,7 +23,8 @@ class StoreComentarioRequest extends FormRequest
     {
         return [
             'comentario' => 'required',
-            'comentable_id' => 'required|numeric'
+            'comentable_id' => 'required|numeric',
+            'imagen' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ];
     }
 }

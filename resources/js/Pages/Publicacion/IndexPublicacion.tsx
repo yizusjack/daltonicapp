@@ -17,12 +17,18 @@ import { Dot, EllipsisVertical, MessageCircleQuestion, Pencil, Trash2 } from 'lu
 import React, { useState } from 'react'
 import { FormProvider, useForm as useFormContext } from 'react-hook-form'
 
+type Media = {
+    id: number;
+    file_name: string;
+    original_url: string;
+};
+
 export default function IndexPublicacion({
     publicaciones,
     tipo,
 }: PageProps<{
     publicaciones: {
-        data: PublicacionWithRelations[];
+        data: (PublicacionWithRelations & { media: Media[] })[];
         links: Link[];
         current_page: number,
         last_page: number,
@@ -42,13 +48,21 @@ export default function IndexPublicacion({
 
     const [abrirModalConfirmacion, setAbrirModalConfirmacion] = useState(false);
 
+    const [imagenes, setImagenes] = useState<File[]>([]);
+
+    const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+
+    const [imagenSeleccionada, setImagenSeleccionada] = useState<string | null>(null);
+
     //Forms para la creación de publicación
     const { data, setData, post, put, processing, errors, reset } = useForm<{
         titulo?: string;
         contenido: string;
+        imagenes: File[]; 
     }>({
         titulo: '',
         contenido: '',
+        imagenes: [], 
     });
 
     const methods = useFormContext({
@@ -62,12 +76,23 @@ export default function IndexPublicacion({
     //Función para guardar publicación
     function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-
+    
+        const formData = new FormData();
+        formData.append('titulo', data.titulo ?? '');
+        formData.append('contenido', data.contenido);
+    
+        data.imagenes.forEach((imagen, index) => {
+            formData.append(`imagenes[${index}]`, imagen);
+        });
+    
         post(route('publicacion.store', tipo), {
+            data: formData,
             preserveScroll: true,
+            forceFormData: true, 
             onSuccess: () => {
                 reset();
                 setAbrirModal(false);
+                setPreviewUrls([]);
             },
         });
     }
@@ -135,8 +160,10 @@ export default function IndexPublicacion({
     const comentarioForm = useForm<{
         comentario: string;
         comentable_id?: number;
+        imagen?: File|null; 
     }>({
         comentario :'',
+        imagen: null,
     });
 
     const setFormComentario = (publicacion: number) => {
@@ -147,7 +174,7 @@ export default function IndexPublicacion({
 
     function submitComentario(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-
+    
         comentarioForm.post(route('comentario.store'), {
             preserveScroll: true,
             onSuccess: () => {
@@ -155,6 +182,16 @@ export default function IndexPublicacion({
                 comentarioForm.reset();
             },
         });
+    }
+
+    function handleRemoveImage(index: number) {
+        const nuevasImagenes = [...data.imagenes];
+        nuevasImagenes.splice(index, 1);
+        setData('imagenes', nuevasImagenes);
+    
+        const nuevasPreviews = [...previewUrls];
+        nuevasPreviews.splice(index, 1);
+        setPreviewUrls(nuevasPreviews);
     }
 
     return (
@@ -227,6 +264,30 @@ export default function IndexPublicacion({
                                             <div className='whitespace-pre-line'>
                                                 {publicacion.contenido}
                                             </div>
+
+                                            <div className="flex flex-wrap gap-2 mt-4">
+                                                {publicacion.media.map((img) => (
+                                                    <img
+                                                        key={img.id}
+                                                        src={img.original_url}
+                                                        alt={img.file_name}
+                                                        className="w-32 h-32 object-cover rounded-md cursor-pointer"
+                                                        onClick={() => setImagenSeleccionada(img.original_url)}
+                                                    />
+                                                ))}
+                                            </div>
+
+                                            {imagenSeleccionada && (
+                                                <Dialog open={imagenSeleccionada !== null} onOpenChange={() => setImagenSeleccionada(null)}>
+                                                <DialogContent className="max-w-4xl">
+                                                    <img
+                                                        src={imagenSeleccionada!}
+                                                        alt="Imagen"
+                                                        className="max-h-[90vh] object-contain m-auto"
+                                                    />
+                                                </DialogContent>
+                                            </Dialog>
+                                            )}
 
                                             <div className='flex justify-between text-xs'>
                                                 <div className='flex items-center text-cyan-900'>
@@ -331,6 +392,20 @@ export default function IndexPublicacion({
                                                 <div className='whitespace-pre-line'>
                                                     {comentario.comentario}
                                                 </div>
+
+                                                {comentario.media && comentario.media.length > 0 && (
+                                                    <div className="mt-4">
+                                                        {comentario.media.map((image) => (
+                                                            <img 
+                                                                key={image.id}
+                                                                src={image.original_url} 
+                                                                alt={image.name} 
+                                                                className="w-16 h-16 object-cover rounded-md cursor-pointer"
+                                                                onClick={() => setImagenSeleccionada(image.original_url)}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                )}
                                             </div>
                                         ))
                                     }
@@ -345,7 +420,30 @@ export default function IndexPublicacion({
                                                 placeholder='Escribe un comentario...'
                                                 onChange={(e) => comentarioForm.setData('comentario', e.target.value)}
                                             />
+                                    
+                                            <div className="mt-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => document.getElementById('input-imagen')?.click()}
+                                                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                                >
+                                                    Cargar imagen
+                                                </button>
 
+                                                <input
+                                                    id="input-imagen"
+                                                    type="file"
+                                                    accept="image/*"
+                                                    style={{ display: 'none' }}
+                                                    onChange={(e) => {
+                                                        const file = e.target.files?.[0];
+                                                        if (file) {
+                                                            comentarioForm.setData('imagen', file);
+                                                        }
+                                                    }}
+                                                />
+                                            </div>
+                                    
                                             <div className="mt-2 flex justify-end gap-x-2">
                                                 <Button
                                                     type='button'
@@ -355,7 +453,7 @@ export default function IndexPublicacion({
                                                 >
                                                     Cancelar
                                                 </Button>
-
+                                    
                                                 <Button
                                                     type='submit'
                                                     size='sm'
@@ -434,6 +532,78 @@ export default function IndexPublicacion({
                                     )}
                                 >
                                 </FormField>
+                            </div>
+
+                            <div className='pb-4'>
+                                <FormField
+                                    name="imagenes"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Imágenes</FormLabel>
+
+                                            <FormControl>
+                                                <div>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => document.getElementById('input-imagenes')?.click()}
+                                                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                                    >
+                                                        Cargar imágenes
+                                                    </button>
+
+                                                    <input
+                                                        id="input-imagenes"
+                                                        type="file"
+                                                        accept="image/*"
+                                                        multiple
+                                                        style={{ display: 'none' }}
+                                                        onChange={(e) => {
+                                                            if (e.target.files) {
+                                                                const filesArray = Array.from(e.target.files);
+                                                        
+                                                                const imagenesValidas = filesArray.filter(file =>
+                                                                    file.type.startsWith('image/')
+                                                                );
+                                                        
+                                                                if (imagenesValidas.length !== filesArray.length) {
+                                                                    alert('Solo puedes subir imagenes.');
+                                                                }
+                                                        
+                                                                if (imagenesValidas.length > 0) {
+                                                                    setData('imagenes', [...(data.imagenes || []), ...imagenesValidas]);
+                                                        
+                                                                    const nuevosPreviews = imagenesValidas.map(file => URL.createObjectURL(file));
+                                                                    setPreviewUrls(prev => [...prev, ...nuevosPreviews]);
+                                                                }
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                            </FormControl>
+
+                                            {previewUrls.length > 0 && (
+                                                <div className="flex flex-wrap gap-2 mt-2">
+                                                    {previewUrls.map((url, index) => (
+                                                        <div key={index} className="relative w-24 h-24">
+                                                            <img
+                                                                src={url}
+                                                                alt={`Preview ${index}`}
+                                                                className="w-full h-full object-cover rounded border"
+                                                            />
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleRemoveImage(index)}
+                                                                className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                                                            >
+                                                                ×
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </FormItem>
+                                    )}
+                                />
                             </div>
 
                             <div className="flex justify-end gap-x-4">

@@ -34,7 +34,14 @@ class ComentarioController extends Controller
         $data['comentable_type'] = 'App\Models\Publicacion';
         $data['user_id'] = Auth::user()->id;
 
-        Comentario::create($data);
+        $comentario = Comentario::create($data);
+
+        if ($request->hasFile('imagen')) {
+            $comentario
+                ->addMediaFromRequest('imagen') 
+                ->toMediaCollection('comentarios'); 
+        }
+
 
         return redirect()->to(url()->previous())->with([
             'message' => 'Comentario creado',

@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react'
 import { motion } from "framer-motion";
 import React from 'react'
+import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider';
 
 export default function Landing() {
     return (
@@ -52,7 +53,7 @@ export default function Landing() {
             </section>
 
             {/* Info del daltonismo */}
-            <section className='bg-neutral-100 px-16'>
+            <section className='bg-neutral-100 p-8 md:p-16'>
                 <motion.div
                     className="w-full md:w-3/4"
                     initial={{ opacity: 0, x: 100 }}
@@ -64,7 +65,7 @@ export default function Landing() {
                         ¿Qué es el Daltonismo?
                     </div>
 
-                    <div className="text-justify my-4">
+                    <div className="text-justify my-4 text-sm md:text-base">
                         <p>
                             El daltonismo es una afección que impide ver algunos colores de la misma forma que la mayoría de la población, causada por una anomalía en los fotorreceptores del ojo (conos).
                         </p>
@@ -75,17 +76,17 @@ export default function Landing() {
                 </motion.div>
 
                 <motion.div
-                    className="w-full md:ml-auto md:w-3/4 p-16"
+                    className="w-full md:ml-auto md:w-3/4"
                     initial={{ opacity: 0, x: -100 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, ease: 'easeOut' }}
                     viewport={{ once: true, amount: 0.2 }}
                 >
-                    <div className="text-2xl md:text-3xl font-black uppercase text-slate-700 text-right">
+                    <div className="text-2xl md:text-3xl font-black uppercase text-slate-700 text-left md:text-right">
                         ¿El daltonismo es común?
                     </div>
 
-                    <div className="text-right my-4">
+                    <div className="text-justify md:text-right my-4 text-sm md:text-base">
                         <p>
                             La mayor parte de los casos de daltonismo se presentan en hombres, estimando que aproximadamente 1 de cada 10 hombres padecen alguna forma de daltonismo, mientras que en mujeres esta cifra ronda el 0.5%.
                         </p>
@@ -103,11 +104,67 @@ export default function Landing() {
                         ¿Qué es el Daltonicapp?
                     </div>
 
-                    <div className="text-justify my-4">
+                    <div className="text-justify text-sm md:text-base my-4">
                         <p>Daltonicapp es una aplicación web que ayuda a las personas con daltonismo o a las interesadas en este tema a poder afrontar las problemáticas ocasionadas por el daltonismo.</p>
                         <p>Para hacerlo ponemos a tu disposición las siguientes herramientas:</p>
                     </div>
                 </motion.div>
+            </section>
+
+            {/* Test */}
+            <section className='bg-neutral-200 p-8 md:p-16'>
+                <motion.div
+                    className="w-full md:w-3/4"
+                    initial={{ opacity: 0, x: 100 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, ease: 'easeOut' }}
+                    viewport={{ once: true, amount: 0.2 }}
+                >
+                    <div className="flex flex-col-reverse justify-center md:justify-start md:flex-row items-center my-4">
+                        <div className="justify-center">
+                            <img className="max-w-44 md:max-w-64" src="ishihara/1/ishihara_1.png" alt="" />
+                        </div>
+
+                        <div className="md:pl-4">
+                            <div className="text-2xl md:text-3xl font-black text-slate-700">
+                                Test de daltonismo
+                            </div>
+                            <p className='text-sm md:text-base'>
+                                Realiza el test de ishihara para poder determinar tu tipo de daltonismo
+                            </p>
+                        </div>
+                    </div>
+                </motion.div>
+
+                <motion.div
+                    className="w-full md:ml-auto md:w-3/4"
+                    initial={{ opacity: 0, x: -100 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, ease: 'easeOut' }}
+                    viewport={{ once: true, amount: 0.2 }}
+                >
+                    <div className="flex flex-col md:flex-row justify-center md:justify-end items-center">
+                        <div className='sm:pr-4'>
+                            <div className="text-2xl md:text-3xl font-black text-slate-700 text-left md:text-right">
+                                Convierte imágenes
+                            </div>
+
+                            <div className="text-justify md:text-right text-sm md:text-base">
+                                Transforma las imágenes para poder ver los colores correctamente según tu tipo de daltonismo.
+                            </div>
+                        </div>
+
+                        <div className="justify-center md:justify-end mt-4">
+                            <ReactCompareSlider
+                                itemOne={<ReactCompareSliderImage src="ishihara/landing/trans.jpeg" alt="Image one" />}
+                                itemTwo={<ReactCompareSliderImage src="ishihara/landing/original.jpeg" alt="Image two" />}
+                                className="max-w-64 md:max-w-96"
+                            />
+
+                        </div>
+                    </div>
+                </motion.div>
+
             </section>
         </div>
     )

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comentario;
+use App\Enums\TipoArchivoEnum;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreComentarioRequest;
 use App\Http\Requests\UpdateComentarioRequest;
@@ -38,8 +39,8 @@ class ComentarioController extends Controller
 
         if ($request->hasFile('imagen')) {
             $comentario
-                ->addMediaFromRequest('imagen') 
-                ->toMediaCollection('comentarios'); 
+                ->addMediaFromRequest('imagen')
+                ->toMediaCollection(TipoArchivoEnum::Comentario->value);
         }
 
 

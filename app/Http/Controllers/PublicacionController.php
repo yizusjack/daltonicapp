@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Publicacion;
+use App\Enums\TipoArchivoEnum;
 use App\Enums\TipoPublicacionEnum;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -32,7 +33,7 @@ class PublicacionController extends Controller
             abort(404);
         }
 
-        
+
 
         return Inertia::render('Publicacion/IndexPublicacion', [
             'publicaciones' => $publicaciones,
@@ -64,7 +65,7 @@ class PublicacionController extends Controller
             foreach ($request->file('imagenes') as $imagen) {
                 $publicacion
                     ->addMedia($imagen)
-                    ->toMediaCollection('publicacion'); 
+                    ->toMediaCollection(TipoArchivoEnum::Publicacion->value);
             }
         }
 

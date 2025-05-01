@@ -18,4 +18,5 @@ enum TipoArchivoEnum: string
     case ImagenPrivada = 'Imagen privada';
     case ImagenOriginal = 'Imagen original';
     case Publicacion = 'Publicacion';
+    case Comentario = 'Comentario';
 }

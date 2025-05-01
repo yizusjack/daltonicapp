@@ -296,6 +296,12 @@ export default function IndexPublicacion({
                                                     <div className='flex items-center text-cyan-900'>
                                                         {publicacion.user.name}
                                                         <Dot />
+                                                        {tipo == 2 &&
+                                                            <>
+                                                                {publicacion.user.tipo_daltonismo}
+                                                                <Dot />
+                                                            </>
+                                                        }
                                                         {publicacion.fecha}
                                                     </div>
 
@@ -389,6 +395,12 @@ export default function IndexPublicacion({
                                                 <div className='flex items-center text-cyan-900'>
                                                     {comentario.user.name}
                                                     <Dot />
+                                                    {tipo == 2 &&
+                                                        <>
+                                                            {comentario.user.tipo_daltonismo}
+                                                            <Dot />
+                                                        </>
+                                                    }
                                                     {publicacion.fecha}
                                                 </div>
 

@@ -1,11 +1,17 @@
-import { Link } from '@inertiajs/react'
+import { PageProps } from '@/types';
+import { Head, Link } from '@inertiajs/react'
 import { motion } from "framer-motion";
-import React from 'react'
 import { ReactCompareSlider, ReactCompareSliderImage } from 'react-compare-slider';
 
-export default function Landing() {
+export default function Landing({
+    auth,
+    laravelVersion,
+    phpVersion,
+}: PageProps<{ laravelVersion: string; phpVersion: string }>) {
     return (
         <div>
+            <Head title="Inicio" />
+
             <header className="sticky top-0 z-50 bg-card shadow-md bg-neutral-200">
                 <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
                     {/* Logo o nombre del sitio */}
@@ -13,18 +19,29 @@ export default function Landing() {
 
                     {/* Botones */}
                     <div className='flex justify-end font-semibold'>
-                        <Link
-                            href={route('login')}
-                            className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                        >
-                            Iniciar sesión
-                        </Link>
-                        <Link
-                            href={route('register')}
-                            className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                        >
-                            Regístrate
-                        </Link>
+                        {auth?.user ? (
+                            <Link
+                                href={route('dashboard')}
+                                className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                            >
+                                Inicio
+                            </Link>
+                        ) : (
+                            <>
+                                <Link
+                                    href={route('login')}
+                                    className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                >
+                                    Iniciar sesión
+                                </Link>
+                                <Link
+                                    href={route('register')}
+                                    className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                >
+                                    Regístrate
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </header>

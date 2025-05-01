@@ -156,11 +156,34 @@ export default function Landing() {
 
                         <div className="justify-center md:justify-end mt-4">
                             <ReactCompareSlider
-                                itemOne={<ReactCompareSliderImage src="ishihara/landing/trans.jpeg" alt="Image one" />}
-                                itemTwo={<ReactCompareSliderImage src="ishihara/landing/original.jpeg" alt="Image two" />}
+                                itemOne={<ReactCompareSliderImage src="/landing/trans.jpeg" alt="Image one" />}
+                                itemTwo={<ReactCompareSliderImage src="/landing/original.jpeg" alt="Image two" />}
                                 className="max-w-64 md:max-w-96"
                             />
 
+                        </div>
+                    </div>
+                </motion.div>
+
+                <motion.div
+                    className="w-full md:w-3/4"
+                    initial={{ opacity: 0, x: 100 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, ease: 'easeOut' }}
+                    viewport={{ once: true, amount: 0.2 }}
+                >
+                    <div className="flex flex-col-reverse justify-center md:justify-start md:flex-row items-center my-4">
+                        <div className="justify-center rounded-full max-w-44 md:max-w-64">
+                            <img className="object-cover w-full h-full rounded-full" src="/landing/foro.jpg" alt="" />
+                        </div>
+
+                        <div className="md:pl-4">
+                            <div className="text-2xl md:text-3xl font-black text-slate-700">
+                                Foro
+                            </div>
+                            <p className='text-sm md:text-base'>
+                                Comparte tus imágenes, dudas, recomendaciones, consejos con otras personas daltónicas.
+                            </p>
                         </div>
                     </div>
                 </motion.div>

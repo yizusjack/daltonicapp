@@ -5,13 +5,14 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Reporte;
 use App\Models\Comentario;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Comentario extends Model
+class Comentario extends Model implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\ComentarioFactory> */
     use HasFactory, InteractsWithMedia;
@@ -91,5 +92,10 @@ class Comentario extends Model
     public function getFechaAttribute(): string
     {
         return $this->created_at->format('d-m-Y');
+    }
+
+    public function getImagenesAttribute(): array
+    {
+        return $this->getMedia('*')->pluck('original_url')->toArray();
     }
 }

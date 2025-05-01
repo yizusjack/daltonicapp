@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Publicacion;
+use App\Enums\TipoArchivoEnum;
 use App\Enums\TipoPublicacionEnum;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -20,17 +21,19 @@ class PublicacionController extends Controller
 
         if ($tipo == 1) {
             $publicaciones = Publicacion::where('tipo', TipoPublicacionEnum::Duda->value)
-            ->with(['user', 'comentarios', 'comentarios.user'])
-            ->orderByDesc('id')
-            ->paginate(10);
-        } else if($tipo == 2) {
+                ->with(['user', 'comentarios', 'comentarios.media', 'comentarios.user', 'media'])
+                ->orderByDesc('id')
+                ->paginate(10);
+        } else if ($tipo == 2) {
             $publicaciones = Publicacion::where('tipo', TipoPublicacionEnum::Foro->value)
-            ->with(['user', 'comentarios', 'comentarios.user'])
-            ->orderByDesc('id')
-            ->paginate(10);
+                ->with(['user', 'comentarios', 'comentarios.media', 'comentarios.user', 'media'])
+                ->orderByDesc('id')
+                ->paginate(10);
         } else {
             abort(404);
         }
+
+
 
         return Inertia::render('Publicacion/IndexPublicacion', [
             'publicaciones' => $publicaciones,
@@ -56,7 +59,15 @@ class PublicacionController extends Controller
         $data['user_id'] = $user->id;
         $data['tipo'] = $tipo == 1 ? TipoPublicacionEnum::Duda->value : TipoPublicacionEnum::Foro->value;
         $data['tipo_daltonismo'] = $data['tipo_daltonismo'] ?? $user->tipo_daltonismo;
-        Publicacion::create($data);
+        $publicacion = Publicacion::create($data);
+
+        if ($request->hasFile('imagenes')) {
+            foreach ($request->file('imagenes') as $imagen) {
+                $publicacion
+                    ->addMedia($imagen)
+                    ->toMediaCollection(TipoArchivoEnum::Publicacion->value);
+            }
+        }
 
         return redirect()->to(url()->previous())->with([
             'message' => 'Publicación creada correctamente',

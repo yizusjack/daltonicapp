@@ -23,7 +23,8 @@ class StorePublicacionRequest extends FormRequest
     {
         return [
             'titulo' => 'nullable|max:255',
-            'contenido' => 'required'
+            'contenido' => 'required',
+            'imagenes.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ];
     }
 }

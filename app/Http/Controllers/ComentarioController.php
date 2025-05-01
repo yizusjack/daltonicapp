@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comentario;
+use App\Enums\TipoArchivoEnum;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreComentarioRequest;
 use App\Http\Requests\UpdateComentarioRequest;
@@ -34,7 +35,14 @@ class ComentarioController extends Controller
         $data['comentable_type'] = 'App\Models\Publicacion';
         $data['user_id'] = Auth::user()->id;
 
-        Comentario::create($data);
+        $comentario = Comentario::create($data);
+
+        if ($request->hasFile('imagen')) {
+            $comentario
+                ->addMediaFromRequest('imagen')
+                ->toMediaCollection(TipoArchivoEnum::Comentario->value);
+        }
+
 
         return redirect()->to(url()->previous())->with([
             'message' => 'Comentario creado',

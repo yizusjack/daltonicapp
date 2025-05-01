@@ -17,7 +17,7 @@ use App\Http\Controllers\GuiaContribucionController;
 
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return Inertia::render('Landing', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,

@@ -13,7 +13,7 @@ import { PageProps } from '@/types'
 import { Link } from '@/types/link'
 import { Publicacion, PublicacionWithRelations } from '@/types/publicacion'
 import { useForm } from '@inertiajs/react'
-import { Dot, EllipsisVertical, MessageCircleQuestion, Pencil, Trash2 } from 'lucide-react'
+import { Dot, EllipsisVertical, ImagePlus, MessageCircleQuestion, Pencil, Trash2 } from 'lucide-react'
 import React, { useState } from 'react'
 import { FormProvider, useForm as useFormContext } from 'react-hook-form'
 
@@ -59,11 +59,11 @@ export default function IndexPublicacion({
     const { data, setData, post, put, processing, errors, reset } = useForm<{
         titulo?: string;
         contenido: string;
-        imagenes: File[]; 
+        imagenes: File[];
     }>({
         titulo: '',
         contenido: '',
-        imagenes: [], 
+        imagenes: [],
     });
 
     const methods = useFormContext({
@@ -77,19 +77,19 @@ export default function IndexPublicacion({
     //Función para guardar publicación
     function submit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-    
+
         const formData = new FormData();
         formData.append('titulo', data.titulo ?? '');
         formData.append('contenido', data.contenido);
-    
+
         data.imagenes.forEach((imagen, index) => {
             formData.append(`imagenes[${index}]`, imagen);
         });
-    
+
         post(route('publicacion.store', tipo), {
             data: formData,
             preserveScroll: true,
-            forceFormData: true, 
+            forceFormData: true,
             onSuccess: () => {
                 reset();
                 setAbrirModal(false);
@@ -161,7 +161,7 @@ export default function IndexPublicacion({
     const comentarioForm = useForm<{
         comentario: string;
         comentable_id?: number;
-        imagen?: File|null; 
+        imagen?: File|null;
     }>({
         comentario :'',
         imagen: null,
@@ -176,7 +176,7 @@ export default function IndexPublicacion({
 
     function submitComentario(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-    
+
         comentarioForm.post(route('comentario.store'), {
             preserveScroll: true,
             onSuccess: () => {
@@ -191,7 +191,7 @@ export default function IndexPublicacion({
         const nuevasImagenes = [...data.imagenes];
         nuevasImagenes.splice(index, 1);
         setData('imagenes', nuevasImagenes);
-    
+
         const nuevasPreviews = [...previewUrls];
         nuevasPreviews.splice(index, 1);
         setPreviewUrls(nuevasPreviews);
@@ -399,10 +399,10 @@ export default function IndexPublicacion({
                                                 {comentario.media && comentario.media.length > 0 && (
                                                     <div className="mt-4">
                                                         {comentario.media.map((image) => (
-                                                            <img 
+                                                            <img
                                                                 key={image.id}
-                                                                src={image.original_url} 
-                                                                alt={image.name} 
+                                                                src={image.original_url}
+                                                                alt={image.name}
                                                                 className="w-16 h-16 object-cover rounded-md cursor-pointer"
                                                                 onClick={() => setImagenSeleccionada(image.original_url)}
                                                             />
@@ -423,7 +423,7 @@ export default function IndexPublicacion({
                                                 placeholder='Escribe un comentario...'
                                                 onChange={(e) => comentarioForm.setData('comentario', e.target.value)}
                                             />
-                                    
+
                                             <div className="mt-2">
                                                 <button
                                                     type="button"
@@ -442,20 +442,20 @@ export default function IndexPublicacion({
                                                         setPreviewUrlComment([]);
                                                         if (e.target.files?.[0]) {
                                                             const filesArray = Array.from(e.target.files);
-                                                    
+
                                                             const imagenesValidas = filesArray.filter(file =>
                                                                 file.type.startsWith('image/')
                                                             );
-                                                    
+
                                                             if (imagenesValidas.length !== filesArray.length) {
                                                                 alert('Solo puedes subir imagenes.');
                                                             }
-                                                    
+
                                                             if (imagenesValidas.length == 1) {
                                                                 const nuevosPreviews = imagenesValidas.map(file => URL.createObjectURL(file));
                                                                 setPreviewUrlComment(prev => [...prev, ...nuevosPreviews]);
                                                             }
-                                                            
+
                                                             const file = e.target.files?.[0];
 
                                                             if (file) {
@@ -488,7 +488,7 @@ export default function IndexPublicacion({
                                                     </div>
                                                 )}
                                             </div>
-                                    
+
                                             <div className="mt-2 flex justify-end gap-x-2">
                                                 <Button
                                                     type='button'
@@ -498,7 +498,7 @@ export default function IndexPublicacion({
                                                 >
                                                     Cancelar
                                                 </Button>
-                                    
+
                                                 <Button
                                                     type='submit'
                                                     size='sm'
@@ -584,17 +584,15 @@ export default function IndexPublicacion({
                                     name="imagenes"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Imágenes</FormLabel>
-
                                             <FormControl>
                                                 <div>
-                                                    <button
+                                                    <Button
                                                         type="button"
                                                         onClick={() => document.getElementById('input-imagenes')?.click()}
-                                                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                                                     >
-                                                        Cargar imágenes
-                                                    </button>
+                                                        <ImagePlus className='h-6 w-6' />
+                                                        Agregar imágenes
+                                                    </Button>
 
                                                     <input
                                                         id="input-imagenes"
@@ -605,18 +603,18 @@ export default function IndexPublicacion({
                                                         onChange={(e) => {
                                                             if (e.target.files) {
                                                                 const filesArray = Array.from(e.target.files);
-                                                        
+
                                                                 const imagenesValidas = filesArray.filter(file =>
                                                                     file.type.startsWith('image/')
                                                                 );
-                                                        
+
                                                                 if (imagenesValidas.length !== filesArray.length) {
                                                                     alert('Solo puedes subir imagenes.');
                                                                 }
-                                                        
+
                                                                 if (imagenesValidas.length > 0) {
                                                                     setData('imagenes', [...(data.imagenes || []), ...imagenesValidas]);
-                                                        
+
                                                                     const nuevosPreviews = imagenesValidas.map(file => URL.createObjectURL(file));
                                                                     setPreviewUrls(prev => [...prev, ...nuevosPreviews]);
                                                                 }

@@ -99,7 +99,7 @@ export default function IndexPublicacion({
     }
 
     //Estado para la edición/eliminación de publicaciones
-    const [publicacionSeleccionada, setPublicacionSeleccionada] = useState<null|Publicacion>(null);
+    const [publicacionSeleccionada, setPublicacionSeleccionada] = useState<null | Publicacion>(null);
 
     //Abre la edición de una publicación
     const setEditarPublicacion = (publicacion: Publicacion) => {
@@ -114,8 +114,8 @@ export default function IndexPublicacion({
         setPublicacionSeleccionada(null);
     }
 
-     //Función para editar publicación
-     function editarPublicacion(e: React.FormEvent<HTMLFormElement>) {
+    //Función para editar publicación
+    function editarPublicacion(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
         put(route('publicacion.update', publicacionSeleccionada?.id), {
@@ -127,7 +127,7 @@ export default function IndexPublicacion({
         });
     }
 
-    const [publicacionAEliminar, setPublicacionAEliminar] = useState<null|Publicacion>(null);
+    const [publicacionAEliminar, setPublicacionAEliminar] = useState<null | Publicacion>(null);
 
     //Funcion para eliminar publicacion
     const eliminarPublicacion = (publicacion: Publicacion) => {
@@ -155,15 +155,15 @@ export default function IndexPublicacion({
     };
 
     //Estado para la creación de comentarios
-    const [publicacionAComentar, setpublicacionAComentar] = useState<null|number>(null);
+    const [publicacionAComentar, setpublicacionAComentar] = useState<null | number>(null);
 
     //Formulario para comentarios
     const comentarioForm = useForm<{
         comentario: string;
         comentable_id?: number;
-        imagen?: File|null;
+        imagen?: File | null;
     }>({
-        comentario :'',
+        comentario: '',
         imagen: null,
     });
 
@@ -219,167 +219,167 @@ export default function IndexPublicacion({
                             <div className='w-full my-4 py-4 border-b border-slate-200' key={publicacion.id}>
                                 {
                                     publicacionSeleccionada?.id != publicacion.id ?
-                                    (
-                                        <>
-                                            <div className="font-bold flex justify-between">
-                                                <div>
-                                                    {publicacion.titulo}
-                                                </div>
-
-                                                <Can
-                                                    permission={publicacion.canEditar || publicacion.canEliminar}
-                                                >
-                                                    <div className="justify-end">
-                                                        <DropdownMenu>
-                                                            <DropdownMenuTrigger className='hover:bg-slate-200 rounded-md p-0.5'>
-                                                                <EllipsisVertical className='w-4 h-4' />
-                                                            </DropdownMenuTrigger>
-                                                            <DropdownMenuContent>
-                                                                <Can
-                                                                    permission={publicacion.canEditar}
-                                                                >
-                                                                    <DropdownMenuItem
-                                                                        onClick={() => setEditarPublicacion(publicacion)}
-                                                                    >
-                                                                        <Pencil className='w-3 h-3 text-green-400' />
-                                                                        Editar
-                                                                    </DropdownMenuItem>
-
-                                                                    <DropdownMenuSeparator />
-                                                                </Can>
-
-                                                                <Can
-                                                                    permission={publicacion.canEliminar}
-                                                                >
-                                                                    <DropdownMenuItem
-                                                                        onClick={() => eliminarPublicacion(publicacion)}
-                                                                    >
-                                                                        <Trash2 className='w-3 h-3 text-red-400' />
-                                                                        Eliminar
-                                                                    </DropdownMenuItem>
-                                                                </Can>
-                                                            </DropdownMenuContent>
-                                                        </DropdownMenu>
+                                        (
+                                            <>
+                                                <div className="font-bold flex justify-between">
+                                                    <div>
+                                                        {publicacion.titulo}
                                                     </div>
-                                                </Can>
-                                            </div>
 
-                                            <div className='whitespace-pre-line'>
-                                                {publicacion.contenido}
-                                            </div>
-
-                                            <div className="flex flex-wrap gap-2 mt-4">
-                                                {publicacion.media.map((img) => (
-                                                    <img
-                                                        key={img.id}
-                                                        src={img.original_url}
-                                                        alt={img.file_name}
-                                                        className="w-32 h-32 object-cover rounded-md cursor-pointer"
-                                                        onClick={() => setImagenSeleccionada(img.original_url)}
-                                                    />
-                                                ))}
-                                            </div>
-
-                                            {imagenSeleccionada && (
-                                                <Dialog open={imagenSeleccionada !== null} onOpenChange={() => setImagenSeleccionada(null)}>
-                                                <DialogContent className="max-w-4xl">
-                                                    <img
-                                                        src={imagenSeleccionada!}
-                                                        alt="Imagen"
-                                                        className="max-h-[90vh] object-contain m-auto"
-                                                    />
-                                                </DialogContent>
-                                            </Dialog>
-                                            )}
-
-                                            <div className='flex justify-between text-xs'>
-                                                <div className='flex items-center text-cyan-900'>
-                                                    {publicacion.user.name}
-                                                    <Dot />
-                                                    {publicacion.fecha}
-                                                </div>
-
-                                                { publicacionAComentar != publicacion.id &&
                                                     <Can
-                                                        permission={publicacion.canComentar}
+                                                        permission={publicacion.canEditar || publicacion.canEliminar}
                                                     >
-                                                        <div onClick={() => setFormComentario(publicacion.id)} className='text-slate-500 hover:text-slate-800 hover:underline cursor-pointer'>
-                                                            Agregar un comentario
+                                                        <div className="justify-end">
+                                                            <DropdownMenu>
+                                                                <DropdownMenuTrigger className='hover:bg-slate-200 rounded-md p-0.5'>
+                                                                    <EllipsisVertical className='w-4 h-4' />
+                                                                </DropdownMenuTrigger>
+                                                                <DropdownMenuContent>
+                                                                    <Can
+                                                                        permission={publicacion.canEditar}
+                                                                    >
+                                                                        <DropdownMenuItem
+                                                                            onClick={() => setEditarPublicacion(publicacion)}
+                                                                        >
+                                                                            <Pencil className='w-3 h-3 text-green-400' />
+                                                                            Editar
+                                                                        </DropdownMenuItem>
+
+                                                                        <DropdownMenuSeparator />
+                                                                    </Can>
+
+                                                                    <Can
+                                                                        permission={publicacion.canEliminar}
+                                                                    >
+                                                                        <DropdownMenuItem
+                                                                            onClick={() => eliminarPublicacion(publicacion)}
+                                                                        >
+                                                                            <Trash2 className='w-3 h-3 text-red-400' />
+                                                                            Eliminar
+                                                                        </DropdownMenuItem>
+                                                                    </Can>
+                                                                </DropdownMenuContent>
+                                                            </DropdownMenu>
                                                         </div>
                                                     </Can>
-                                                }
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <FormProvider {...methods}>
-                                                <form onSubmit={editarPublicacion}>
-                                                    <div className='pb-4'>
-                                                        <FormField
-                                                            name="titulo"
-                                                            render={({ field }) => (
-                                                                <FormItem>
-                                                                    <FormLabel>Título</FormLabel>
+                                                </div>
 
-                                                                    <FormControl>
-                                                                        <Input
-                                                                            type='text'
-                                                                            name='titulo'
-                                                                            value={data.titulo}
-                                                                            onChange={(e) => setData('titulo', e.target.value)}
-                                                                        />
-                                                                    </FormControl>
+                                                <div className='whitespace-pre-line'>
+                                                    {publicacion.contenido}
+                                                </div>
 
-                                                                    {errors.titulo && (
-                                                                        <FormMessage>{errors.titulo}</FormMessage>
-                                                                    )}
-                                                                </FormItem>
-                                                            )}
-                                                        >
-                                                        </FormField>
+                                                <div className="flex flex-wrap gap-2 mt-4">
+                                                    {publicacion.media.map((img) => (
+                                                        <img
+                                                            key={img.id}
+                                                            src={img.original_url}
+                                                            alt={img.file_name}
+                                                            className="w-32 h-32 object-cover rounded-md cursor-pointer"
+                                                            onClick={() => setImagenSeleccionada(img.original_url)}
+                                                        />
+                                                    ))}
+                                                </div>
+
+                                                {imagenSeleccionada && (
+                                                    <Dialog open={imagenSeleccionada !== null} onOpenChange={() => setImagenSeleccionada(null)}>
+                                                        <DialogContent className="max-w-4xl">
+                                                            <img
+                                                                src={imagenSeleccionada!}
+                                                                alt="Imagen"
+                                                                className="max-h-[90vh] object-contain m-auto"
+                                                            />
+                                                        </DialogContent>
+                                                    </Dialog>
+                                                )}
+
+                                                <div className='flex justify-between text-xs'>
+                                                    <div className='flex items-center text-cyan-900'>
+                                                        {publicacion.user.name}
+                                                        <Dot />
+                                                        {publicacion.fecha}
                                                     </div>
 
-                                                    <div className='pb-4'>
-                                                        <FormField
-                                                            name="contenido"
-                                                            render={({ field }) => (
-                                                                <FormItem>
-                                                                    <FormLabel>Contenido</FormLabel>
-
-                                                                    <FormControl>
-                                                                        <Textarea
-                                                                            className='h-20'
-                                                                            name='contenido'
-                                                                            value={data.contenido}
-                                                                            onChange={(e) => setData('contenido', e.target.value)}
-                                                                        />
-                                                                    </FormControl>
-
-                                                                    {errors.contenido && (
-                                                                        <FormMessage>{errors.contenido}</FormMessage>
-                                                                    )}
-                                                                </FormItem>
-                                                            )}
+                                                    {publicacionAComentar != publicacion.id &&
+                                                        <Can
+                                                            permission={publicacion.canComentar}
                                                         >
-                                                        </FormField>
-                                                    </div>
+                                                            <div onClick={() => setFormComentario(publicacion.id)} className='text-slate-500 hover:text-slate-800 hover:underline cursor-pointer'>
+                                                                Agregar un comentario
+                                                            </div>
+                                                        </Can>
+                                                    }
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <FormProvider {...methods}>
+                                                    <form onSubmit={editarPublicacion}>
+                                                        <div className='pb-4'>
+                                                            <FormField
+                                                                name="titulo"
+                                                                render={({ field }) => (
+                                                                    <FormItem>
+                                                                        <FormLabel>Título</FormLabel>
 
-                                                    <div className="flex justify-end gap-x-4">
-                                                        <Button
-                                                            type='button'
-                                                            variant='outline'
-                                                            onClick={cancelarEdicion}
-                                                        >
-                                                            Cancelar
-                                                        </Button>
-                                                        <Button>
-                                                            Enviar
-                                                        </Button>
-                                                    </div>
-                                                </form>
-                                            </FormProvider>
-                                        </>
-                                    )
+                                                                        <FormControl>
+                                                                            <Input
+                                                                                type='text'
+                                                                                name='titulo'
+                                                                                value={data.titulo}
+                                                                                onChange={(e) => setData('titulo', e.target.value)}
+                                                                            />
+                                                                        </FormControl>
+
+                                                                        {errors.titulo && (
+                                                                            <FormMessage>{errors.titulo}</FormMessage>
+                                                                        )}
+                                                                    </FormItem>
+                                                                )}
+                                                            >
+                                                            </FormField>
+                                                        </div>
+
+                                                        <div className='pb-4'>
+                                                            <FormField
+                                                                name="contenido"
+                                                                render={({ field }) => (
+                                                                    <FormItem>
+                                                                        <FormLabel>Contenido</FormLabel>
+
+                                                                        <FormControl>
+                                                                            <Textarea
+                                                                                className='h-20'
+                                                                                name='contenido'
+                                                                                value={data.contenido}
+                                                                                onChange={(e) => setData('contenido', e.target.value)}
+                                                                            />
+                                                                        </FormControl>
+
+                                                                        {errors.contenido && (
+                                                                            <FormMessage>{errors.contenido}</FormMessage>
+                                                                        )}
+                                                                    </FormItem>
+                                                                )}
+                                                            >
+                                                            </FormField>
+                                                        </div>
+
+                                                        <div className="flex justify-end gap-x-4">
+                                                            <Button
+                                                                type='button'
+                                                                variant='outline'
+                                                                onClick={cancelarEdicion}
+                                                            >
+                                                                Cancelar
+                                                            </Button>
+                                                            <Button>
+                                                                Enviar
+                                                            </Button>
+                                                        </div>
+                                                    </form>
+                                                </FormProvider>
+                                            </>
+                                        )
                                 }
 
                                 <div className="ml-8">
@@ -412,9 +412,9 @@ export default function IndexPublicacion({
                                             </div>
                                         ))
                                     }
-                                    </div>
+                                </div>
 
-                                { publicacionAComentar == publicacion.id &&
+                                {publicacionAComentar == publicacion.id &&
                                     <form onSubmit={submitComentario}>
                                         <div className='mt-4'>
                                             <Textarea
@@ -425,13 +425,14 @@ export default function IndexPublicacion({
                                             />
 
                                             <div className="mt-2">
-                                                <button
+                                                <Button
                                                     type="button"
                                                     onClick={() => document.getElementById('input-imagen')?.click()}
-                                                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                                    size="sm"
                                                 >
-                                                    Cargar imagen
-                                                </button>
+                                                    <ImagePlus className='h-6 w-6' />
+                                                    Agregar imagen
+                                                </Button>
 
                                                 <input
                                                     id="input-imagen"
@@ -666,7 +667,7 @@ export default function IndexPublicacion({
                 </DialogContent>
             </Dialog>
 
-           { publicacionAEliminar &&
+            {publicacionAEliminar &&
                 <ConfirmationModal
                     confirmar={confirmarEliminacion}
                     modelo='Publicación'

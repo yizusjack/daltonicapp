@@ -27,6 +27,7 @@ export interface Comentario {
     id: number;
     comentario: string;
     fecha: string;
+    canEliminar: boolean;
 }
 
 export interface ComentarioWithRelations extends Comentario {

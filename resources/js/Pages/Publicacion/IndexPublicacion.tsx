@@ -431,7 +431,7 @@ export default function IndexPublicacion({
 
                                                     <div>
                                                         <Can
-                                                            permission={publicacion.canEditar || publicacion.canEliminar}
+                                                            permission={comentario.canEliminar}
                                                         >
                                                             <div className="justify-end">
                                                                 <DropdownMenu>
@@ -440,7 +440,7 @@ export default function IndexPublicacion({
                                                                     </DropdownMenuTrigger>
                                                                     <DropdownMenuContent>
                                                                         <Can
-                                                                            permission={publicacion.canEliminar}
+                                                                            permission={comentario.canEliminar}
                                                                         >
                                                                             <DropdownMenuItem
                                                                                 onClick={() => abrirEliminacionComentario(comentario)}

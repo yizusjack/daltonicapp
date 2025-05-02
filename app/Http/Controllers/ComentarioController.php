@@ -79,6 +79,11 @@ class ComentarioController extends Controller
      */
     public function destroy(Comentario $comentario)
     {
-        //
+        $comentario->delete();
+
+        return redirect()->to(url()->previous())->with([
+            'message' => 'Comentario eliminado',
+            'description' => ' ',
+        ]);
     }
 }

@@ -10,6 +10,7 @@ import { Input } from '@/Components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import MainLayout from '@/Layouts/MainLayout'
 import { PageProps } from '@/types'
+import { ComentarioWithRelations } from '@/types/comentario'
 import { Link } from '@/types/link'
 import { Publicacion, PublicacionWithRelations } from '@/types/publicacion'
 import { useForm } from '@inertiajs/react'
@@ -156,6 +157,29 @@ export default function IndexPublicacion({
 
     //Estado para la creación de comentarios
     const [publicacionAComentar, setpublicacionAComentar] = useState<null | number>(null);
+
+    //Estado para la eliminación de comentarios
+    const [comentarioSeleccionado, setComentarioSeleccionado] = useState<null | ComentarioWithRelations>(null);
+
+    const abrirEliminacionComentario = (comentario: ComentarioWithRelations) => {
+        setComentarioSeleccionado(comentario);
+
+        setTimeout(() => {
+            setAbrirModalConfirmacion(true);
+        }, 100);
+    }
+
+    const eliminarComentario = useForm({});
+
+    const confirmarEliminacionComentario = () => {;
+        eliminar.delete(route('comentario.destroy', comentarioSeleccionado?.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                setComentarioSeleccionado(null);
+                setAbrirModalConfirmacion(false);
+            },
+        });
+    };
 
     //Formulario para comentarios
     const comentarioForm = useForm<{
@@ -392,16 +416,44 @@ export default function IndexPublicacion({
                                     {
                                         publicacion.comentarios.map((comentario) => (
                                             <div className='w-full my-4 py-4 border-b border-slate-100 text-xs' key={comentario.id}>
-                                                <div className='flex items-center text-cyan-900'>
-                                                    {comentario.user.name}
-                                                    <Dot />
-                                                    {tipo == 2 &&
-                                                        <>
-                                                            {comentario.user.tipo_daltonismo}
-                                                            <Dot />
-                                                        </>
-                                                    }
-                                                    {publicacion.fecha}
+                                                <div className="flex justify-between">
+                                                    <div className='flex items-center text-cyan-900'>
+                                                        {comentario.user.name}
+                                                        <Dot />
+                                                        {tipo == 2 &&
+                                                            <>
+                                                                {comentario.user.tipo_daltonismo}
+                                                                <Dot />
+                                                            </>
+                                                        }
+                                                        {publicacion.fecha}
+                                                    </div>
+
+                                                    <div>
+                                                        <Can
+                                                            permission={publicacion.canEditar || publicacion.canEliminar}
+                                                        >
+                                                            <div className="justify-end">
+                                                                <DropdownMenu>
+                                                                    <DropdownMenuTrigger className='hover:bg-slate-200 rounded-md p-0.5'>
+                                                                        <EllipsisVertical className='w-4 h-4' />
+                                                                    </DropdownMenuTrigger>
+                                                                    <DropdownMenuContent>
+                                                                        <Can
+                                                                            permission={publicacion.canEliminar}
+                                                                        >
+                                                                            <DropdownMenuItem
+                                                                                onClick={() => abrirEliminacionComentario(comentario)}
+                                                                            >
+                                                                                <Trash2 className='w-3 h-3 text-red-400' />
+                                                                                Eliminar
+                                                                            </DropdownMenuItem>
+                                                                        </Can>
+                                                                    </DropdownMenuContent>
+                                                                </DropdownMenu>
+                                                            </div>
+                                                        </Can>
+                                                    </div>
                                                 </div>
 
                                                 <div className='whitespace-pre-line'>
@@ -683,6 +735,15 @@ export default function IndexPublicacion({
                 <ConfirmationModal
                     confirmar={confirmarEliminacion}
                     modelo='Publicación'
+                    abrirModal={abrirModalConfirmacion}
+                    setAbrirModal={setAbrirModalConfirmacion}
+                />
+            }
+
+            {comentarioSeleccionado &&
+                <ConfirmationModal
+                    confirmar={confirmarEliminacionComentario}
+                    modelo='Comentario'
                     abrirModal={abrirModalConfirmacion}
                     setAbrirModal={setAbrirModalConfirmacion}
                 />

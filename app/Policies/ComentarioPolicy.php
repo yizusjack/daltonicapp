@@ -45,7 +45,7 @@ class ComentarioPolicy
      */
     public function delete(User $user, Comentario $comentario): bool
     {
-        return false;
+        return $comentario->user_id == $user->id;
     }
 
     /**

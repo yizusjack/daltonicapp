@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comentario;
 use App\Enums\TipoArchivoEnum;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreComentarioRequest;
 use App\Http\Requests\UpdateComentarioRequest;
 
@@ -79,6 +80,13 @@ class ComentarioController extends Controller
      */
     public function destroy(Comentario $comentario)
     {
-        //
+        Gate::authorize('delete', $comentario);
+
+        $comentario->delete();
+
+        return redirect()->to(url()->previous())->with([
+            'message' => 'Comentario eliminado',
+            'description' => ' ',
+        ]);
     }
 }

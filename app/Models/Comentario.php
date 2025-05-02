@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Reporte;
 use App\Models\Comentario;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -41,7 +42,8 @@ class Comentario extends Model implements HasMedia
     ];
 
     protected $appends = [
-        'fecha'
+        'fecha',
+        'canEliminar'
     ];
 
     /**
@@ -97,5 +99,10 @@ class Comentario extends Model implements HasMedia
     public function getImagenesAttribute(): array
     {
         return $this->getMedia('*')->pluck('original_url')->toArray();
+    }
+
+    public function getCanEliminarAttribute(): bool
+    {
+        return Gate::allows('delete', $this);
     }
 }

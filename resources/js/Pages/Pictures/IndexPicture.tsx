@@ -231,7 +231,7 @@ export default function IndexPicture({
             {
                 selectedPicture &&
                 <Dialog open={abrirModalPublicar} onOpenChange={setAbrirModalPublicar}>
-                    <DialogContent className="max-w-2xl max-h-full">
+                    <DialogContent className="max-w-2xl max-h-full overflow-auto">
                         <h1 className='font-semibold leading-none tracking-tight'>
                             Publicar imagen
                         </h1>

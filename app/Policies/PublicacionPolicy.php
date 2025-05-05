@@ -3,6 +3,8 @@
 namespace App\Policies;
 
 use App\Models\User;
+use App\Models\Reporte;
+use App\Models\Comentario;
 use App\Models\Publicacion;
 use App\Enums\TipoPublicacionEnum;
 use Illuminate\Auth\Access\Response;
@@ -46,7 +48,15 @@ class PublicacionPolicy
      */
     public function delete(User $user, Publicacion $publicacion): bool
     {
-        return $publicacion->user_id == $user->id;
+        if ($publicacion->user_id == $user->id){
+            return true;
+        }
+
+        $reportes = Reporte::where('reportable_type', Publicacion::class)
+            ->where('reportable_id', $publicacion->id)
+            ->count();
+
+        return $user->hasRole('Administrador') && $reportes >= 3;
     }
 
     /**
@@ -78,5 +88,20 @@ class PublicacionPolicy
             $permiso = true;
         }
         return $permiso;
+    }
+
+    public function reportar(User $user, Publicacion $publicacion): bool
+    {
+        if($user->id == $publicacion->user_id){
+            return false;
+        }
+     
+     
+        $permiso = Reporte::where('reportable_id', $publicacion->id)
+            ->where('reportable_type', 'Publicacion')
+            ->where('user_id', $user->id)
+            ->exists();
+
+        return !$permiso;
     }
 }

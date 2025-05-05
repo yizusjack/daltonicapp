@@ -6,9 +6,11 @@ use App\Models\User;
 use App\Models\Reporte;
 use App\Models\Comentario;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -41,7 +43,8 @@ class Comentario extends Model implements HasMedia
     ];
 
     protected $appends = [
-        'fecha'
+        'fecha',
+        'canReportarComentario'
     ];
 
     /**
@@ -97,5 +100,10 @@ class Comentario extends Model implements HasMedia
     public function getImagenesAttribute(): array
     {
         return $this->getMedia('*')->pluck('original_url')->toArray();
+    }
+
+    public function getCanReportarComentarioAttribute(): bool
+    {
+        return Gate::allows('reportarComentario', $this);
     }
 }

@@ -11,6 +11,7 @@ export interface Publicacion {
     canEditar: boolean;
     canEliminar: boolean;
     canComentar: boolean;
+    canReportar: boolean;
     imagenes: string[];
 }
 

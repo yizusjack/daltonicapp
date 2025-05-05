@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Reporte;
 use App\Models\Comentario;
 use App\Enums\TipoArchivoEnum;
 use Spatie\MediaLibrary\HasMedia;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Publicacion extends Model implements HasMedia
@@ -47,6 +49,7 @@ class Publicacion extends Model implements HasMedia
         'canEditar',
         'canEliminar',
         'canComentar',
+        'canReportar',
         'imagenes'
     ];
 
@@ -119,4 +122,10 @@ class Publicacion extends Model implements HasMedia
     {
         return $this->getMedia('*')->pluck('original_url')->toArray();
     }
+
+    public function getCanReportarAttribute(): bool
+    {
+      return Gate::allows('reportar', $this);
+    }
+
 }

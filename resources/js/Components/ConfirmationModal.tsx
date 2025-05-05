@@ -18,16 +18,6 @@ export default function ConfirmationModal({
 
     const {delete: destroy} = useForm({});
 
-    // const confirmar = () => {
-    //     destroy(ruta as string, {
-    //         preserveScroll: true,
-    //         onSuccess: () => {
-    //             setAbrirModal(false);
-    //         },
-    //     });
-    // }
-
-
     return (
         <Dialog open={abrirModal} onOpenChange={setAbrirModal}>
             <DialogContent className="sm:max-w-[425px]">
@@ -38,8 +28,8 @@ export default function ConfirmationModal({
                     ¿Estás seguro de querer eliminar esta {modelo}?
                 </div>
                 <DialogFooter>
-                    <Button onClick={() => setAbrirModal(false)} variant='outline'>Cancelar</Button>
-                    <Button onClick={confirmar} variant='destructive'>Eliminar</Button>
+                    <Button className='mb-2' onClick={() => setAbrirModal(false)} variant='outline'>Cancelar</Button>
+                    <Button className='mb-2' onClick={confirmar} variant='destructive'>Eliminar</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

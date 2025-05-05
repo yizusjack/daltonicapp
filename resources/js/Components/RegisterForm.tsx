@@ -14,8 +14,12 @@ import { FormEventHandler, useState } from "react"
 import InputError from "./InputError"
 import Checkbox from "./Checkbox"
 import Terminos from "./Terminos"
+import { useToast } from "@/hooks/use-toast"
+import { Toaster } from "./ui/toaster"
 
 export function RegisterForm() {
+    const { toast } = useToast()
+
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
@@ -38,6 +42,16 @@ export function RegisterForm() {
     const aceptarTerminos = () => {
         setAbrirModal(true);
         setTerminosAceptados(true);
+    }
+
+    const displayToast = () => {
+        if(!terminosAceptados) {
+            toast({
+                title: "No has abierto los términos y condiciones",
+                description: "Para poder hacer clic aquí primero necesitas leerlos.",
+                variant: "destructive",
+            });
+        }
     }
 
     return (
@@ -128,16 +142,18 @@ export function RegisterForm() {
                                 </div>
 
                                 <div className="mt-2 block flex items-center">
-                                    <Checkbox
-                                        id="terms"
-                                        name="terms"
-                                        checked={data.terms}
-                                        onChange={(e) =>
-                                            setData('terms', e.target.checked)
-                                        }
-                                        disabled={! terminosAceptados}
-                                    />
-                                    <Label className="pl-2" htmlFor="terms">He leído y acepto el </Label>
+                                    <div onClick={displayToast}>
+                                        <Checkbox
+                                            id="terms"
+                                            name="terms"
+                                            checked={data.terms}
+                                            onChange={(e) =>
+                                                setData('terms', e.target.checked)
+                                            }
+                                            disabled={!terminosAceptados}
+                                        />
+                                        <Label className="pl-2" htmlFor="terms">He leído y acepto el </Label>
+                                    </div>
                                     <div onClick={aceptarTerminos} className="text-sm font-medium leading-none ml-1 underline cursor-pointer hover:font-semibold">aviso de privacidad</div>
                                 </div>
 
@@ -163,6 +179,8 @@ export function RegisterForm() {
                 abrirModal={abrirModal}
                 setAbrirModal={setAbrirModal}
             />
+
+            <Toaster />
         </div>
     )
 }

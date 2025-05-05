@@ -205,8 +205,8 @@ export default function IndexPicture({
                 (<Dialog open={abrirModal} onOpenChange={setAbrirModal}>
                     <DialogContent className="max-w-7xl max-h-full flex flex-col items-center justify-center">
                         {/* Contenedor de los textos */}
-                        <div className="mt-2 flex flex-col md:flex-row justify-between text-xs md:text-sm w-full lg:w-1/2">
-                            <div className="flex gap-x-2 items-center">
+                        <div className="mt-2 flex justify-center md:flex-row md:justify-between text-xs md:text-sm w-full lg:w-1/2">
+                            <div className="flex gap-x-2 items-center mr-2">
                                 <MoveLeft /> Imagen original
                             </div>
 

@@ -66,7 +66,7 @@ export default function IndexPublicacion({
         contenido: '',
         imagenes: [],
     });
-    
+
 
     const methods = useFormContext({
         defaultValues: {
@@ -222,7 +222,7 @@ export default function IndexPublicacion({
         setPreviewUrls(nuevasPreviews);
     }
 
-    const opcionesReporte = [   
+    const opcionesReporte = [
         { label: 'El contenido es inapropiado',  value: 'Inapropiado' },
         { label: 'El contenido es ofensivo para mi o alguien más',  value: 'Ofensivo' },
         { label: 'El contenido  no tiene relación con el foro',  value: 'NoRelacion' },
@@ -244,12 +244,15 @@ export default function IndexPublicacion({
     const abrirModalReporte = (modelo: 'Publicacion' | 'Comentario', id: number) => {
         reporte.setData('reportable_id', id);
         reporte.setData('reportable_type', modelo);
-        if(modelo == 'Publicacion'){
-            setAbrirModalReportePublicacion(true);
-        } else {
-            setAbrirModalReporteComentario(true);
-        };
-        
+
+        setTimeout(() => {
+            if(modelo == 'Publicacion'){
+                setAbrirModalReportePublicacion(true);
+            } else {
+                setAbrirModalReporteComentario(true);
+            };
+        }, 100);
+
     };
 
     return (
@@ -323,7 +326,7 @@ export default function IndexPublicacion({
                                                                         >
                                                                             <MessageSquareWarning className='w-3 h-3 text-red-400' />
                                                                             Reportar
-                                                                        </DropdownMenuItem>                                                                            
+                                                                        </DropdownMenuItem>
                                                                     </Can>
                                                                 </DropdownMenuContent>
                                                             </DropdownMenu>
@@ -501,7 +504,7 @@ export default function IndexPublicacion({
                                                                             >
                                                                                 <MessageSquareWarning className='w-3 h-3 text-red-400' />
                                                                                 Reportar
-                                                                            </DropdownMenuItem>                                                                            
+                                                                            </DropdownMenuItem>
                                                                     </Can>
                                                                     </DropdownMenuContent>
                                                                 </DropdownMenu>
@@ -808,7 +811,7 @@ export default function IndexPublicacion({
                   <DialogHeader>
                     <DialogTitle>Reportar {reporte.data.reportable_type}</DialogTitle>
                   </DialogHeader>
-              
+
                   <DropdownMenu>
                     <DropdownMenuTrigger>
                       Motivo: {reporte.data.type || 'Seleccionar'}
@@ -824,13 +827,13 @@ export default function IndexPublicacion({
                     ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
-              
+
                   <Input
                     placeholder="Explicación"
                     value={reporte.data.explicacion}
                     onChange={(e) => reporte.setData('explicacion', e.target.value)}
                   />
-              
+
                   <DialogFooter>
                     <Button variant="outline" onClick={() => setAbrirModalReportePublicacion(false)}>Cancelar</Button>
                     <Button
@@ -855,7 +858,7 @@ export default function IndexPublicacion({
                   <DialogHeader>
                     <DialogTitle>Reportar {reporte.data.reportable_type}</DialogTitle>
                   </DialogHeader>
-              
+
                   <DropdownMenu>
                     <DropdownMenuTrigger>
                       Motivo: {reporte.data.type || 'Seleccionar'}
@@ -871,13 +874,13 @@ export default function IndexPublicacion({
                     ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
-              
+
                   <Input
                     placeholder="Explicación"
                     value={reporte.data.explicacion}
                     onChange={(e) => reporte.setData('explicacion', e.target.value)}
                   />
-              
+
                   <DialogFooter>
                     <Button variant="outline" onClick={() => setAbrirModalReporteComentario(false)}>Cancelar</Button>
                     <Button

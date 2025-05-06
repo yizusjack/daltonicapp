@@ -172,7 +172,8 @@ export default function IndexPublicacion({
 
     const eliminarComentario = useForm({});
 
-    const confirmarEliminacionComentario = () => {;
+    const confirmarEliminacionComentario = () => {
+        ;
         eliminar.delete(route('comentario.destroy', comentarioSeleccionado?.id), {
             preserveScroll: true,
             onSuccess: () => {
@@ -223,11 +224,11 @@ export default function IndexPublicacion({
     }
 
     const opcionesReporte = [
-        { label: 'El contenido es inapropiado',  value: 'Inapropiado' },
-        { label: 'El contenido es ofensivo para mi o alguien más',  value: 'Ofensivo' },
-        { label: 'El contenido  no tiene relación con el foro',  value: 'NoRelacion' },
-        { label: 'El contenido es publicidad engañosa',  value: 'Engañoso' },
-        { label: 'Quien creó este contenido está fingiendo ser alguien que no es',  value: 'Catfish' },
+        { label: 'El contenido es inapropiado', value: 'Inapropiado' },
+        { label: 'El contenido es ofensivo para mi o alguien más', value: 'Ofensivo' },
+        { label: 'El contenido  no tiene relación con el foro', value: 'NoRelacion' },
+        { label: 'El contenido es publicidad engañosa', value: 'Engañoso' },
+        { label: 'Quien creó este contenido está fingiendo ser alguien que no es', value: 'Catfish' },
     ];
 
     const reporte = useForm({
@@ -246,7 +247,7 @@ export default function IndexPublicacion({
         reporte.setData('reportable_type', modelo);
 
         setTimeout(() => {
-            if(modelo == 'Publicacion'){
+            if (modelo == 'Publicacion') {
                 setAbrirModalReportePublicacion(true);
             } else {
                 setAbrirModalReporteComentario(true);
@@ -505,7 +506,7 @@ export default function IndexPublicacion({
                                                                                 <MessageSquareWarning className='w-3 h-3 text-red-400' />
                                                                                 Reportar
                                                                             </DropdownMenuItem>
-                                                                    </Can>
+                                                                        </Can>
                                                                     </DropdownMenuContent>
                                                                 </DropdownMenu>
                                                             </div>
@@ -808,97 +809,103 @@ export default function IndexPublicacion({
 
             <Dialog open={abrirModalReportePublicacion} onOpenChange={setAbrirModalReportePublicacion}>
                 <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Reportar {reporte.data.reportable_type}</DialogTitle>
-                  </DialogHeader>
+                    <DialogHeader>
+                        <DialogTitle>Reportar {reporte.data.reportable_type}</DialogTitle>
+                    </DialogHeader>
 
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      Motivo: {reporte.data.type || 'Seleccionar'}
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                    {opcionesReporte.map((opcion) => (
-                    <DropdownMenuItem
-                        key={opcion.value}
-                        onSelect={() => reporte.setData('type', opcion.value)}
-                    >
-                        {opcion.label}
-                    </DropdownMenuItem>
-                    ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            Motivo: {reporte.data.type || 'Seleccionar'}
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            {opcionesReporte.map((opcion) => (
+                                <DropdownMenuItem
+                                    key={opcion.value}
+                                    onSelect={() => reporte.setData('type', opcion.value)}
+                                >
+                                    {opcion.label}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
 
-                  <Input
-                    placeholder="Explicación"
-                    value={reporte.data.explicacion}
-                    onChange={(e) => reporte.setData('explicacion', e.target.value)}
-                  />
+                    {reporte.errors.type && <div className='p-1 text-xs text-red-700'>{reporte.errors.type}</div>}
 
-                  <DialogFooter>
-                    <Button variant="outline" onClick={() => setAbrirModalReportePublicacion(false)}>Cancelar</Button>
-                    <Button
-                      onClick={() => {
-                        reporte.post(route('reporte.store'), {
-                          preserveScroll: true,
-                          onSuccess: () => {
-                            reset();
-                            setAbrirModalReportePublicacion(false);
-                          }
-                        });
-                      }}
-                    >
-                      Reportar
-                    </Button>
-                  </DialogFooter>
+                    <Input
+                        placeholder="Explicación"
+                        value={reporte.data.explicacion}
+                        onChange={(e) => reporte.setData('explicacion', e.target.value)}
+                    />
+
+                    {reporte.errors.explicacion && <div className='p-1 text-xs text-red-700'>{reporte.errors.explicacion}</div>}
+
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setAbrirModalReportePublicacion(false)}>Cancelar</Button>
+                        <Button
+                            onClick={() => {
+                                reporte.post(route('reporte.store'), {
+                                    preserveScroll: true,
+                                    onSuccess: () => {
+                                        reset();
+                                        setAbrirModalReportePublicacion(false);
+                                    }
+                                });
+                            }}
+                        >
+                            Reportar
+                        </Button>
+                    </DialogFooter>
                 </DialogContent>
-              </Dialog>
+            </Dialog>
 
-              <Dialog open={abrirModalReporteComentario} onOpenChange={setAbrirModalReporteComentario}>
+            <Dialog open={abrirModalReporteComentario} onOpenChange={setAbrirModalReporteComentario}>
                 <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Reportar {reporte.data.reportable_type}</DialogTitle>
-                  </DialogHeader>
+                    <DialogHeader>
+                        <DialogTitle>Reportar {reporte.data.reportable_type}</DialogTitle>
+                    </DialogHeader>
 
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      Motivo: {reporte.data.type || 'Seleccionar'}
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                    {opcionesReporte.map((opcion) => (
-                    <DropdownMenuItem
-                        key={opcion.value}
-                        onSelect={() => reporte.setData('type', opcion.value)}
-                    >
-                        {opcion.label}
-                    </DropdownMenuItem>
-                    ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            Motivo: {reporte.data.type || 'Seleccionar'}
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            {opcionesReporte.map((opcion) => (
+                                <DropdownMenuItem
+                                    key={opcion.value}
+                                    onSelect={() => reporte.setData('type', opcion.value)}
+                                >
+                                    {opcion.label}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    {reporte.errors.type && <div className='p-1 text-xs text-red-700'>{reporte.errors.type}</div>}
 
-                  <Input
-                    placeholder="Explicación"
-                    value={reporte.data.explicacion}
-                    onChange={(e) => reporte.setData('explicacion', e.target.value)}
-                  />
+                    <Input
+                        placeholder="Explicación"
+                        value={reporte.data.explicacion}
+                        onChange={(e) => reporte.setData('explicacion', e.target.value)}
+                    />
+                    {reporte.errors.explicacion && <div className='p-1 text-xs text-red-700'>{reporte.errors.explicacion}</div>}
 
-                  <DialogFooter>
-                    <Button variant="outline" onClick={() => setAbrirModalReporteComentario(false)}>Cancelar</Button>
-                    <Button
-                      onClick={() => {
-                        reporte.post(route('reporte.store'), {
-                          preserveScroll: true,
-                          onSuccess: () => {
-                            reset();
-                            setAbrirModalReporteComentario(false);
-                          }
-                        });
-                      }}
-                    >
-                      Reportar
-                    </Button>
-                  </DialogFooter>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setAbrirModalReporteComentario(false)}>Cancelar</Button>
+                        <Button
+                            onClick={() => {
+                                reporte.post(route('reporte.store'), {
+                                    preserveScroll: true,
+                                    onSuccess: () => {
+                                        reset();
+                                        setAbrirModalReporteComentario(false);
+                                    }
+                                });
+                            }}
+                        >
+                            Reportar
+                        </Button>
+                    </DialogFooter>
                 </DialogContent>
-              </Dialog>
+            </Dialog>
 
 
         </MainLayout>

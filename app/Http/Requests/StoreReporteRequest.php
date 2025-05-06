@@ -22,7 +22,7 @@ class StoreReporteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tipo' => 'required',
+            'type' => 'required',
             'explicacion' => 'nullable|max:255',
         ];
     }

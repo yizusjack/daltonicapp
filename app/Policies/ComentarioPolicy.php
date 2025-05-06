@@ -47,10 +47,10 @@ class ComentarioPolicy
     public function delete(User $user, Comentario $comentario): bool
     {
         $reportes = Reporte::where('reportable_type', Comentario::class)
-            ->where('reportable_id', $publicacion->id)
+            ->where('reportable_id', $comentario->id)
             ->count();
 
-        return $user->hasRole('Administrador') && $reportes >= 3;
+        return $user->hasRole('Administrador') && $reportes >= 3 || $comentario->user_id == $user->id;
     }
 
     /**
@@ -72,19 +72,19 @@ class ComentarioPolicy
     public function reportarComentario(User $user, Comentario $comentario): bool
     {
         $reportes = Reporte::where('reportable_id', $comentario->id);
- 
+
         if($user->id == $comentario->user_id){
             return false;
         }
-     
-     
+
+
         $permiso = Reporte::where('reportable_id', $comentario->id)
             ->where('reportable_type', Comentario::class)
             ->where('user_id', $user->id)
             ->exists();
-    
+
 
         return !$permiso;
-     
+
     }
 }

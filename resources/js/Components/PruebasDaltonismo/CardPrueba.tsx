@@ -28,7 +28,7 @@ export default function CardPrueba({
 			<Card className='w-full bg-slate-50'>
 				<CardHeader>
 					<CardTitle>{titleCard}</CardTitle>
-					<CardDescription>Selecciona el número que ves en la imagen</CardDescription>
+					<CardDescription>Selecciona el número que ves en la imagen, se honesto y no trates de adivinar con lógica, si lo haces tus resultados podrían no ser precisos.</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<div className="flex justify-center">

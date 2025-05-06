@@ -44,7 +44,8 @@ class Comentario extends Model implements HasMedia
 
     protected $appends = [
         'fecha',
-        'canReportarComentario'
+        'canReportarComentario',
+        'canEliminar',
     ];
 
     /**
@@ -102,8 +103,14 @@ class Comentario extends Model implements HasMedia
         return $this->getMedia('*')->pluck('original_url')->toArray();
     }
 
+
     public function getCanReportarComentarioAttribute(): bool
     {
         return Gate::allows('reportarComentario', $this);
+    }
+
+    public function getCanEliminarAttribute(): bool
+    {
+        return Gate::allows('delete', $this);
     }
 }

@@ -163,112 +163,94 @@ export default function Galeria({
             {
                 selectedPicture &&
                 (<Dialog open={abrirModal} onOpenChange={setAbrirModal}>
-                    <DialogContent className="max-w-7xl max-h-full flex flex-col items-center justify-center">
+                    <DialogContent className="max-w-7xl w-full max-h-[90vh] overflow-hidden">
+                        <div className="flex flex-col lg:flex-row h-[80vh] gap-4">
 
-                        <div className="max-w-full grid grid-cols-12 gap-4 my-4">
-                            <div className="col-span-12 md:col-span-6 lg:col-span-8">
-                                <img src={selectedPicture.imagenes[0]} alt="Imagen transformada" />
+                            {/* Imagen fija */}
+                            <div className="flex-1 flex items-center justify-center overflow-hidden">
+                                <img
+                                    src={selectedPicture.imagenes[0]}
+                                    alt="Imagen transformada"
+                                    className="max-h-full max-w-full object-contain rounded"
+                                />
                             </div>
 
-                            <div className="col-span-12 md:col-span-6 lg:col-span-4">
-                                <div className="flex flex-col items-end justify-end text-cyan-900">
-                                    <div className='flex items-center font-semibold'>
-                                        {selectedPicture.user.name}
-
-                                        <Can
-                                            permission={selectedPicture.canEditar || selectedPicture.canEliminar}
-                                        >
-                                            {/* <div className="justify-end"> */}
+                            {/* Columna de texto */}
+                            <div className="w-full lg:w-[30%] flex flex-col justify-between overflow-hidden">
+                                <div className="flex flex-col items-end text-cyan-900">
+                                    <div className='flex items-center justify-between w-full font-semibold'>
+                                        <span>{selectedPicture.user.name}</span>
+                                        <Can permission={selectedPicture.canEditar || selectedPicture.canEliminar}>
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger className='hover:bg-slate-200 rounded-md p-0.5'>
                                                     <EllipsisVertical className='w-4 h-4' />
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent>
-                                                    <Can
-                                                        permission={selectedPicture.canEditar}
-                                                    >
-                                                        <DropdownMenuItem
-                                                            onClick={cargarEdicion}
-                                                        >
+                                                    <Can permission={selectedPicture.canEditar}>
+                                                        <DropdownMenuItem onClick={cargarEdicion}>
                                                             <Pencil className='w-3 h-3 text-green-400' />
                                                             Editar
                                                         </DropdownMenuItem>
-
                                                         <DropdownMenuSeparator />
                                                     </Can>
-
-                                                    <Can
-                                                        permission={selectedPicture.canEliminar}
-                                                    >
-                                                        <DropdownMenuItem
-                                                            onClick={eliminarPublicacion}
-                                                        >
+                                                    <Can permission={selectedPicture.canEliminar}>
+                                                        <DropdownMenuItem onClick={eliminarPublicacion}>
                                                             <Trash2 className='w-3 h-3 text-red-400' />
                                                             Eliminar
                                                         </DropdownMenuItem>
                                                     </Can>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
-                                            {/* </div> */}
                                         </Can>
                                     </div>
-
                                     <div className='italic'>{selectedPicture.fecha}</div>
                                 </div>
 
-                                {
-                                    !editarPublicacion ? (
-                                        <>
-                                            <div className="text-justify whitespace-pre-line">
-                                                "{selectedPicture.contenido}"
-                                            </div>
-                                        </>
+                                {/* Descripción */}
+                                <div className="mt-4 overflow-auto flex-grow">
+                                    {!editarPublicacion ? (
+                                        <div className="text-justify whitespace-pre-line">
+                                            "{selectedPicture.contenido}"
+                                        </div>
                                     ) : (
-                                        <>
-                                            <FormProvider {...methods}>
-                                                <form onSubmit={submitEdicion}>
-                                                    <div className='pb-4'>
-                                                        <FormField
-                                                            name="contenido"
-                                                            render={({ field }) => (
-                                                                <FormItem>
-                                                                    <FormControl>
-                                                                        <Textarea
-                                                                            className='h-20'
-                                                                            name='contenido'
-                                                                            value={data.contenido}
-                                                                            onChange={(e) => setData('contenido', e.target.value)}
-                                                                        />
-                                                                    </FormControl>
-
-                                                                    {errors.contenido && (
-                                                                        <FormMessage>{errors.contenido}</FormMessage>
-                                                                    )}
-                                                                </FormItem>
-                                                            )}
-                                                        >
-                                                        </FormField>
-                                                    </div>
-
-                                                    <div className="flex justify-end gap-x-4">
-                                                        <Button
-                                                            type='button'
-                                                            variant='outline'
-                                                            onClick={() => setEditarPublicacion(false)}
-                                                        >
-                                                            Cancelar
-                                                        </Button>
-                                                        <Button>
-                                                            Guardar
-                                                        </Button>
-                                                    </div>
-                                                </form>
-                                            </FormProvider>
-                                        </>)
-                                }
+                                        <FormProvider {...methods}>
+                                            <form onSubmit={submitEdicion} className="flex flex-col h-full">
+                                                <div className='pb-4 flex-grow'>
+                                                    <FormField
+                                                        name="contenido"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormControl>
+                                                                    <Textarea
+                                                                        className='h-20 w-full resize-none'
+                                                                        name='contenido'
+                                                                        value={data.contenido}
+                                                                        onChange={(e) => setData('contenido', e.target.value)}
+                                                                    />
+                                                                </FormControl>
+                                                                {errors.contenido && (
+                                                                    <FormMessage>{errors.contenido}</FormMessage>
+                                                                )}
+                                                            </FormItem>
+                                                        )}
+                                                    />
+                                                </div>
+                                                <div className="flex justify-end gap-x-4">
+                                                    <Button type='button' variant='outline' onClick={() => setEditarPublicacion(false)}>
+                                                        Cancelar
+                                                    </Button>
+                                                    <Button>Guardar</Button>
+                                                </div>
+                                            </form>
+                                        </FormProvider>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </DialogContent>
+
+
+
 
                 </Dialog>)
             }

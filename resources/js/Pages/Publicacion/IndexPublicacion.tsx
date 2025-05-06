@@ -172,8 +172,8 @@ export default function IndexPublicacion({
 
     const eliminarComentario = useForm({});
 
-    const confirmarEliminacionComentario = () => {
-        eliminarComentario.delete(route('comentario.destroy', comentarioSeleccionado?.id), {
+    const confirmarEliminacionComentario = () => {;
+        eliminar.delete(route('comentario.destroy', comentarioSeleccionado?.id), {
             preserveScroll: true,
             onSuccess: () => {
                 setComentarioSeleccionado(null);
@@ -477,7 +477,7 @@ export default function IndexPublicacion({
 
                                                     <div>
                                                         <Can
-                                                            permission={publicacion.canEditar || publicacion.canEliminar || comentario.canReportarComentario}
+                                                            permission={comentario.canEliminar || comentario.canReportarComentario}
                                                         >
                                                             <div className="justify-end">
                                                                 <DropdownMenu>
@@ -486,7 +486,7 @@ export default function IndexPublicacion({
                                                                     </DropdownMenuTrigger>
                                                                     <DropdownMenuContent>
                                                                         <Can
-                                                                            permission={publicacion.canEliminar}
+                                                                            permission={comentario.canEliminar}
                                                                         >
                                                                             <DropdownMenuItem
                                                                                 onClick={() => abrirEliminacionComentario(comentario)}
@@ -494,6 +494,7 @@ export default function IndexPublicacion({
                                                                                 <Trash2 className='w-3 h-3 text-red-400' />
                                                                                 Eliminar
                                                                             </DropdownMenuItem>
+
                                                                             <DropdownMenuSeparator />
                                                                         </Can>
                                                                         <Can
@@ -905,8 +906,6 @@ export default function IndexPublicacion({
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-
-
         </MainLayout>
     )
 }

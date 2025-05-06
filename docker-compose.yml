@@ -35,6 +35,7 @@ services:
       - "80"
     ports:
       - '${DOCKER_WEB_PORT:-8090}:80'
+      - 443:443
     environment:
       - VIRTUAL_HOST=${DOCKER_PROXY_DOMAIN}
       #- LETSENCRYPT_HOST=${DOCKER_PROXY_DOMAIN}
@@ -45,10 +46,17 @@ services:
       - './:/var/www'
       - './nginx/conf.d/:/etc/nginx/conf.d/'
       - './php/local.ini:/usr/local/etc/php/conf.d/local.ini'
+      - './certbot/conf/:/etc/letsencrypt/'
 
     networks:
       - default
       - app-network
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - './certbot/www/:/var/www/certbot/:rw'
+      - './certbot/conf/:/etc/letsencrypt/:rw'
   db:
     image: 'mariadb:10.9.4'
     restart: unless-stopped

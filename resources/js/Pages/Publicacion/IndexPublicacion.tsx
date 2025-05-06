@@ -173,8 +173,7 @@ export default function IndexPublicacion({
     const eliminarComentario = useForm({});
 
     const confirmarEliminacionComentario = () => {
-        ;
-        eliminar.delete(route('comentario.destroy', comentarioSeleccionado?.id), {
+        eliminarComentario.delete(route('comentario.destroy', comentarioSeleccionado?.id), {
             preserveScroll: true,
             onSuccess: () => {
                 setComentarioSeleccionado(null);
@@ -846,7 +845,7 @@ export default function IndexPublicacion({
                                 reporte.post(route('reporte.store'), {
                                     preserveScroll: true,
                                     onSuccess: () => {
-                                        reset();
+                                        reporte.reset();
                                         setAbrirModalReportePublicacion(false);
                                     }
                                 });
@@ -895,7 +894,7 @@ export default function IndexPublicacion({
                                 reporte.post(route('reporte.store'), {
                                     preserveScroll: true,
                                     onSuccess: () => {
-                                        reset();
+                                        reporte.reset();
                                         setAbrirModalReporteComentario(false);
                                     }
                                 });

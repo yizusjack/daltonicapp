@@ -116,16 +116,11 @@ export default function AppSidebar() {
                             </Link>
                         </SidebarGroupContent>
                         <SidebarGroupContent>
-                            <SidebarMenuButton>
-                                <Diff /> Permisos
-                            </SidebarMenuButton>
-                        </SidebarGroupContent>
-                        <SidebarGroupContent>
                             <Link href='/reporte'>
                                 <SidebarMenuButton >
                                     <ClipboardX /> Reportes
                                 </SidebarMenuButton>
-                            </Link> 
+                            </Link>
                         </SidebarGroupContent>
                         <SidebarGroupContent>
                             <Link href='/imagenes'>

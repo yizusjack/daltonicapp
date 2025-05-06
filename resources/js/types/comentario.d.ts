@@ -19,7 +19,7 @@ export interface Media {
     order_column: number;
     created_at: string;
     updated_at: string;
-    original_url: string;  // Make sure original_url is included
+    original_url: string;
     preview_url: string;
 }
 
@@ -27,6 +27,7 @@ export interface Comentario {
     id: number;
     comentario: string;
     fecha: string;
+    canReportarComentario: boolean;
     canEliminar: boolean;
 }
 

@@ -2,18 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
+use App\Enums\TipoReporteEnum;
 use App\Http\Requests\StoreReporteRequest;
 use App\Http\Requests\UpdateReporteRequest;
 use App\Models\Reporte;
+use App\Models\User;
+use App\Models\Publicacion;
+use App\Models\Comentario;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ReporteController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $this->authorize('viewAny', User::class);
+
+        $reportables = collect();
+
+        $publicaciones = Publicacion::withCount('reportes')
+            ->with('reportes')
+            ->get()
+            ->filter(fn($p) => $p->reportes_count >= 3)
+            ->map(function ($pub) {
+                return [
+                    'id' => $pub->id,
+                    'contenido' => $pub->contenido,
+                    'reportes' => $pub->reportes,
+                    'reportable_type' => 'Publicacion',
+                ];
+            });
+
+        $comentarios = Comentario::withCount('reportes')
+            ->with('reportes')
+            ->get()
+            ->filter(fn($c) => $c->reportes_count >= 3)
+            ->map(function ($com) {
+                return [
+                    'id' => $com->id,
+                    'contenido' => $com->comentario,
+                    'reportes' => $com->reportes,
+                    'reportable_type' => 'Comentario',
+                ];
+            });
+
+        return Inertia::render('Reporte/indexReporte', [
+            'publicaciones' => $publicaciones,
+            'comentarios' => $comentarios,
+        ]);
     }
 
     /**
@@ -29,7 +71,20 @@ class ReporteController extends Controller
      */
     public function store(StoreReporteRequest $request)
     {
-        //
+        $user = Auth::user();
+        $data = $request->validated();
+        $data['user_id'] = $user->id;
+        $data['reportable_type'] = $request->reportable_type == 'Comentario' ? 'App\Models\Comentario' : 'App\Models\Publicacion';
+        $data['reportable_id'] = $request->reportable_id;
+        $data['explicacion'] = $request->explicacion;
+        $data['type'] = $request->type;
+
+        $reporte = Reporte::create($data);
+
+        return redirect()->to(url()->previous())->with([
+            'message' => 'Reporte registrado',
+            'description' => 'Los administradores lo tomaran en cuenta',
+        ]);
     }
 
     /**

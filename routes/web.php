@@ -7,6 +7,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ImagenController;
+use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\PictureController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\IshiharaController;
@@ -83,6 +84,10 @@ Route::middleware('auth')->group(function () {
 
     //Rutas para los fotos
     Route::resource('comentario', ComentarioController::class)->only('store', 'update', 'destroy');
+
+    Route::resource('reporte', ReporteController::class)->only('store',  'destroy');
+
+    Route::get('/reporte', [ReporteController::class, 'index'])->name('reportes.index');
 });
 
 require __DIR__.'/auth.php';

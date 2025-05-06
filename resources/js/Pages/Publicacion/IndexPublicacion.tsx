@@ -3,7 +3,7 @@ import Can from '@/Components/Auth/Can'
 import ConfirmationModal from '@/Components/ConfirmationModal'
 import Paginator from '@/Components/partials/Paginator'
 import { Button } from '@/Components/ui/button'
-import { Dialog, DialogContent } from '@/Components/ui/dialog'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/Components/ui/dialog'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuSeparator, DropdownMenuItem } from '@/Components/ui/dropdown-menu'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/Components/ui/form'
 import { Input } from '@/Components/ui/input'
@@ -14,7 +14,7 @@ import { ComentarioWithRelations } from '@/types/comentario'
 import { Link } from '@/types/link'
 import { Publicacion, PublicacionWithRelations } from '@/types/publicacion'
 import { useForm } from '@inertiajs/react'
-import { Dot, EllipsisVertical, ImagePlus, MessageCircleQuestion, Pencil, Trash2 } from 'lucide-react'
+import { Dot, EllipsisVertical, ImagePlus, MessageCircleQuestion, Pencil, Trash2, MessageSquareWarning } from 'lucide-react'
 import React, { useState } from 'react'
 import { FormProvider, useForm as useFormContext } from 'react-hook-form'
 
@@ -66,6 +66,7 @@ export default function IndexPublicacion({
         contenido: '',
         imagenes: [],
     });
+
 
     const methods = useFormContext({
         defaultValues: {
@@ -221,6 +222,39 @@ export default function IndexPublicacion({
         setPreviewUrls(nuevasPreviews);
     }
 
+    const opcionesReporte = [
+        { label: 'El contenido es inapropiado', value: 'Inapropiado' },
+        { label: 'El contenido es ofensivo para mi o alguien más', value: 'Ofensivo' },
+        { label: 'El contenido  no tiene relación con el foro', value: 'NoRelacion' },
+        { label: 'El contenido es publicidad engañosa', value: 'Engañoso' },
+        { label: 'Quien creó este contenido está fingiendo ser alguien que no es', value: 'Catfish' },
+    ];
+
+    const reporte = useForm({
+        reportable_id: 0,
+        reportable_type: '',
+        type: '',
+        explicacion: ''
+    });
+
+    const [abrirModalReportePublicacion, setAbrirModalReportePublicacion] = useState(false);
+
+    const [abrirModalReporteComentario, setAbrirModalReporteComentario] = useState(false);
+
+    const abrirModalReporte = (modelo: 'Publicacion' | 'Comentario', id: number) => {
+        reporte.setData('reportable_id', id);
+        reporte.setData('reportable_type', modelo);
+
+        setTimeout(() => {
+            if (modelo == 'Publicacion') {
+                setAbrirModalReportePublicacion(true);
+            } else {
+                setAbrirModalReporteComentario(true);
+            };
+        }, 100);
+
+    };
+
     return (
         <MainLayout
             name={tipo == 1 ? "Dudas" : "Comunidad"}
@@ -251,7 +285,7 @@ export default function IndexPublicacion({
                                                     </div>
 
                                                     <Can
-                                                        permission={publicacion.canEditar || publicacion.canEliminar}
+                                                        permission={publicacion.canEditar || publicacion.canEliminar || publicacion.canReportar}
                                                     >
                                                         <div className="justify-end">
                                                             <DropdownMenu>
@@ -280,6 +314,18 @@ export default function IndexPublicacion({
                                                                         >
                                                                             <Trash2 className='w-3 h-3 text-red-400' />
                                                                             Eliminar
+                                                                        </DropdownMenuItem>
+                                                                        <DropdownMenuSeparator />
+                                                                    </Can>
+
+                                                                    <Can
+                                                                        permission={publicacion.canReportar}
+                                                                    >
+                                                                        <DropdownMenuItem
+                                                                            onClick={() => abrirModalReporte('Publicacion', publicacion.id)}
+                                                                        >
+                                                                            <MessageSquareWarning className='w-3 h-3 text-red-400' />
+                                                                            Reportar
                                                                         </DropdownMenuItem>
                                                                     </Can>
                                                                 </DropdownMenuContent>
@@ -431,7 +477,7 @@ export default function IndexPublicacion({
 
                                                     <div>
                                                         <Can
-                                                            permission={comentario.canEliminar}
+                                                            permission={comentario.canEliminar || comentario.canReportarComentario}
                                                         >
                                                             <div className="justify-end">
                                                                 <DropdownMenu>
@@ -447,6 +493,18 @@ export default function IndexPublicacion({
                                                                             >
                                                                                 <Trash2 className='w-3 h-3 text-red-400' />
                                                                                 Eliminar
+                                                                            </DropdownMenuItem>
+
+                                                                            <DropdownMenuSeparator />
+                                                                        </Can>
+                                                                        <Can
+                                                                            permission={comentario.canReportarComentario}
+                                                                        >
+                                                                            <DropdownMenuItem
+                                                                                onClick={() => abrirModalReporte('Comentario', comentario.id)}
+                                                                            >
+                                                                                <MessageSquareWarning className='w-3 h-3 text-red-400' />
+                                                                                Reportar
                                                                             </DropdownMenuItem>
                                                                         </Can>
                                                                     </DropdownMenuContent>
@@ -748,6 +806,106 @@ export default function IndexPublicacion({
                     setAbrirModal={setAbrirModalConfirmacion}
                 />
             }
+
+            <Dialog open={abrirModalReportePublicacion} onOpenChange={setAbrirModalReportePublicacion}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Reportar {reporte.data.reportable_type}</DialogTitle>
+                    </DialogHeader>
+
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            Motivo: {reporte.data.type || 'Seleccionar'}
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            {opcionesReporte.map((opcion) => (
+                                <DropdownMenuItem
+                                    key={opcion.value}
+                                    onSelect={() => reporte.setData('type', opcion.value)}
+                                >
+                                    {opcion.label}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    {reporte.errors.type && <div className='p-1 text-xs text-red-700'>{reporte.errors.type}</div>}
+
+                    <Input
+                        placeholder="Explicación"
+                        value={reporte.data.explicacion}
+                        onChange={(e) => reporte.setData('explicacion', e.target.value)}
+                    />
+
+                    {reporte.errors.explicacion && <div className='p-1 text-xs text-red-700'>{reporte.errors.explicacion}</div>}
+
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setAbrirModalReportePublicacion(false)}>Cancelar</Button>
+                        <Button
+                            onClick={() => {
+                                reporte.post(route('reporte.store'), {
+                                    preserveScroll: true,
+                                    onSuccess: () => {
+                                        reporte.reset();
+                                        setAbrirModalReportePublicacion(false);
+                                    }
+                                });
+                            }}
+                        >
+                            Reportar
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={abrirModalReporteComentario} onOpenChange={setAbrirModalReporteComentario}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Reportar {reporte.data.reportable_type}</DialogTitle>
+                    </DialogHeader>
+
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            Motivo: {reporte.data.type || 'Seleccionar'}
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            {opcionesReporte.map((opcion) => (
+                                <DropdownMenuItem
+                                    key={opcion.value}
+                                    onSelect={() => reporte.setData('type', opcion.value)}
+                                >
+                                    {opcion.label}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    {reporte.errors.type && <div className='p-1 text-xs text-red-700'>{reporte.errors.type}</div>}
+
+                    <Input
+                        placeholder="Explicación"
+                        value={reporte.data.explicacion}
+                        onChange={(e) => reporte.setData('explicacion', e.target.value)}
+                    />
+                    {reporte.errors.explicacion && <div className='p-1 text-xs text-red-700'>{reporte.errors.explicacion}</div>}
+
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setAbrirModalReporteComentario(false)}>Cancelar</Button>
+                        <Button
+                            onClick={() => {
+                                reporte.post(route('reporte.store'), {
+                                    preserveScroll: true,
+                                    onSuccess: () => {
+                                        reporte.reset();
+                                        setAbrirModalReporteComentario(false);
+                                    }
+                                });
+                            }}
+                        >
+                            Reportar
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </MainLayout>
     )
 }

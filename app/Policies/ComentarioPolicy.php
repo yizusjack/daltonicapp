@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Comentario;
+use App\Models\Reporte;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
@@ -45,7 +46,11 @@ class ComentarioPolicy
      */
     public function delete(User $user, Comentario $comentario): bool
     {
-        return $comentario->user_id == $user->id;
+        $reportes = Reporte::where('reportable_type', Comentario::class)
+            ->where('reportable_id', $comentario->id)
+            ->count();
+
+        return $user->hasRole('Administrador') && $reportes >= 3 || $comentario->user_id == $user->id;
     }
 
     /**
@@ -62,5 +67,24 @@ class ComentarioPolicy
     public function forceDelete(User $user, Comentario $comentario): bool
     {
         return false;
+    }
+
+    public function reportarComentario(User $user, Comentario $comentario): bool
+    {
+        $reportes = Reporte::where('reportable_id', $comentario->id);
+
+        if($user->id == $comentario->user_id){
+            return false;
+        }
+
+
+        $permiso = Reporte::where('reportable_id', $comentario->id)
+            ->where('reportable_type', Comentario::class)
+            ->where('user_id', $user->id)
+            ->exists();
+
+
+        return !$permiso;
+
     }
 }

@@ -83,6 +83,7 @@ class ReporteController extends Controller
 
         return redirect()->to(url()->previous())->with([
             'message' => 'Reporte registrado',
+            'description' => 'Los administradores lo tomaran en cuenta',
         ]);
     }
 

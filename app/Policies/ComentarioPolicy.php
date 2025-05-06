@@ -79,9 +79,10 @@ class ComentarioPolicy
      
      
         $permiso = Reporte::where('reportable_id', $comentario->id)
-            ->where('reportable_type', 'Comentario')
+            ->where('reportable_type', Comentario::class)
             ->where('user_id', $user->id)
             ->exists();
+    
 
         return !$permiso;
      

@@ -98,7 +98,7 @@ class PublicacionPolicy
      
      
         $permiso = Reporte::where('reportable_id', $publicacion->id)
-            ->where('reportable_type', 'Publicacion')
+            ->where('reportable_type', Publicacion::class)
             ->where('user_id', $user->id)
             ->exists();
 
